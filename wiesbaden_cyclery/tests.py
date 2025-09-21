@@ -40,7 +40,8 @@ class HomepageTestCase(TestCase):
         self.assertContains(response, 'Home')
         self.assertContains(response, 'Products')
         self.assertContains(response, 'Cart')
-        self.assertContains(response, 'Account')
+        self.assertContains(response, 'Sign In')
+        self.assertContains(response, 'Sign Up')
 
 
 class BasicProjectTestCase(TestCase):

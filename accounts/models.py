@@ -32,8 +32,14 @@ class UserProfile(models.Model):
         """
         Return the first_name plus the last_name, with a space in between.
         """
-        full_name = f'{self.first_name} {self.last_name}'
-        return full_name.strip()
+        if self.first_name and self.last_name:
+            return f'{self.first_name} {self.last_name}'
+        elif self.first_name:
+            return self.first_name
+        elif self.last_name:
+            return self.last_name
+        else:
+            return ''
 
 
 @receiver(post_save, sender=User)
