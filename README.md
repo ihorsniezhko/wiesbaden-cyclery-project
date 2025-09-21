@@ -25,7 +25,7 @@ Wiesbaden Cyclery is a **full-featured e-commerce platform** built with Django 3
 - **Django 3.2.25** (LTS) - Web framework
 - **Python 3.11** - Programming language
 - **SQLite** - Development database
-- **PostgreSQL** - Production database (planned)
+- **PostgreSQL** - Production database (Code Institute)
 
 ### Frontend
 - **Bootstrap 4.6.2** - CSS framework
@@ -57,6 +57,9 @@ Copy `.env.example` to `.env` and configure your settings:
 ```env
 DEBUG=True
 SECRET_KEY=your-secret-key-here
+
+# For production with Code Institute PostgreSQL:
+# CI_DATABASE_URL=postgresql://neondb_owner:npg_L95rzFapgvun@ep-morning-art-a2n0h2k6.eu-central-1.aws.neon.tech/quail_plus_crust_122150
 ```
 
 4. **Database setup**
