@@ -1,0 +1,83 @@
+/* Wiesbaden Cyclery Base Styles */
+
+/* Typography */
+body {
+    font-family: 'Roboto Serif', serif;
+    line-height: 1.6;
+}
+
+/* Brand Colors */
+:root {
+    --primary-color: #199CF4;
+    --secondary-color: #555;
+    --accent-color: #ffc107;
+    --dark-color: #000;
+    --light-color: #fff;
+}
+
+/* Navigation */
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #0d8ce8;
+    border-color: #0d8ce8;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0d8ce8 100%);
+}
+
+/* Feature Boxes */
+.feature-box {
+    padding: 2rem 1rem;
+    transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .feature-box {
+        padding: 1rem;
+    }
+}
