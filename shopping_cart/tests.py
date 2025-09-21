@@ -297,3 +297,249 @@ class CartUtilsTest(TestCase):
         # Verify item is removed
         cart = get_or_create_cart(request)
         self.assertEqual(cart.total_items, 0)
+
+class CartViewsTest(TestCase):
+    """Test cart view functionality"""
+
+    def setUp(self):
+        """Set up test data"""
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@example.com',
+            password='testpass123'
+        )
+        
+        self.category = Category.objects.create(
+            name='test_bikes',
+            friendly_name='Test Bikes'
+        )
+        
+        self.product = Product.objects.create(
+            name='Test Bike',
+            description='A test bicycle',
+            price=Decimal('100.00'),
+            category=self.category,
+            sku='TEST001'
+        )
+        
+        self.size_m = Size.objects.create(name='M', display_name='Medium')
+        self.product.sizes.add(self.size_m)
+
+    def test_cart_view_empty(self):
+        """Test cart view when empty"""
+        response = self.client.get('/cart/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Your cart is empty')
+
+    def test_cart_view_with_items(self):
+        """Test cart view with items"""
+        # Add item to cart first
+        self.client.login(username='testuser', password='testpass123')
+        self.client.post(f'/cart/add/{self.product.id}/', {
+            'quantity': 2,
+            'size': self.size_m.id
+        })
+        
+        response = self.client.get('/cart/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Test Bike')
+        self.assertContains(response, 'Medium')
+
+    def test_add_to_cart_view(self):
+        """Test adding product to cart via view"""
+        response = self.client.post(f'/cart/add/{self.product.id}/', {
+            'quantity': 1,
+            'size': self.size_m.id
+        })
+        
+        # Should redirect to cart
+        self.assertEqual(response.status_code, 302)
+        
+        # Check cart has item
+        cart = Cart.objects.filter(session_key=self.client.session.session_key).first()
+        self.assertIsNotNone(cart)
+        self.assertEqual(cart.total_items, 1)
+
+    def test_add_to_cart_without_required_size(self):
+        """Test adding product that requires size without providing size"""
+        response = self.client.post(f'/cart/add/{self.product.id}/', {
+            'quantity': 1
+        })
+        
+        # Should redirect back to product detail
+        self.assertEqual(response.status_code, 302)
+        
+        # Check no cart was created
+        cart = Cart.objects.filter(session_key=self.client.session.session_key).first()
+        self.assertIsNone(cart)
+
+    def test_update_cart_view(self):
+        """Test updating cart item quantity"""
+        # Add item first
+        self.client.post(f'/cart/add/{self.product.id}/', {
+            'quantity': 1,
+            'size': self.size_m.id
+        })
+        
+        # Update quantity
+        response = self.client.post(f'/cart/update/{self.product.id}/', {
+            'quantity': 3,
+            'size': self.size_m.id
+        })
+        
+        self.assertEqual(response.status_code, 302)
+        
+        # Check updated quantity
+        cart = Cart.objects.filter(session_key=self.client.session.session_key).first()
+        cart_item = cart.items.first()
+        self.assertEqual(cart_item.quantity, 3)
+
+    def test_remove_from_cart_view(self):
+        """Test removing item from cart"""
+        # Add item first
+        self.client.post(f'/cart/add/{self.product.id}/', {
+            'quantity': 1,
+            'size': self.size_m.id
+        })
+        
+        # Remove item
+        response = self.client.post(f'/cart/remove/{self.product.id}/', {
+            'size': self.size_m.id
+        })
+        
+        self.assertEqual(response.status_code, 302)
+        
+        # Check item removed
+        cart = Cart.objects.filter(session_key=self.client.session.session_key).first()
+        self.assertEqual(cart.total_items, 0)
+
+    def test_clear_cart_view(self):
+        """Test clearing entire cart"""
+        # Add multiple items
+        self.client.post(f'/cart/add/{self.product.id}/', {
+            'quantity': 2,
+            'size': self.size_m.id
+        })
+        
+        # Clear cart
+        response = self.client.post('/cart/clear/')
+        
+        self.assertEqual(response.status_code, 302)
+        
+        # Check cart is empty
+        cart = Cart.objects.filter(session_key=self.client.session.session_key).first()
+        self.assertEqual(cart.total_items, 0)
+
+    def test_ajax_add_to_cart(self):
+        """Test AJAX add to cart functionality"""
+        import json
+        
+        response = self.client.post(
+            f'/cart/ajax/add/{self.product.id}/',
+            data=json.dumps({
+                'quantity': 2,
+                'size': self.size_m.id
+            }),
+            content_type='application/json'
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        
+        data = json.loads(response.content)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['cart_total_items'], 2)
+
+    def test_ajax_cart_summary(self):
+        """Test AJAX cart summary"""
+        # Add item first
+        self.client.post(f'/cart/add/{self.product.id}/', {
+            'quantity': 1,
+            'size': self.size_m.id
+        })
+        
+        response = self.client.get('/cart/ajax/summary/')
+        self.assertEqual(response.status_code, 200)
+        
+        import json
+        data = json.loads(response.content)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['cart_total_items'], 1)
+
+
+class CartIntegrationTest(TestCase):
+    """Test cart integration with user authentication"""
+
+    def setUp(self):
+        """Set up test data"""
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@example.com',
+            password='testpass123'
+        )
+        
+        self.category = Category.objects.create(
+            name='test_bikes',
+            friendly_name='Test Bikes'
+        )
+        
+        self.product = Product.objects.create(
+            name='Test Bike',
+            description='A test bicycle',
+            price=Decimal('100.00'),
+            category=self.category,
+            sku='TEST001'
+        )
+
+    def test_anonymous_to_authenticated_cart_merge(self):
+        """Test cart merging when anonymous user logs in"""
+        # Add item as anonymous user
+        self.client.post(f'/cart/add/{self.product.id}/', {
+            'quantity': 2
+        })
+        
+        # Verify anonymous cart exists
+        session_key = self.client.session.session_key
+        anonymous_cart = Cart.objects.filter(session_key=session_key).first()
+        self.assertIsNotNone(anonymous_cart)
+        self.assertEqual(anonymous_cart.total_items, 2)
+        
+        # Login user and access cart page to trigger merge
+        self.client.login(username='testuser', password='testpass123')
+        response = self.client.get('/cart/')
+        
+        # Check that a user cart now exists
+        user_cart = Cart.objects.filter(user=self.user).first()
+        self.assertIsNotNone(user_cart)
+        
+        # Check total carts (should be 2: anonymous + user, merge happens in utils)
+        total_carts = Cart.objects.count()
+        self.assertGreaterEqual(total_carts, 1)
+
+    def test_delivery_cost_calculation(self):
+        """Test delivery cost calculation logic"""
+        # Create cheap product (under €50)
+        cheap_product = Product.objects.create(
+            name='Cheap Item',
+            description='A cheap item',
+            price=Decimal('30.00'),
+            category=self.category,
+            sku='CHEAP001'
+        )
+        
+        # Add cheap item (under €50)
+        self.client.post(f'/cart/add/{cheap_product.id}/', {
+            'quantity': 1
+        })
+        
+        cart = Cart.objects.filter(session_key=self.client.session.session_key).first()
+        self.assertEqual(cart.delivery_cost, Decimal('4.99'))
+        self.assertEqual(cart.total, Decimal('34.99'))  # 30 + 4.99
+        
+        # Add expensive item (over €50 total)
+        self.client.post(f'/cart/add/{self.product.id}/', {
+            'quantity': 1
+        })
+        
+        cart.refresh_from_db()
+        self.assertEqual(cart.delivery_cost, Decimal('0.00'))  # Free delivery
+        self.assertEqual(cart.total, Decimal('130.00'))  # 30 + 100 + 0

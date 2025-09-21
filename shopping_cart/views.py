@@ -40,15 +40,15 @@ def add_to_cart_view(request, product_id):
             # Verify size is valid for this product
             if not product.sizes.filter(id=size.id).exists():
                 messages.error(request, f"Selected size is not available for {product.name}")
-                return redirect('products:product_detail', product_id=product.id)
+                return redirect('product_detail', product_id=product.id)
         except Size.DoesNotExist:
             messages.error(request, "Invalid size selected")
-            return redirect('products:product_detail', product_id=product.id)
+            return redirect('product_detail', product_id=product.id)
     
     # Check if product requires size but none provided
     if product.sizes.exists() and not size:
         messages.error(request, f"Please select a size for {product.name}")
-        return redirect('products:product_detail', product_id=product.id)
+        return redirect('product_detail', product_id=product.id)
     
     # Get quantity
     try:
@@ -72,7 +72,7 @@ def add_to_cart_view(request, product_id):
     # Redirect back to product or cart
     redirect_to = request.POST.get('redirect_to', 'shopping_cart:cart')
     if redirect_to == 'product_detail':
-        return redirect('products:product_detail', product_id=product.id)
+        return redirect('product_detail', product_id=product.id)
     else:
         return redirect('shopping_cart:cart')
 
