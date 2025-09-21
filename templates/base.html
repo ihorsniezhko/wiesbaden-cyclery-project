@@ -39,7 +39,12 @@
                         <a class="nav-link" href="{% url 'products' %}">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Cart</a>
+                        <a class="nav-link" href="{% url 'shopping_cart:cart' %}">
+                            <i class="fa fa-shopping-cart"></i> Cart
+                            {% if cart_total_items > 0 %}
+                                <span class="badge badge-warning">{{ cart_total_items }}</span>
+                            {% endif %}
+                        </a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">

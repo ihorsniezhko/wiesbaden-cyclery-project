@@ -100,32 +100,75 @@
                 {% endif %}
             </div>
             
-            <!-- Size Selection (if applicable) -->
-            {% if product.has_sizes and product.sizes.all %}
-                <div class="mb-3">
-                    <label class="form-label"><strong>Size:</strong></label>
-                    <div class="btn-group-toggle" data-toggle="buttons">
-                        {% for size in product.sizes.all %}
-                            <label class="btn btn-outline-primary btn-sm">
-                                <input type="radio" name="size" value="{{ size.name }}"> {{ size.display_name }}
-                            </label>
-                        {% endfor %}
+            <!-- Add to Cart Form -->
+            {% if product.in_stock %}
+                <form class="form" action="{% url 'shopping_cart:add_to_cart' product.id %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- Size Selection (if applicable) -->
+                    {% if product.sizes.all %}
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Size:</strong></label>
+                            <select class="form-control" name="size" id="id_product_size" required>
+                                <option value="">Select Size</option>
+                                {% for size in product.sizes.all %}
+                                    <option value="{{ size.id }}">{{ size.display_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Quantity Selection -->
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Quantity:</strong></label>
+                        <div class="form-group w-50">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button class="decrement-qty btn btn-black rounded-0" 
+                                            type="button" 
+                                            data-item_id="{{ product.id }}">
+                                        <span class="icon">
+                                            <i class="fas fa-minus"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <input class="form-control qty_input" type="number"
+                                       name="quantity" value="1" min="1" max="99"
+                                       data-item_id="{{ product.id }}">
+                                <div class="input-group-append">
+                                    <button class="increment-qty btn btn-black rounded-0"
+                                            type="button" 
+                                            data-item_id="{{ product.id }}">
+                                        <span class="icon">
+                                            <i class="fas fa-plus"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            {% endif %}
-            
-            <!-- Add to Cart Button -->
-            <div class="mb-3">
-                {% if product.in_stock %}
-                    <button class="btn btn-primary btn-lg">
-                        <i class="fa fa-shopping-cart"></i> Add to Cart
-                    </button>
-                {% else %}
+                    
+                    <!-- Submit Buttons -->
+                    <div class="mb-3">
+                        <input type="hidden" name="redirect_to" value="product_detail">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fa fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 mt-2">
+                            <span class="icon">
+                                <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="text-uppercase">Keep Shopping</span>
+                        </a>
+                    </div>
+                </form>
+            {% else %}
+                <div class="mb-3">
                     <button class="btn btn-secondary btn-lg" disabled>
                         <i class="fa fa-times"></i> Out of Stock
                     </button>
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
             
             <!-- Product Info -->
             <div class="small text-muted">
@@ -168,4 +211,51 @@
         </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script type="text/javascript">
+    // Disable +/- buttons outside 1-99 range
+    function handleEnableDisable(itemId) {
+        var currentValue = parseInt($(`input[data-item_id='${itemId}']`).val());
+        var minusDisabled = currentValue < 2;
+        var plusDisabled = currentValue > 98;
+        $(`.decrement-qty[data-item_id='${itemId}']`).prop('disabled', minusDisabled);
+        $(`.increment-qty[data-item_id='${itemId}']`).prop('disabled', plusDisabled);
+    }
+
+    // Ensure proper enabling/disabling of all inputs on page load
+    var allQtyInputs = $('.qty_input');
+    for(var i = 0; i < allQtyInputs.length; i++){
+        var itemId = $(allQtyInputs[i]).data('item_id');
+        handleEnableDisable(itemId);
+    }
+
+    // Check enable/disable every time the input is changed
+    $('.qty_input').change(function() {
+        var itemId = $(this).data('item_id');
+        handleEnableDisable(itemId);
+    });
+
+    // Increment quantity
+    $('.increment-qty').click(function(e) {
+       e.preventDefault();
+       var itemId = $(this).data('item_id');
+       var allQuantityInputs = $(`.qty_input[data-item_id='${itemId}']`);
+       var currentValue = parseInt(allQuantityInputs.val());
+       allQuantityInputs.val(currentValue + 1);
+       handleEnableDisable(itemId);
+    });
+
+    // Decrement quantity
+    $('.decrement-qty').click(function(e) {
+       e.preventDefault();
+       var itemId = $(this).data('item_id');
+       var allQuantityInputs = $(`.qty_input[data-item_id='${itemId}']`);
+       var currentValue = parseInt(allQuantityInputs.val());
+       allQuantityInputs.val(currentValue - 1);
+       handleEnableDisable(itemId);
+    });
+</script>
 {% endblock %}
