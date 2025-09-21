@@ -12,7 +12,7 @@ Wiesbaden Cyclery is a **full-featured e-commerce platform** built with Django 3
 
 ### 🌟 Key Features (In Development)
 
-- **🛍️ E-commerce Core**: Product catalog, shopping cart, secure checkout
+- **🛍️ E-commerce Core**: Product catalog ✅, shopping cart, secure checkout
 - **👤 User Management**: Registration, authentication, user profiles ✅
 - **💳 Payment Processing**: Stripe integration with EUR currency support
 - **📱 Responsive Design**: Bootstrap 4 with mobile-first approach
@@ -78,7 +78,7 @@ This project is being developed in stages to demonstrate realistic e-commerce de
 
 - ✅ **Stage 1**: Project Foundation - Basic Django setup and homepage
 - ✅ **Stage 2**: User Authentication - Registration and login system
-- ⏳ **Stage 3**: Product Catalog - Product management and display
+- ✅ **Stage 3**: Product Catalog - Product management and display
 - ⏳ **Stage 4**: Shopping Cart - Cart functionality and calculations
 - ⏳ **Stage 5**: Order Processing - Checkout and order management
 - ⏳ **Stage 6**: Payment Integration - Stripe payment processing
