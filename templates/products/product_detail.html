@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} - Wiesbaden Cyclery{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products' %}">Products</a></li>
+            {% if product.category %}
+                <li class="breadcrumb-item">{{ product.category.get_friendly_name }}</li>
+            {% endif %}
+            <li class="breadcrumb-item active">{{ product.name }}</li>
+        </ol>
+    </nav>
+    
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 400px;">
+                    {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                            <i class="fa fa-bicycle fa-5x text-muted"></i>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <h1>{{ product.name }}</h1>
+            
+            {% if product.category %}
+                <p class="text-muted">
+                    <i class="fa fa-tag"></i> {{ product.category.get_friendly_name }}
+                </p>
+            {% endif %}
+            
+            {% if product.rating %}
+                <div class="mb-3">
+                    <span class="text-warning">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= product.rating %}
+                                <i class="fa fa-star"></i>
+                            {% else %}
+                                <i class="fa fa-star-o"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                    <span class="ml-2">({{ product.rating }} stars)</span>
+                </div>
+            {% endif %}
+            
+            <h3 class="text-primary mb-3">€{{ product.price }}</h3>
+            
+            <p class="lead">{{ product.description }}</p>
+            
+            <!-- Bicycle Specifications -->
+            {% if product.frame_size or product.wheel_size or product.gear_system %}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fa fa-cog"></i> Specifications
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if product.frame_size %}
+                            <p><strong>Frame Size:</strong> {{ product.frame_size }}</p>
+                        {% endif %}
+                        {% if product.wheel_size %}
+                            <p><strong>Wheel Size:</strong> {{ product.wheel_size }}</p>
+                        {% endif %}
+                        {% if product.gear_system %}
+                            <p><strong>Gear System:</strong> {{ product.gear_system }}</p>
+                        {% endif %}
+                        {% if product.bicycle_features %}
+                            <p><strong>Features:</strong> {{ product.bicycle_features }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- Stock Status -->
+            <div class="mb-3">
+                {% if product.in_stock %}
+                    <span class="badge badge-success">
+                        <i class="fa fa-check"></i> In Stock ({{ product.stock_quantity }} available)
+                    </span>
+                {% else %}
+                    <span class="badge badge-danger">
+                        <i class="fa fa-times"></i> Out of Stock
+                    </span>
+                {% endif %}
+            </div>
+            
+            <!-- Size Selection (if applicable) -->
+            {% if product.has_sizes and product.sizes.all %}
+                <div class="mb-3">
+                    <label class="form-label"><strong>Size:</strong></label>
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        {% for size in product.sizes.all %}
+                            <label class="btn btn-outline-primary btn-sm">
+                                <input type="radio" name="size" value="{{ size.name }}"> {{ size.display_name }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- Add to Cart Button -->
+            <div class="mb-3">
+                {% if product.in_stock %}
+                    <button class="btn btn-primary btn-lg">
+                        <i class="fa fa-shopping-cart"></i> Add to Cart
+                    </button>
+                {% else %}
+                    <button class="btn btn-secondary btn-lg" disabled>
+                        <i class="fa fa-times"></i> Out of Stock
+                    </button>
+                {% endif %}
+            </div>
+            
+            <!-- Product Info -->
+            <div class="small text-muted">
+                {% if product.sku %}
+                    <p><strong>SKU:</strong> {{ product.sku }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Related Products -->
+    {% if related_products %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3>Related Products</h3>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            {% for related_product in related_products %}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
+                            {% if related_product.image %}
+                                <img src="{{ related_product.image.url }}" alt="{{ related_product.name }}" class="img-fluid" style="max-height: 130px;">
+                            {% else %}
+                                <i class="fa fa-bicycle fa-3x text-muted"></i>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title">{{ related_product.name }}</h6>
+                            <p class="text-primary">€{{ related_product.price }}</p>
+                            <a href="{% url 'product_detail' related_product.id %}" class="btn btn-outline-primary btn-sm">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
