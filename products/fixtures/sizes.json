@@ -1,0 +1,173 @@
+[
+  {
+    "model": "products.size",
+    "pk": 1,
+    "fields": {
+      "name": "XS",
+      "display_name": "XS",
+      "sort_order": 10
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 2,
+    "fields": {
+      "name": "S",
+      "display_name": "S",
+      "sort_order": 20
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 3,
+    "fields": {
+      "name": "M",
+      "display_name": "M",
+      "sort_order": 30
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 4,
+    "fields": {
+      "name": "L",
+      "display_name": "L",
+      "sort_order": 40
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 5,
+    "fields": {
+      "name": "XL",
+      "display_name": "XL",
+      "sort_order": 50
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 6,
+    "fields": {
+      "name": "XXL",
+      "display_name": "XXL",
+      "sort_order": 60
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 7,
+    "fields": {
+      "name": "44cm",
+      "display_name": "44cm Frame (XS)",
+      "sort_order": 110
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 8,
+    "fields": {
+      "name": "48cm",
+      "display_name": "48cm Frame (S)",
+      "sort_order": 120
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 9,
+    "fields": {
+      "name": "52cm",
+      "display_name": "52cm Frame (M)",
+      "sort_order": 130
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 10,
+    "fields": {
+      "name": "56cm",
+      "display_name": "56cm Frame (L)",
+      "sort_order": 140
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 11,
+    "fields": {
+      "name": "60cm",
+      "display_name": "60cm Frame (XL)",
+      "sort_order": 150
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 12,
+    "fields": {
+      "name": "64cm",
+      "display_name": "64cm Frame (XXL)",
+      "sort_order": 160
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 13,
+    "fields": {
+      "name": "12\"",
+      "display_name": "12 inch (Kids)",
+      "sort_order": 210
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 14,
+    "fields": {
+      "name": "14\"",
+      "display_name": "14 inch (Kids)",
+      "sort_order": 220
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 15,
+    "fields": {
+      "name": "16\"",
+      "display_name": "16 inch (Kids)",
+      "sort_order": 230
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 16,
+    "fields": {
+      "name": "18\"",
+      "display_name": "18 inch (Kids)",
+      "sort_order": 240
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 17,
+    "fields": {
+      "name": "20\"",
+      "display_name": "20 inch (Kids)",
+      "sort_order": 250
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 18,
+    "fields": {
+      "name": "24\"",
+      "display_name": "24 inch (Kids)",
+      "sort_order": 260
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 19,
+    "fields": {
+      "name": "OneSize",
+      "display_name": "One Size",
+      "sort_order": 300
+    }
+  }
+]

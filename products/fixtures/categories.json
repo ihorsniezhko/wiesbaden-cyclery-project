@@ -1,0 +1,82 @@
+[
+  {
+    "model": "products.category",
+    "pk": 1,
+    "fields": {
+      "name": "road_bikes",
+      "friendly_name": "Road Bikes"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 2,
+    "fields": {
+      "name": "mountain_bikes",
+      "friendly_name": "Mountain Bikes"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 3,
+    "fields": {
+      "name": "hybrid_bikes",
+      "friendly_name": "Hybrid Bikes"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 4,
+    "fields": {
+      "name": "electric_bikes",
+      "friendly_name": "Electric Bikes"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 5,
+    "fields": {
+      "name": "bmx_bikes",
+      "friendly_name": "BMX Bikes"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 6,
+    "fields": {
+      "name": "kids_bikes",
+      "friendly_name": "Kids Bikes"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 7,
+    "fields": {
+      "name": "accessories",
+      "friendly_name": "Accessories"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 8,
+    "fields": {
+      "name": "components",
+      "friendly_name": "Components"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 9,
+    "fields": {
+      "name": "apparel",
+      "friendly_name": "Apparel"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 10,
+    "fields": {
+      "name": "sale_items",
+      "friendly_name": "Sale Items"
+    }
+  }
+]

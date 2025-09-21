@@ -1,0 +1,8 @@
+[
+  {
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "sku": "RB001",
+      "nam
