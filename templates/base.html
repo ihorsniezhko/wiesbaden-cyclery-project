@@ -39,6 +39,9 @@
                         <a class="nav-link" href="{% url 'products' %}">Products</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'orders:order_tracking' %}">Track Order</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'shopping_cart:cart' %}">
                             <i class="fa fa-shopping-cart"></i> Cart
                             {% if cart_total_items > 0 %}
@@ -54,6 +57,9 @@
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{% url 'profile' %}">
                                     <i class="fa fa-user"></i> My Profile
+                                </a>
+                                <a class="dropdown-item" href="{% url 'orders:order_history' %}">
+                                    <i class="fa fa-list"></i> Order History
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'account_logout' %}">
