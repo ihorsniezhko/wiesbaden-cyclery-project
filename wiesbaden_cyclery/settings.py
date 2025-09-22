@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'accounts',
     'products',
     'shopping_cart',
+    'orders',
 ]
 
 # Site ID for django-allauth
