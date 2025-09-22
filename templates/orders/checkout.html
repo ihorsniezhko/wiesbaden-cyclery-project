@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="row">
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="overlay"></div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <hr>
+            <h2 class="logo-font mb-4">Checkout</h2>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-6 order-lg-last mb-5">
+            <p class="text-muted">Order Summary ({{ cart.total_items }} items)</p>
+            <div class="row">
+                <div class="col-7 offset-2">
+                    <p class="mb-1 mt-0 small text-muted">Item</p>
+                </div>
+                <div class="col-3 text-right">
+                    <p class="mb-1 mt-0 small text-muted">Subtotal</p>
+                </div>
+            </div>
+            {% for item in cart_items %}
+                <div class="row">
+                    <div class="col-2 mb-1">
+                        <a href="{% url 'product_detail' item.product.id %}">
+                            {% if item.product.image %}
+                                <img class="w-100" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            {% else %}
+                                <img class="w-100" src="{% static 'images/noimage.png' %}" alt="{{ item.product.name }}">
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="col-7">
+                        <p class="my-0"><strong>{{ item.product.name }}</strong></p>
+                        {% if item.size %}
+                            <p class="my-0 small">Size: {{ item.size.display_name }}</p>
+                        {% endif %}
+                        <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
+                    </div>
+                    <div class="col-3 text-right">
+                        <p class="my-0 small text-muted">€{{ item.line_total }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+            <hr class="my-0">
+            <div class="row text-black text-right">
+                <div class="col-7 offset-2">
+                    <p class="my-0">Order Total:</p>
+                    <p class="my-0">Delivery:</p>
+                    <p class="my-0"><strong>Grand Total:</strong></p>
+                </div>
+                <div class="col-3">
+                    <p class="my-0">€{{ cart.subtotal }}</p>
+                    <p class="my-0">€{{ cart.delivery_cost }}</p>
+                    <p class="my-0"><strong>€{{ cart.total }}</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-6">
+            <p class="text-muted">Please fill out the form below to complete your order</p>
+            <form action="{% url 'orders:checkout' %}" method="POST" id="payment-form">
+                {% csrf_token %}
+                <fieldset class="rounded px-3 mb-5">
+                    <legend class="fieldset-label small text-black px-2 w-auto">Details</legend>
+                    {{ form.full_name | as_crispy_field }}
+                    {{ form.email | as_crispy_field }}
+                </fieldset>
+                <fieldset class="rounded px-3 mb-5">
+                    <legend class="fieldset-label small text-black px-2 w-auto">Delivery</legend>
+                    {{ form.phone_number | as_crispy_field }}
+                    {{ form.street_address1 | as_crispy_field }}
+                    {{ form.street_address2 | as_crispy_field }}
+                    {{ form.town_or_city | as_crispy_field }}
+                    {{ form.county | as_crispy_field }}
+                    {{ form.postcode | as_crispy_field }}
+                    {{ form.country | as_crispy_field }}
+                    <div class="form-check form-check-inline float-right mr-0">
+                        {% if user.is_authenticated %}
+                            <label class="form-check-label" for="id-save-info">Save this delivery information to my profile</label>
+                            <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-info" name="save-info" checked>
+                        {% else %}
+                            <label class="form-check-label" for="id-save-info">
+                                <a class="text-info" href="{% url 'account_signup' %}">Create an account</a> or 
+                                <a class="text-info" href="{% url 'account_login' %}">login</a> to save this information
+                            </label>
+                        {% endif %}
+                    </div>
+                </fieldset>
+                
+                <!-- Order Summary for Mobile -->
+                <div class="d-block d-lg-none">
+                    <hr>
+                    <h5>Order Summary</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <p>Order Total:</p>
+                            <p>Delivery:</p>
+                            <p><strong>Grand Total:</strong></p>
+                        </div>
+                        <div class="col-6 text-right">
+                            <p>€{{ cart.subtotal }}</p>
+                            <p>€{{ cart.delivery_cost }}</p>
+                            <p><strong>€{{ cart.total }}</strong></p>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                
+                <div class="submit-button text-right mt-5 mb-2">                    
+                    <a href="{% url 'shopping_cart:cart' %}" class="btn btn-outline-black rounded-0">
+                        <span class="icon">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                        <span class="font-weight-bold">Adjust Cart</span>
+                    </a>
+                    <button id="submit-button" class="btn btn-black rounded-0">
+                        <span class="font-weight-bold">Complete Order</span>
+                        <span class="icon">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </button>
+                    <p class="small text-danger my-0">
+                        <span class="icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </span>
+                        <span>Your card will be charged <strong>€{{ cart.total }}</strong></span>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="loading-overlay">
+    <h1 class="text-light logo-font loading-spinner">
+        <span class="icon">
+            <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+        </span>
+    </h1>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script type="text/javascript">
+    // Show loading overlay on form submission
+    $('#payment-form').submit(function() {
+        $('#loading-overlay').fadeIn();
+        $('#submit-button').attr('disabled', true);
+    });
+    
+    // Auto-fill country field if not set
+    if (!$('#id_country').val()) {
+        $('#id_country').val('DE'); // Default to Germany
+    }
+</script>
+
+<style>
+    .fieldset-label {
+        position: relative;
+        right: .5rem;
+    }
+
+    #payment-form .form-control,
+    #card-element {
+        color: #000;
+        border: 1px solid #ccc;
+    }
+
+    .stripe-style-input {
+        box-sizing: border-box;
+        height: 40px;
+        padding: 10px 12px;
+        border: 1px solid transparent;
+        border-radius: 0px;
+        background-color: white;
+        box-shadow: 0 1px 3px 0 #e6ebf1;
+        -webkit-transition: box-shadow 150ms ease;
+        transition: box-shadow 150ms ease;
+    }
+
+    .stripe-style-input:focus,
+    .stripe-style-input:hover {
+        box-shadow: 0 1px 3px 0 #cfd7df;
+    }
+
+    .stripe-style-input::placeholder {
+        color: #87bbfd;
+    }
+
+    #loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(23, 162, 184, .85);
+        z-index: 9999;
+    }
+
+    .loading-spinner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        height: 100%;
+    }
+</style>
+{% endblock %}
