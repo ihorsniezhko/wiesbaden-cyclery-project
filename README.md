@@ -10,16 +10,18 @@ A comprehensive Django-based e-commerce platform for a bicycle shop, featuring m
 
 Wiesbaden Cyclery is a **full-featured e-commerce platform** built with Django 3.2.25, designed specifically for bicycle shops. The platform provides a complete online shopping experience with secure payment processing, user account management, product catalog, and comprehensive administrative tools.
 
-### 🌟 Key Features (In Development)
+### 🌟 Key Features
 
 - **🛍️ E-commerce Core**: Product catalog ✅, shopping cart ✅, secure checkout ✅
 - **👤 User Management**: Registration, authentication, user profiles ✅
 - **💳 Payment Processing**: Stripe integration with EUR currency support ✅
 - **📧 Email System**: Order confirmations and status updates with Gmail SMTP ✅
+- **📬 Newsletter**: Mailchimp integration with GDPR-compliant signup ✅
 - **🔍 Order Tracking**: Customer self-service order status tracking ✅
-- **📱 Responsive Design**: Bootstrap 4 with mobile-first approach
-- **🔒 Security**: GDPR compliant with comprehensive security measures
-- **☁️ Cloud Integration**: AWS S3 for media, Gmail SMTP for emails
+- **🔒 Legal Compliance**: Privacy Policy, Terms of Service, GDPR cookie consent ✅
+- **📱 Responsive Design**: Bootstrap 4 with mobile-first approach ✅
+- **🌐 Social Media**: Facebook Business page integration ✅
+- **☁️ Cloud Ready**: Prepared for AWS S3 and production deployment
 
 ## 🛠️ Technology Stack
 
@@ -87,10 +89,11 @@ This project is being developed in stages to demonstrate realistic e-commerce de
 - ✅ **Stage 4**: Shopping Cart - Cart functionality and calculations
 - ✅ **Stage 5**: Order Processing - Checkout and order management
 - ✅ **Stage 6**: Payment Integration - Stripe payment processing
-- ⏳ **Stage 7**: Email System - Order confirmations and notifications
-- ⏳ **Stage 8**: Enhanced Features - Advanced functionality
-- ⏳ **Stage 9**: Testing Suite - Comprehensive testing
-- ⏳ **Stage 10**: Production Deployment - Heroku deployment
+- ✅ **Stage 7**: Email System - Gmail SMTP integration and Mailchimp newsletter
+- ✅ **Stage 8**: Legal Compliance - Privacy Policy, Terms of Service, GDPR cookie consent
+- ⏳ **Stage 9**: Enhanced Features - Product reviews and V5 logic
+- ⏳ **Stage 10**: Testing Suite - Comprehensive testing
+- ⏳ **Stage 11**: Production Deployment - Heroku deployment
 
 ## 📝 Development Notes
 
