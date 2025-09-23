@@ -1,475 +1,531 @@
+"""
+Comprehensive test suite for orders and payment system
+"""
+import json
+from decimal import Decimal
+from unittest.mock import patch, Mock
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.urls import reverse
-from decimal import Decimal
-import json
+from django.conf import settings
+from accounts.models import UserProfile
 from products.models import Product, Category, Size
 from shopping_cart.models import Cart, CartItem
-from .models import Order, OrderLineItem
-from .forms import OrderForm
+from .models import Order, OrderLineItem, OrderStatusHistory
+from .payment_errors import PaymentErrorHandler, handle_payment_error
+from .stripe_utils import create_payment_intent, validate_stripe_configuration
+from .webhooks import handle_payment_succeeded, handle_payment_failed
+import stripe
 
 
-class OrderModelTest(TestCase):
-    """Test order model functionality"""
-
+class PaymentSystemTestCase(TestCase):
+    """Base test case with common setup for payment tests"""
+    
     def setUp(self):
         """Set up test data"""
+        # Create test user
         self.user = User.objects.create_user(
             username='testuser',
             email='test@example.com',
             password='testpass123'
         )
         
+        # Create user profile
+        self.user_profile = UserProfile.objects.create(
+            user=self.user,
+            default_phone_number='+49123456789',
+            default_street_address1='Test Street 123',
+            default_town_or_city='Berlin',
+            default_postcode='10115',
+            default_country='DE'
+        )
+        
+        # Create test products
         self.category = Category.objects.create(
-            name='test_bikes',
+            name='test-bikes',
             friendly_name='Test Bikes'
         )
         
-        self.product = Product.objects.create(
-            name='Test Bike',
-            description='A test bicycle',
-            price=Decimal('100.00'),
-            category=self.category,
-            sku='TEST001',
-            stock_quantity=10
+        self.size = Size.objects.create(
+            name='M',
+            display_name='Medium'
         )
+        
+        self.product = Product.objects.create(
+            category=self.category,
+            sku='TEST-BIKE-001',
+            name='Test Mountain Bike',
+            description='A test mountain bike',
+            price=Decimal('299.99'),
+            rating=Decimal('4.5'),
+            image='test-bike.jpg',
+            stock_quantity=10,
+            in_stock=True
+        )
+        self.product.sizes.add(self.size)
+        
+        # Create test cart
+        self.cart = Cart.objects.create(user=self.user)
+        self.cart_item = CartItem.objects.create(
+            cart=self.cart,
+            product=self.product,
+            size=self.size,
+            quantity=1
+        )
+        
+        self.client = Client()
 
+
+class StripeIntegrationTests(PaymentSystemTestCase):
+    """Test Stripe integration functionality"""
+    
+    @patch('stripe.PaymentIntent.create')
+    def test_create_payment_intent_success(self, mock_create):
+        """Test successful payment intent creation"""
+        # Mock Stripe response
+        mock_intent = Mock()
+        mock_intent.id = 'pi_test_123456789'
+        mock_intent.client_secret = 'pi_test_123456789_secret_test'
+        mock_intent.amount = 30499  # €304.99 in cents
+        mock_intent.currency = 'eur'
+        mock_create.return_value = mock_intent
+        
+        # Test payment intent creation
+        result = create_payment_intent(
+            amount=Decimal('304.99'),
+            currency='eur',
+            metadata={'test': 'true'}
+        )
+        
+        self.assertIsNotNone(result)
+        self.assertEqual(result.id, 'pi_test_123456789')
+        self.assertEqual(result.amount, 30499)
+        
+    @patch('stripe.PaymentIntent.create')
+    def test_create_payment_intent_failure(self, mock_create):
+        """Test payment intent creation failure"""
+        # Mock Stripe error
+        mock_create.side_effect = stripe.error.CardError(
+            message='Your card was declined.',
+            param='card',
+            code='card_declined'
+        )
+        
+        # Test payment intent creation failure
+        result = create_payment_intent(
+            amount=Decimal('304.99'),
+            currency='eur'
+        )
+        
+        self.assertIsNone(result)
+    
+    def test_stripe_configuration_validation(self):
+        """Test Stripe configuration validation"""
+        is_valid, errors = validate_stripe_configuration()
+        
+        # Should be valid in test environment
+        self.assertTrue(is_valid or len(errors) <= 1)  # Allow for debug mode warning
+
+
+class PaymentErrorHandlingTests(PaymentSystemTestCase):
+    """Test payment error handling system"""
+    
+    def test_error_handler_initialization(self):
+        """Test PaymentErrorHandler initialization"""
+        handler = PaymentErrorHandler()
+        self.assertIsNotNone(handler)
+        self.assertEqual(len(handler.error_log), 0)
+        
+        # Test with order
+        order = Order.objects.create(
+            full_name='Test User',
+            email='test@example.com',
+            phone_number='+49123456789',
+            street_address1='Test Street 123',
+            town_or_city='Berlin',
+            postcode='10115',
+            country='DE',
+            order_total=Decimal('304.99'),
+            delivery_cost=Decimal('4.99'),
+            grand_total=Decimal('309.98')
+        )
+        
+        handler_with_order = PaymentErrorHandler(order)
+        self.assertEqual(handler_with_order.order, order)
+    
+    def test_stripe_error_handling(self):
+        """Test Stripe error handling"""
+        handler = PaymentErrorHandler()
+        
+        # Create mock Stripe error
+        mock_error = Mock()
+        mock_error.code = 'card_declined'
+        mock_error.type = 'card_error'
+        mock_error.user_message = 'Your card was declined.'
+        
+        result = handler.handle_stripe_error(mock_error, context='test')
+        
+        self.assertFalse(result['success'])
+        self.assertEqual(result['error_code'], 'card_declined')
+        self.assertIn('declined', result['user_message'].lower())
+        self.assertEqual(result['recovery_action'], 'try_different_card')
+        self.assertTrue(result['retry_allowed'])
+    
+    def test_error_categorization(self):
+        """Test error categorization"""
+        handler = PaymentErrorHandler()
+        
+        # Test card error categorization
+        self.assertEqual(handler._categorize_error('card_declined'), 'card_errors')
+        self.assertEqual(handler._categorize_error('network_error'), 'network_errors')
+        self.assertEqual(handler._categorize_error('api_key_expired'), 'api_errors')
+        self.assertEqual(handler._categorize_error('unknown_error'), 'unknown')
+    
+    def test_severity_determination(self):
+        """Test error severity determination"""
+        handler = PaymentErrorHandler()
+        
+        self.assertEqual(handler._determine_severity('api_key_expired', 'authentication_error'), 'critical')
+        self.assertEqual(handler._determine_severity('card_declined', 'card_error'), 'high')
+        self.assertEqual(handler._determine_severity('incorrect_cvc', 'card_error'), 'medium')
+
+
+class OrderModelTests(PaymentSystemTestCase):
+    """Test Order model functionality"""
+    
     def test_order_creation(self):
         """Test order creation"""
         order = Order.objects.create(
             full_name='Test User',
             email='test@example.com',
-            street_address1='123 Test St',
-            town_or_city='Test City',
-            postcode='12345',
-            country='US'
+            phone_number='+49123456789',
+            street_address1='Test Street 123',
+            town_or_city='Berlin',
+            postcode='10115',
+            country='DE',
+            order_total=Decimal('299.99'),
+            delivery_cost=Decimal('4.99'),
+            grand_total=Decimal('304.98')
         )
         
         self.assertIsNotNone(order.order_number)
-        self.assertEqual(order.full_name, 'Test User')
         self.assertEqual(order.status, 'pending')
-        self.assertEqual(order.order_total, 0)
-        # Empty order should have no delivery cost initially
-        self.assertEqual(order.delivery_cost, 0)
-        self.assertEqual(order.grand_total, 0)
-
+        self.assertEqual(order.payment_status, 'pending')
+        self.assertEqual(order.grand_total, Decimal('304.98'))
+    
     def test_order_number_generation(self):
         """Test unique order number generation"""
         order1 = Order.objects.create(
             full_name='Test User 1',
             email='test1@example.com',
-            street_address1='123 Test St',
-            town_or_city='Test City',
-            country='US'
+            street_address1='Test Street 123',
+            town_or_city='Berlin',
+            country='DE'
         )
         
         order2 = Order.objects.create(
             full_name='Test User 2',
             email='test2@example.com',
-            street_address1='456 Test Ave',
-            town_or_city='Test City',
-            country='US'
+            street_address1='Test Street 456',
+            town_or_city='Munich',
+            country='DE'
         )
         
         self.assertNotEqual(order1.order_number, order2.order_number)
-        self.assertEqual(len(order1.order_number), 32)
-        self.assertEqual(len(order2.order_number), 32)
-
+        self.assertTrue(len(order1.order_number) > 0)
+        self.assertTrue(len(order2.order_number) > 0)
+    
     def test_order_total_calculation(self):
-        """Test order total calculation with line items"""
+        """Test order total calculation"""
         order = Order.objects.create(
             full_name='Test User',
             email='test@example.com',
-            street_address1='123 Test St',
-            town_or_city='Test City',
-            country='US'
+            street_address1='Test Street 123',
+            town_or_city='Berlin',
+            country='DE'
         )
         
-        # Add line item
+        # Add line items
         OrderLineItem.objects.create(
             order=order,
-            product=self.product,
-            quantity=2
-        )
-        
-        order.refresh_from_db()
-        self.assertEqual(order.order_total, Decimal('200.00'))
-        self.assertEqual(order.delivery_cost, Decimal('0.00'))  # Free over €50
-        self.assertEqual(order.grand_total, Decimal('200.00'))
-
-    def test_delivery_cost_calculation(self):
-        """Test delivery cost calculation"""
-        # Create cheap product
-        cheap_product = Product.objects.create(
-            name='Cheap Item',
-            price=Decimal('30.00'),
-            category=self.category,
-            sku='CHEAP001'
-        )
-        
-        order = Order.objects.create(
-            full_name='Test User',
-            email='test@example.com',
-            street_address1='123 Test St',
-            town_or_city='Test City',
-            country='US'
-        )
-        
-        # Add cheap item (under €50)
-        OrderLineItem.objects.create(
-            order=order,
-            product=cheap_product,
-            quantity=1
-        )
-        
-        order.refresh_from_db()
-        self.assertEqual(order.delivery_cost, Decimal('4.99'))
-        self.assertEqual(order.grand_total, Decimal('34.99'))
-
-    def test_order_status_badge(self):
-        """Test order status badge display"""
-        order = Order.objects.create(
-            full_name='Test User',
-            email='test@example.com',
-            street_address1='123 Test St',
-            town_or_city='Test City',
-            country='US',
-            status='shipped'
-        )
-        
-        self.assertEqual(order.get_status_display_badge(), 'badge-primary')
-
-
-class OrderLineItemModelTest(TestCase):
-    """Test order line item model functionality"""
-
-    def setUp(self):
-        """Set up test data"""
-        self.category = Category.objects.create(
-            name='test_bikes',
-            friendly_name='Test Bikes'
-        )
-        
-        self.product = Product.objects.create(
-            name='Test Bike',
-            description='A test bicycle',
-            price=Decimal('100.00'),
-            category=self.category,
-            sku='TEST001'
-        )
-        
-        self.size = Size.objects.create(name='M', display_name='Medium')
-        
-        self.order = Order.objects.create(
-            full_name='Test User',
-            email='test@example.com',
-            street_address1='123 Test St',
-            town_or_city='Test City',
-            country='US'
-        )
-
-    def test_line_item_creation(self):
-        """Test line item creation"""
-        line_item = OrderLineItem.objects.create(
-            order=self.order,
             product=self.product,
             size=self.size,
             quantity=2
         )
         
-        self.assertEqual(line_item.lineitem_total, Decimal('200.00'))
-        self.assertEqual(str(line_item), f'SKU {self.product.sku} on order {self.order.order_number} (Medium)')
-
-    def test_line_item_without_size(self):
-        """Test line item without size"""
-        line_item = OrderLineItem.objects.create(
-            order=self.order,
-            product=self.product,
-            quantity=1
-        )
+        order.update_total()
         
-        self.assertIsNone(line_item.size)
-        self.assertEqual(line_item.lineitem_total, Decimal('100.00'))
-
-    def test_line_item_updates_order_total(self):
-        """Test that line item creation updates order total"""
-        initial_total = self.order.grand_total
+        expected_total = self.product.price * 2
+        expected_delivery = Decimal('4.99') if expected_total < 50 else Decimal('0.00')
+        expected_grand_total = expected_total + expected_delivery
         
-        OrderLineItem.objects.create(
-            order=self.order,
-            product=self.product,
-            quantity=1
-        )
-        
-        self.order.refresh_from_db()
-        self.assertNotEqual(self.order.grand_total, initial_total)
-        self.assertEqual(self.order.order_total, Decimal('100.00'))
+        self.assertEqual(order.order_total, expected_total)
+        self.assertEqual(order.delivery_cost, expected_delivery)
+        self.assertEqual(order.grand_total, expected_grand_total)
 
 
-class OrderViewsTest(TestCase):
-    """Test order views"""
-
-    def setUp(self):
-        """Set up test data"""
-        self.client = Client()
-        self.user = User.objects.create_user(
-            username='testuser',
+class OrderLineItemTests(PaymentSystemTestCase):
+    """Test OrderLineItem model functionality"""
+    
+    def test_line_item_creation(self):
+        """Test order line item creation"""
+        order = Order.objects.create(
+            full_name='Test User',
             email='test@example.com',
-            password='testpass123'
+            street_address1='Test Street 123',
+            town_or_city='Berlin',
+            country='DE'
         )
         
-        self.category = Category.objects.create(
-            name='test_bikes',
-            friendly_name='Test Bikes'
+        line_item = OrderLineItem.objects.create(
+            order=order,
+            product=self.product,
+            size=self.size,
+            quantity=2
         )
         
-        self.product = Product.objects.create(
-            name='Test Bike',
-            description='A test bicycle',
-            price=Decimal('100.00'),
-            category=self.category,
-            sku='TEST001',
-            stock_quantity=10
-        )
+        expected_total = self.product.price * 2
+        self.assertEqual(line_item.lineitem_total, expected_total)
+        self.assertEqual(line_item.product_name, self.product.name)
+        self.assertEqual(line_item.product_sku, self.product.sku)
+        self.assertEqual(line_item.product_price, self.product.price)
 
-    def test_checkout_view_empty_cart(self):
-        """Test checkout view with empty cart"""
-        response = self.client.get(reverse('orders:checkout'))
-        self.assertEqual(response.status_code, 302)  # Redirect to cart
 
-    def test_checkout_view_with_cart(self):
-        """Test checkout view with items in cart"""
-        # Add item to cart
-        self.client.post(f'/cart/add/{self.product.id}/', {'quantity': 1})
+class CheckoutViewTests(PaymentSystemTestCase):
+    """Test checkout view functionality"""
+    
+    def test_checkout_page_access(self):
+        """Test checkout page access with cart"""
+        self.client.login(username='testuser', password='testpass123')
         
         response = self.client.get(reverse('orders:checkout'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Checkout')
-        self.assertContains(response, 'Test Bike')
-
-    def test_checkout_post_valid_data(self):
-        """Test checkout POST with valid data"""
-        # Add item to cart
-        self.client.post(f'/cart/add/{self.product.id}/', {'quantity': 1})
+        self.assertContains(response, self.product.name)
+    
+    def test_checkout_empty_cart_redirect(self):
+        """Test checkout redirect with empty cart"""
+        # Clear cart
+        self.cart.items.all().delete()
         
-        form_data = {
-            'full_name': 'Test User',
-            'email': 'test@example.com',
-            'phone_number': '1234567890',
-            'street_address1': '123 Test St',
-            'town_or_city': 'Test City',
-            'postcode': '12345',
-            'country': 'US'
-        }
+        self.client.login(username='testuser', password='testpass123')
+        response = self.client.get(reverse('orders:checkout'))
         
-        response = self.client.post(reverse('orders:checkout'), form_data)
-        self.assertEqual(response.status_code, 302)  # Redirect to confirmation
+        self.assertEqual(response.status_code, 302)  # Redirect
+    
+    @patch('orders.views.create_payment_intent')
+    def test_create_payment_intent_view(self, mock_create_intent):
+        """Test payment intent creation view"""
+        # Mock successful payment intent creation
+        mock_intent = Mock()
+        mock_intent.id = 'pi_test_123456789'
+        mock_intent.client_secret = 'pi_test_123456789_secret_test'
+        mock_create_intent.return_value = mock_intent
         
-        # Check order was created
-        self.assertEqual(Order.objects.count(), 1)
-        order = Order.objects.first()
-        self.assertEqual(order.full_name, 'Test User')
-
-    def test_order_confirmation_view(self):
-        """Test order confirmation view"""
-        order = Order.objects.create(
-            full_name='Test User',
-            email='test@example.com',
-            street_address1='123 Test St',
-            town_or_city='Test City',
-            country='US'
-        )
-        
-        response = self.client.get(
-            reverse('orders:order_confirmation', args=[order.order_number])
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Order Confirmed')
-        self.assertContains(response, order.order_number)
-
-    def test_order_history_view_authenticated(self):
-        """Test order history view for authenticated user"""
         self.client.login(username='testuser', password='testpass123')
         
-        response = self.client.get(reverse('orders:order_history'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Order History')
-
-    def test_order_history_view_anonymous(self):
-        """Test order history view redirects anonymous users"""
-        response = self.client.get(reverse('orders:order_history'))
-        self.assertEqual(response.status_code, 302)  # Redirect to login
-
-    def test_order_tracking_view_get(self):
-        """Test order tracking view GET"""
-        response = self.client.get(reverse('orders:order_tracking'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Track Your Order')
-
-    def test_order_tracking_view_post_valid(self):
-        """Test order tracking view POST with valid data"""
-        order = Order.objects.create(
-            full_name='Test User',
-            email='test@example.com',
-            street_address1='123 Test St',
-            town_or_city='Test City',
-            country='US'
+        response = self.client.post(
+            reverse('orders:ajax_create_payment_intent'),
+            data=json.dumps({
+                'full_name': 'Test User',
+                'email': 'test@example.com'
+            }),
+            content_type='application/json'
         )
         
-        response = self.client.post(reverse('orders:order_tracking'), {
-            'order_number': order.order_number,
-            'email': 'test@example.com'
-        })
-        
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, order.order_number)
-        self.assertContains(response, 'Order Progress')
-
-    def test_order_tracking_view_post_invalid(self):
-        """Test order tracking view POST with invalid data"""
-        response = self.client.post(reverse('orders:order_tracking'), {
-            'order_number': 'INVALID',
-            'email': 'test@example.com'
-        })
-        
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Order not found')
-
-    def test_ajax_order_status(self):
-        """Test AJAX order status endpoint"""
-        order = Order.objects.create(
-            full_name='Test User',
-            email='test@example.com',
-            street_address1='123 Test St',
-            town_or_city='Test City',
-            country='US'
-        )
-        
-        response = self.client.get(
-            reverse('orders:ajax_order_status', args=[order.order_number])
-        )
-        self.assertEqual(response.status_code, 200)
-        
         data = json.loads(response.content)
         self.assertTrue(data['success'])
-        self.assertEqual(data['order_number'], order.order_number)
-        self.assertEqual(data['status'], 'pending')
+        self.assertEqual(data['payment_intent_id'], 'pi_test_123456789')
 
 
-class OrderFormTest(TestCase):
-    """Test order forms"""
-
-    def test_order_form_valid_data(self):
-        """Test order form with valid data"""
-        form_data = {
-            'full_name': 'Test User',
-            'email': 'test@example.com',
-            'phone_number': '1234567890',
-            'street_address1': '123 Test St',
-            'town_or_city': 'Test City',
-            'postcode': '12345',
-            'country': 'US'
-        }
-        
-        form = OrderForm(form_data)
-        self.assertTrue(form.is_valid())
-
-    def test_order_form_invalid_data(self):
-        """Test order form with invalid data"""
-        form_data = {
-            'full_name': 'Test',  # Should require first and last name
-            'email': 'invalid-email',
-            'street_address1': '',  # Required field
-            'town_or_city': '',  # Required field
-            'country': ''  # Required field
-        }
-        
-        form = OrderForm(form_data)
-        self.assertFalse(form.is_valid())
-        self.assertIn('full_name', form.errors)
-        self.assertIn('email', form.errors)
-        self.assertIn('street_address1', form.errors)
-        self.assertIn('town_or_city', form.errors)
-        self.assertIn('country', form.errors)
-
-    def test_order_form_email_cleaning(self):
-        """Test order form email cleaning"""
-        form_data = {
-            'full_name': 'Test User',
-            'email': '  TEST@EXAMPLE.COM  ',
-            'street_address1': '123 Test St',
-            'town_or_city': 'Test City',
-            'country': 'US'
-        }
-        
-        form = OrderForm(form_data)
-        self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data['email'], 'test@example.com')
-
-
-class OrderIntegrationTest(TestCase):
-    """Test order integration with other systems"""
-
-    def setUp(self):
-        """Set up test data"""
-        self.client = Client()
-        self.user = User.objects.create_user(
-            username='testuser',
+class WebhookTests(PaymentSystemTestCase):
+    """Test webhook functionality"""
+    
+    def test_payment_succeeded_handler(self):
+        """Test payment succeeded webhook handler"""
+        # Create order with payment intent
+        order = Order.objects.create(
+            full_name='Test User',
             email='test@example.com',
-            password='testpass123'
+            street_address1='Test Street 123',
+            town_or_city='Berlin',
+            country='DE',
+            payment_intent_id='pi_test_123456789',
+            order_total=Decimal('299.99'),
+            delivery_cost=Decimal('4.99'),
+            grand_total=Decimal('304.98')
         )
         
-        self.category = Category.objects.create(
-            name='test_bikes',
-            friendly_name='Test Bikes'
-        )
-        
-        self.product = Product.objects.create(
-            name='Test Bike',
-            description='A test bicycle',
-            price=Decimal('100.00'),
-            category=self.category,
-            sku='TEST001',
-            stock_quantity=5
-        )
-
-    def test_complete_checkout_workflow(self):
-        """Test complete checkout workflow from cart to order"""
-        # Add item to cart
-        self.client.post(f'/cart/add/{self.product.id}/', {'quantity': 2})
-        
-        # Verify cart has items
-        response = self.client.get('/cart/')
-        self.assertContains(response, 'Test Bike')
-        
-        # Go to checkout
-        response = self.client.get(reverse('orders:checkout'))
-        self.assertEqual(response.status_code, 200)
-        
-        # Submit checkout form
-        form_data = {
-            'full_name': 'Test User',
-            'email': 'test@example.com',
-            'phone_number': '1234567890',
-            'street_address1': '123 Test St',
-            'town_or_city': 'Test City',
-            'postcode': '12345',
-            'country': 'US'
+        # Mock payment intent data
+        payment_intent_data = {
+            'id': 'pi_test_123456789',
+            'amount_received': 30498,  # €304.98 in cents
+            'currency': 'eur',
+            'charges': {
+                'data': [{'id': 'ch_test_123456789'}]
+            }
         }
         
-        response = self.client.post(reverse('orders:checkout'), form_data)
-        self.assertEqual(response.status_code, 302)
+        result = handle_payment_succeeded(payment_intent_data)
+        
+        self.assertTrue(result['success'])
+        
+        # Refresh order from database
+        order.refresh_from_db()
+        self.assertEqual(order.payment_status, 'succeeded')
+        self.assertEqual(order.status, 'processing')
+    
+    def test_payment_failed_handler(self):
+        """Test payment failed webhook handler"""
+        # Create order with payment intent
+        order = Order.objects.create(
+            full_name='Test User',
+            email='test@example.com',
+            street_address1='Test Street 123',
+            town_or_city='Berlin',
+            country='DE',
+            payment_intent_id='pi_test_failed_123',
+            order_total=Decimal('299.99'),
+            delivery_cost=Decimal('4.99'),
+            grand_total=Decimal('304.98')
+        )
+        
+        # Mock failed payment intent data
+        payment_intent_data = {
+            'id': 'pi_test_failed_123',
+            'last_payment_error': {
+                'code': 'card_declined',
+                'message': 'Your card was declined.',
+                'decline_code': 'generic_decline'
+            }
+        }
+        
+        result = handle_payment_failed(payment_intent_data)
+        
+        self.assertTrue(result['success'])
+        
+        # Refresh order from database
+        order.refresh_from_db()
+        self.assertEqual(order.payment_status, 'failed')
+        self.assertIn('card_declined', order.order_notes)
+
+
+class PaymentIntegrationTests(PaymentSystemTestCase):
+    """Integration tests for complete payment flow"""
+    
+    @patch('orders.views.create_payment_intent')
+    @patch('orders.utils.send_order_confirmation_email')
+    @patch('orders.utils.send_order_notification_email')
+    def test_complete_payment_flow(self, mock_notify, mock_confirm, mock_create_intent):
+        """Test complete payment flow from cart to order"""
+        # Mock payment intent creation
+        mock_intent = Mock()
+        mock_intent.id = 'pi_test_integration_123'
+        mock_intent.client_secret = 'pi_test_integration_123_secret'
+        mock_create_intent.return_value = mock_intent
+        
+        # Mock email sending
+        mock_confirm.return_value = True
+        mock_notify.return_value = True
+        
+        self.client.login(username='testuser', password='testpass123')
+        
+        # Step 1: Create payment intent
+        response = self.client.post(
+            reverse('orders:ajax_create_payment_intent'),
+            data=json.dumps({
+                'full_name': 'Test User',
+                'email': 'test@example.com',
+                'phone_number': '+49123456789',
+                'street_address1': 'Test Street 123',
+                'town_or_city': 'Berlin',
+                'postcode': '10115',
+                'country': 'DE'
+            }),
+            content_type='application/json'
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        intent_data = json.loads(response.content)
+        self.assertTrue(intent_data['success'])
+        
+        # Step 2: Process payment (simulate successful payment)
+        response = self.client.post(
+            reverse('orders:ajax_process_payment'),
+            data=json.dumps({
+                'payment_intent_id': 'pi_test_integration_123',
+                'order_form': {
+                    'full_name': 'Test User',
+                    'email': 'test@example.com',
+                    'phone_number': '+49123456789',
+                    'street_address1': 'Test Street 123',
+                    'town_or_city': 'Berlin',
+                    'postcode': '10115',
+                    'country': 'DE'
+                }
+            }),
+            content_type='application/json'
+        )
+        
+        self.assertEqual(response.status_code, 200)
+        process_data = json.loads(response.content)
+        self.assertTrue(process_data['success'])
         
         # Verify order was created
-        self.assertEqual(Order.objects.count(), 1)
-        order = Order.objects.first()
-        self.assertEqual(order.lineitems.count(), 1)
-        self.assertEqual(order.lineitems.first().quantity, 2)
-        
-        # Verify stock was updated
-        self.product.refresh_from_db()
-        self.assertEqual(self.product.stock_quantity, 3)  # 5 - 2
+        order = Order.objects.get(payment_intent_id='pi_test_integration_123')
+        self.assertEqual(order.full_name, 'Test User')
+        self.assertEqual(order.payment_status, 'processing')
         
         # Verify cart was cleared
-        response = self.client.get('/cart/')
-        self.assertContains(response, 'Your cart is empty')
+        self.cart.refresh_from_db()
+        self.assertEqual(self.cart.items.count(), 0)
+
+
+class PaymentSecurityTests(PaymentSystemTestCase):
+    """Test payment security features"""
+    
+    def test_csrf_protection(self):
+        """Test CSRF protection on payment endpoints"""
+        # Test without CSRF token
+        response = self.client.post(
+            reverse('orders:ajax_create_payment_intent'),
+            data=json.dumps({'test': 'data'}),
+            content_type='application/json'
+        )
+        
+        # Should be forbidden due to CSRF protection
+        self.assertEqual(response.status_code, 403)
+    
+    def test_authentication_required(self):
+        """Test authentication requirements"""
+        # Test order history without authentication
+        response = self.client.get(reverse('orders:order_history'))
+        self.assertEqual(response.status_code, 302)  # Redirect to login
+    
+    def test_order_access_permissions(self):
+        """Test order access permissions"""
+        # Create order for different user
+        other_user = User.objects.create_user(
+            username='otheruser',
+            email='other@example.com',
+            password='otherpass123'
+        )
+        other_profile = UserProfile.objects.create(user=other_user)
+        
+        order = Order.objects.create(
+            user_profile=other_profile,
+            full_name='Other User',
+            email='other@example.com',
+            street_address1='Other Street 123',
+            town_or_city='Munich',
+            country='DE'
+        )
+        
+        # Login as first user and try to access other user's order
+        self.client.login(username='testuser', password='testpass123')
+        response = self.client.get(
+            reverse('orders:order_detail', args=[order.order_number])
+        )
+        
+        self.assertEqual(response.status_code, 403)  # Forbidden

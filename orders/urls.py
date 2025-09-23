@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .webhooks import stripe_webhook
 
 app_name = 'orders'
 
@@ -16,4 +17,15 @@ urlpatterns = [
     # AJAX views
     path('ajax/status/<str:order_number>/', views.order_status_ajax, name='ajax_order_status'),
     path('ajax/checkout-summary/', views.checkout_summary_ajax, name='ajax_checkout_summary'),
+    path('ajax/create-payment-intent/', views.create_payment_intent_view, name='ajax_create_payment_intent'),
+    path('ajax/process-payment/', views.process_payment_view, name='ajax_process_payment'),
+    path('ajax/payment-error-recovery/', views.payment_error_recovery, name='ajax_payment_error_recovery'),
+    path('ajax/retry-payment/', views.retry_payment_intent, name='ajax_retry_payment'),
+    
+    # Error pages
+    path('payment-error/', views.payment_error_page, name='payment_error'),
+    
+    # Stripe webhook
+    path('webhook/stripe/', stripe_webhook, name='stripe_webhook'),
+    path('wh/', stripe_webhook, name='stripe_webhook_short'),  # For Stripe CLI
 ]

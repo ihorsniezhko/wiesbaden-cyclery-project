@@ -119,6 +119,38 @@
                     <hr>
                 </div>
                 
+                <!-- Stripe Payment Element -->
+                <fieldset class="rounded px-3 mb-5">
+                    <legend class="fieldset-label small text-black px-2 w-auto">Payment Information</legend>
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <i class="fas fa-lock"></i> Your payment information is secure and encrypted
+                        </small>
+                    </div>
+                    <div class="mb-3" id="card-element" style="min-height: 40px; padding: 10px; border: 1px solid #000; border-radius: 4px; background-color: white;">
+                        <div style="color: #aab7c4; font-style: italic;">Loading payment form...</div>
+                    </div>
+                    
+
+                    <!-- Used to display form errors -->
+                    <div class="mb-3 text-danger" id="card-errors" role="alert" style="display: none;"></div>
+                    <!-- Pass the client secret to the view so we can get the payment intent id -->
+                    <input type="hidden" value="{{ client_secret }}" name="client_secret">
+                    <div id="card-errors" class="text-danger mt-2" role="alert"></div>
+                    <div id="card-success" class="text-success mt-2" role="alert" style="display: none;">
+                        <i class="fas fa-check-circle"></i> Payment method ready
+                    </div>
+                    
+                    <!-- Test card information for development -->
+                    {% if debug %}
+                    <div class="mt-3 p-2 bg-light border rounded">
+                        <small class="text-muted">
+                            <strong>Test Mode:</strong> Use card number 4242 4242 4242 4242 with any future date and CVC
+                        </small>
+                    </div>
+                    {% endif %}
+                </fieldset>
+                
                 <div class="submit-button text-right mt-5 mb-2">                    
                     <a href="{% url 'shopping_cart:cart' %}" class="btn btn-outline-black rounded-0">
                         <span class="icon">
@@ -145,28 +177,137 @@
 </div>
 
 <div id="loading-overlay">
-    <h1 class="text-light logo-font loading-spinner">
-        <span class="icon">
-            <i class="fas fa-3x fa-sync-alt fa-spin"></i>
-        </span>
-    </h1>
+    <div class="loading-spinner">
+        <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+            <span class="sr-only">Processing...</span>
+        </div>
+        <div class="spinner-text">
+            <div id="loading-message">Processing your secure payment...</div>
+            <small class="mt-2 d-block">Please do not refresh or close this page</small>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
-{% block postloadjs %}
-{{ block.super }}
-<script type="text/javascript">
-    // Show loading overlay on form submission
-    $('#payment-form').submit(function() {
-        $('#loading-overlay').fadeIn();
-        $('#submit-button').attr('disabled', true);
-    });
+{% block extra_js %}
+    {{ block.super }}
+    {{ stripe_public_key|json_script:"id_stripe_public_key" }}
+    {{ client_secret|json_script:"id_client_secret" }}
     
-    // Auto-fill country field if not set
-    if (!$('#id_country').val()) {
-        $('#id_country').val('DE'); // Default to Germany
-    }
-</script>
+    <!-- Load Stripe library -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <!-- Stripe checkout script -->
+    <script>
+        // Wait for DOM to be ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initCheckout);
+        } else {
+            initCheckout();
+        }
+        
+        function initCheckout() {
+            const publicKey = '{{ stripe_public_key }}';
+            const clientSecret = '{{ client_secret }}';
+            
+            if (!publicKey || !clientSecret) {
+                console.error('Missing Stripe configuration');
+                return;
+            }
+            
+            // Initialize Stripe when available
+            let attempts = 0;
+            function waitForStripe() {
+                attempts++;
+                
+                if (typeof Stripe !== 'undefined') {
+                    setupStripeElements();
+                } else if (attempts < 50) {
+                    setTimeout(waitForStripe, 100);
+                } else {
+                    console.error('Stripe library failed to load');
+                }
+            }
+            
+            function setupStripeElements() {
+                try {
+                    const stripe = Stripe(publicKey);
+                    const elements = stripe.elements();
+                    const cardElement = elements.create('card', {
+                        hidePostalCode: true,
+                        style: {
+                            base: {
+                                fontSize: '16px',
+                                color: '#000',
+                                '::placeholder': { color: '#aab7c4' }
+                            }
+                        }
+                    });
+                    
+                    // Mount the card element
+                    cardElement.mount('#card-element');
+                    
+                    // Handle card changes
+                    cardElement.on('change', function(event) {
+                        const errorElement = document.getElementById('card-errors');
+                        if (errorElement) {
+                            if (event.error) {
+                                errorElement.textContent = event.error.message;
+                                errorElement.style.display = 'block';
+                            } else {
+                                errorElement.textContent = '';
+                                errorElement.style.display = 'none';
+                            }
+                        }
+                    });
+                    
+                    // Handle form submission
+                    const form = document.getElementById('payment-form');
+                    if (form) {
+                        form.addEventListener('submit', function(event) {
+                            event.preventDefault();
+                            
+                            const submitButton = document.getElementById('submit-button');
+                            if (submitButton) {
+                                submitButton.disabled = true;
+                                submitButton.textContent = 'Processing...';
+                            }
+                            
+                            stripe.confirmCardPayment(clientSecret, {
+                                payment_method: {
+                                    card: cardElement,
+                                    billing_details: {
+                                        name: form.full_name ? form.full_name.value : '',
+                                        email: form.email ? form.email.value : ''
+                                    }
+                                }
+                            }).then(function(result) {
+                                if (result.error) {
+                                    const errorElement = document.getElementById('card-errors');
+                                    if (errorElement) {
+                                        errorElement.textContent = result.error.message;
+                                        errorElement.style.display = 'block';
+                                    }
+                                    if (submitButton) {
+                                        submitButton.disabled = false;
+                                        submitButton.textContent = 'Complete Order';
+                                    }
+                                } else {
+                                    form.submit();
+                                }
+                            });
+                        });
+                    }
+                    
+                } catch (error) {
+                    console.error('Stripe setup error:', error);
+                }
+            }
+            
+            // Start waiting for Stripe
+            waitForStripe();
+        }
+    </script>
 
 <style>
     .fieldset-label {
@@ -178,29 +319,59 @@
     #card-element {
         color: #000;
         border: 1px solid #ccc;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    #payment-form .form-control:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    #payment-form .form-control.is-invalid {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
     }
 
     .stripe-style-input {
         box-sizing: border-box;
         height: 40px;
         padding: 10px 12px;
-        border: 1px solid transparent;
-        border-radius: 0px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
         background-color: white;
         box-shadow: 0 1px 3px 0 #e6ebf1;
-        -webkit-transition: box-shadow 150ms ease;
-        transition: box-shadow 150ms ease;
+        -webkit-transition: all 150ms ease;
+        transition: all 150ms ease;
     }
 
     .stripe-style-input:focus,
     .stripe-style-input:hover {
-        box-shadow: 0 1px 3px 0 #cfd7df;
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
 
     .stripe-style-input::placeholder {
         color: #87bbfd;
     }
 
+    /* Security indicators */
+    .security-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 8px;
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 4px;
+        color: #155724;
+        font-size: 0.875rem;
+    }
+
+    .security-badge i {
+        margin-right: 4px;
+    }
+
+    /* Enhanced loading overlay */
     #loading-overlay {
         display: none;
         position: fixed;
@@ -208,16 +379,114 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(23, 162, 184, .85);
+        background: linear-gradient(135deg, rgba(23, 162, 184, .9), rgba(13, 110, 253, .9));
         z-index: 9999;
+        backdrop-filter: blur(2px);
     }
 
     .loading-spinner {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         margin: 0;
         height: 100%;
+        color: white;
+    }
+
+    .loading-spinner .spinner-text {
+        margin-top: 20px;
+        font-size: 1.2rem;
+        font-weight: 300;
+    }
+
+    /* Button states */
+    .btn-black {
+        background-color: #000;
+        border-color: #000;
+        color: #fff;
+        transition: all 0.15s ease-in-out;
+    }
+
+    .btn-black:hover {
+        background-color: #333;
+        border-color: #333;
+        color: #fff;
+    }
+
+    .btn-black:disabled {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: #fff;
+        opacity: 0.65;
+    }
+
+    .btn-secondary:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+
+    /* Form validation styles */
+    .invalid-feedback {
+        display: block;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+        color: #dc3545;
+    }
+
+    .was-validated .form-control:invalid {
+        border-color: #dc3545;
+        padding-right: calc(1.5em + 0.75rem);
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath d='m5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    }
+
+    .was-validated .form-control:valid {
+        border-color: #28a745;
+        padding-right: calc(1.5em + 0.75rem);
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='m2.3 6.73.94-.94 1.44 1.44L7.4 4.5l.94.94L4.66 9.17z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .stripe-style-input {
+            font-size: 16px; /* Prevent zoom on iOS */
+        }
+        
+        #loading-overlay .loading-spinner {
+            padding: 20px;
+        }
+        
+        .loading-spinner .spinner-text {
+            font-size: 1rem;
+            text-align: center;
+        }
+    }
+
+    /* Accessibility improvements */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    /* Focus indicators for keyboard navigation */
+    .btn:focus,
+    .form-control:focus {
+        outline: 2px solid #007bff;
+        outline-offset: 2px;
     }
 </style>
 {% endblock %}

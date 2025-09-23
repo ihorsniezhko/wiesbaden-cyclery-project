@@ -78,9 +78,24 @@ class Order(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     
-    # Payment information (for future Stripe integration)
+    # Payment information
     original_cart = models.TextField(null=False, blank=False, default='')
     stripe_pid = models.CharField(max_length=254, null=True, blank=True, default='')
+    payment_intent_id = models.CharField(max_length=254, null=True, blank=True)
+    payment_status = models.CharField(
+        max_length=20,
+        choices=[
+            ('pending', 'Pending'),
+            ('processing', 'Processing'),
+            ('succeeded', 'Succeeded'),
+            ('failed', 'Failed'),
+            ('cancelled', 'Cancelled'),
+        ],
+        default='pending'
+    )
+    
+    # Additional order information
+    order_notes = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ['-date']
@@ -211,3 +226,31 @@ def update_on_delete(sender, instance, **kwargs):
     Update order total on lineitem delete
     """
     instance.order.update_total()
+
+
+class OrderStatusHistory(models.Model):
+    """
+    Track order status changes for audit trail
+    """
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        related_name='status_history'
+    )
+    status = models.CharField(max_length=20, choices=Order.STATUS_CHOICES)
+    changed_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    changed_date = models.DateTimeField(auto_now_add=True)
+    notes = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['-changed_date']
+        verbose_name = 'Order Status History'
+        verbose_name_plural = 'Order Status Histories'
+
+    def __str__(self):
+        return f'{self.order.order_number} - {self.get_status_display()} on {self.changed_date}'

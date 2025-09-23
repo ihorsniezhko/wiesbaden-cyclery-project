@@ -1,8 +1,14 @@
 import json
+import logging
 from decimal import Decimal
 from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from .models import Order, OrderLineItem
 from shopping_cart.utils import get_or_create_cart
+
+logger = logging.getLogger(__name__)
 
 
 def create_order_from_cart(request, order_form):
@@ -200,3 +206,79 @@ def format_order_for_email(order):
         'delivery': f"€{order.delivery_cost:.2f}",
         'total': f"€{order.grand_total:.2f}",
     }
+
+
+def send_order_confirmation_email(order):
+    """
+    Send order confirmation email to customer
+    """
+    try:
+        subject = f'Wiesbaden Cyclery - Order Confirmation #{order.order_number}'
+        
+        # For now, send a simple text email until we create HTML templates
+        message = f"""
+Dear {order.full_name},
+
+Thank you for your order! Your order #{order.order_number} has been received and is being processed.
+
+Order Details:
+- Order Number: {order.order_number}
+- Order Date: {order.date.strftime('%B %d, %Y at %I:%M %p')}
+- Total: €{order.grand_total:.2f}
+
+We'll send you another email when your order ships.
+
+Best regards,
+Wiesbaden Cyclery Team
+        """
+        
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[order.email],
+            fail_silently=False,
+        )
+        
+        logger.info(f"Order confirmation email sent for order {order.order_number}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error sending order confirmation email for order {order.order_number}: {str(e)}")
+        return False
+
+
+def send_order_notification_email(order):
+    """
+    Send order notification email to admin
+    """
+    try:
+        subject = f'New Order Received - #{order.order_number}'
+        
+        message = f"""
+New order received:
+
+Order Number: {order.order_number}
+Customer: {order.full_name} ({order.email})
+Total: €{order.grand_total:.2f}
+Date: {order.date.strftime('%B %d, %Y at %I:%M %p')}
+
+Please process this order in the admin panel.
+        """
+        
+        # Send to admin email
+        admin_email = getattr(settings, 'ADMIN_EMAIL', settings.DEFAULT_FROM_EMAIL)
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[admin_email],
+            fail_silently=False,
+        )
+        
+        logger.info(f"Order notification email sent for order {order.order_number}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error sending order notification email for order {order.order_number}: {str(e)}")
+        return False
