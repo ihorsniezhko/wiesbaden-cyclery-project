@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Wiesbaden Cyclery{% endblock %}</title>
+    <style>
+        /* Mobile-first responsive email styles using only Unicode characters */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #2c3e50;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .footer {
+            background-color: #ecf0f1;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #3498db;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .order-details {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .order-item {
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 0;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .total-row {
+            font-weight: bold;
+            font-size: 16px;
+            border-top: 2px solid #2c3e50;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        /* Mobile responsiveness */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+            }
+            .content {
+                padding: 20px 15px !important;
+            }
+            .header h1 {
+                font-size: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚴 Wiesbaden Cyclery</h1>
+            <p>{% block header_subtitle %}Your Premium Bicycle Shop{% endblock %}</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            {% block content %}
+            <!-- Email content goes here -->
+            {% endblock %}
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Wiesbaden Cyclery</strong></p>
+            <p>📍 Your Premier Destination for Quality Bicycles</p>
+            <p>📧 info@wiesbaden-cyclery.de | 📞 +49 (0) 611 123456</p>
+            <p>
+                <small>
+                    © {% now "Y" %} Wiesbaden Cyclery. All rights reserved.<br>
+                    This email was sent regarding your order. If you have questions, please contact us.
+                </small>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

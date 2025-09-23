@@ -15,6 +15,7 @@ from .utils import (
     get_user_orders,
     get_order_summary
 )
+from .emails import send_order_confirmation_email
 
 
 def checkout(request):
@@ -44,15 +45,28 @@ def checkout(request):
                 # Update product stock
                 update_product_stock(order)
                 
+                # Send order confirmation email
+                email_sent = send_order_confirmation_email(order)
+                
                 # Clear the cart
                 clear_cart(request)
                 
                 # Success message
-                messages.success(
-                    request, 
-                    f'Order {order.order_number} has been created successfully! '
-                    f'A confirmation email will be sent to {order.email}.'
-                )
+                if email_sent:
+                    messages.success(
+                        request, 
+                        f'Order {order.order_number} has been created successfully! '
+                        f'A confirmation email has been sent to {order.email}.'
+                    )
+                else:
+                    messages.success(
+                        request, 
+                        f'Order {order.order_number} has been created successfully!'
+                    )
+                    messages.warning(
+                        request,
+                        'Note: Confirmation email could not be sent. Please check your email settings.'
+                    )
                 
                 # Redirect to order confirmation
                 return redirect('orders:order_confirmation', order_number=order.order_number)

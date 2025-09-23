@@ -19,12 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from . import views
 
-# Import test view
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from test_stripe_simple_view import simple_stripe_test
-from debug_webhook import debug_stripe_webhook
+# Import test view - removed problematic imports for Stage 7
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,8 +28,7 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('cart/', include('shopping_cart.urls')),
     path('orders/', include('orders.urls')),
-    path('test-stripe-simple/', simple_stripe_test, name='test_stripe_simple'),
-    path('debug-wh/', debug_stripe_webhook, name='debug_webhook'),
+    # Test URLs removed for Stage 7 development
     path('', views.index, name='home'),
 ]
 

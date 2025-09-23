@@ -186,12 +186,22 @@ STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY', default='')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='')
 STRIPE_WH_SECRET = config('STRIPE_WH_SECRET', default='')
 
-# Email Configuration
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='wiesbaden.cyclery@gmail.com')
-ADMIN_EMAIL = config('ADMIN_EMAIL', default='admin@wiesbadencyclery.com')
+# Email settings - Use SMTP if credentials are provided, otherwise console
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
+    # SMTP configuration (works in both development and production)
+    EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+    EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+    EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'info@wiesbaden-cyclery.de')
+else:
+    # Fallback: Print emails to console
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'info@wiesbaden-cyclery.de'
+
+# Email configuration for both environments
+EMAIL_SUBJECT_PREFIX = '[Wiesbaden Cyclery] '
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
