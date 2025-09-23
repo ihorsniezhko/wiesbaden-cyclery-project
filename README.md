@@ -59,7 +59,7 @@ DEBUG=True
 SECRET_KEY=your-secret-key-here
 
 # For production with Code Institute PostgreSQL:
-# CI_DATABASE_URL=postgresql://neondb_owner:npg_L95rzFapgvun@ep-morning-art-a2n0h2k6.eu-central-1.aws.neon.tech/quail_plus_crust_122150
+# CI_DATABASE_URL=your_code_institute_database_url_here
 ```
 
 4. **Database setup**
