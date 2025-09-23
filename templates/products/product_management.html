@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Product Management - Wiesbaden Cyclery{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h1><i class="fa fa-cogs"></i> Product Management</h1>
+            <p class="text-muted">Manage products with advanced context-aware logic</p>
+            <hr>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Has Sizes</th>
+                            <th>Sizes</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td>
+                                    <strong>{{ product.name }}</strong><br>
+                                    <small class="text-muted">{{ product.sku|default:"No SKU" }}</small>
+                                </td>
+                                <td>{{ product.category.get_friendly_name|default:"No Category" }}</td>
+                                <td>€{{ product.price }}</td>
+                                <td>
+                                    {% if product.has_sizes %}
+                                        <span class="badge badge-success">Yes</span>
+                                    {% else %}
+                                        <span class="badge badge-secondary">No</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if product.sizes.all %}
+                                        {% for size in product.sizes.all %}
+                                            <span class="badge badge-info">{{ size.display_name }}</span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted">None</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if product.in_stock %}
+                                        <span class="badge badge-success">{{ product.stock_quantity }}</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">Out of Stock</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'edit_product' product.id %}" class="btn btn-primary btn-sm">
+                                        <i class="fa fa-edit"></i> Edit
+                                    </a>
+                                    <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fa fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">No products found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+                <nav aria-label="Product pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

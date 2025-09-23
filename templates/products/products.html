@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block title %}Products - Wiesbaden Cyclery{% endblock %}
 
@@ -46,10 +47,11 @@
     <div class="row">
         {% for product in products %}
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                {% cache 300 product_card product.id product.updated_at %}
                 <div class="card h-100">
                     <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                         {% if product.image %}
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 180px;">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 180px;" loading="lazy">
                         {% else %}
                             <i class="fa fa-bicycle fa-4x text-muted"></i>
                         {% endif %}
@@ -88,6 +90,7 @@
                         </div>
                     </div>
                 </div>
+                {% endcache %}
             </div>
         {% empty %}
             <div class="col-12">

@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Edit {{ product.name }} - Wiesbaden Cyclery{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h1><i class="fa fa-edit"></i> Edit Product</h1>
+            <p class="text-muted">{{ product.name }} - Advanced Context-Aware Logic</p>
+            <hr>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post" id="product-form">
+                {% csrf_token %}
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Product Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Product Name:</strong></label>
+                                    <p class="form-control-plaintext">{{ product.name }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Category:</strong></label>
+                                    <p class="form-control-plaintext">{{ product.category.get_friendly_name|default:"No Category" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Price:</strong></label>
+                                    <p class="form-control-plaintext">€{{ product.price }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Stock:</strong></label>
+                                    <p class="form-control-plaintext">{{ product.stock_quantity }} units</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fa fa-cog"></i> Size Management 
+                            <small class="text-muted">(Advanced Logic)</small>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Context Information -->
+                        <div class="alert alert-info" id="context-info">
+                            <i class="fa fa-info-circle"></i>
+                            <strong>Context:</strong> 
+                            <span id="context-text">
+                                {% if initially_had_sizes %}
+                                    This product originally had sizes. Advanced logic will protect against data loss.
+                                {% else %}
+                                    This product originally had no sizes. Advanced logic will guide configuration.
+                                {% endif %}
+                            </span>
+                        </div>
+                        
+                        <!-- Has Sizes Checkbox -->
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="has_sizes" name="has_sizes" 
+                                       {% if product.has_sizes %}checked{% endif %}>
+                                <label class="form-check-label" for="has_sizes">
+                                    <strong>Has Sizes</strong>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Size Selection -->
+                        <div class="mb-3" id="size-selection">
+                            <label class="form-label"><strong>Available Sizes:</strong></label>
+                            <div class="row">
+                                {% for size in all_sizes %}
+                                    <div class="col-md-3 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input size-checkbox" type="checkbox" 
+                                                   id="size_{{ size.id }}" name="sizes" value="{{ size.id }}"
+                                                   {% if size in product.sizes.all %}checked{% endif %}>
+                                            <label class="form-check-label" for="size_{{ size.id }}">
+                                                {{ size.display_name }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Dynamic Messages -->
+                        <div id="dynamic-messages"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Save Changes
+                    </button>
+                    <a href="{% url 'product_management' %}" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to Management
+                    </a>
+                    <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-primary">
+                        <i class="fa fa-eye"></i> View Product
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fa fa-lightbulb-o"></i> Advanced Logic Guide</h6>
+                </div>
+                <div class="card-body">
+                    <h6>Context-Aware Behavior:</h6>
+                    
+                    {% if initially_had_sizes %}
+                        <div class="alert alert-warning">
+                            <strong>Data Protection Mode</strong><br>
+                            <small>This product originally had sizes. The system will:</small>
+                            <ul class="small mb-0">
+                                <li>Warn before removing size data</li>
+                                <li>Auto-clear sizes if "Has Sizes" is disabled</li>
+                                <li>Auto-disable "Has Sizes" if all sizes removed</li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success">
+                            <strong>Configuration Mode</strong><br>
+                            <small>This product originally had no sizes. The system will:</small>
+                            <ul class="small mb-0">
+                                <li>Guide you through size setup</li>
+                                <li>Auto-enable "Has Sizes" when sizes selected</li>
+                                <li>Provide helpful configuration tips</li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                    <h6 class="mt-3">Current Status:</h6>
+                    <ul class="list-unstyled small">
+                        <li><strong>Has Sizes:</strong> 
+                            {% if product.has_sizes %}
+                                <span class="text-success">Yes</span>
+                            {% else %}
+                                <span class="text-muted">No</span>
+                            {% endif %}
+                        </li>
+                        <li><strong>Size Count:</strong> {{ product.sizes.count }}</li>
+                        <li><strong>Initially Had Sizes:</strong> 
+                            {% if initially_had_sizes %}
+                                <span class="text-warning">Yes</span>
+                            {% else %}
+                                <span class="text-info">No</span>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const hasSizesCheckbox = document.getElementById('has_sizes');
+    const sizeCheckboxes = document.querySelectorAll('.size-checkbox');
+    const dynamicMessages = document.getElementById('dynamic-messages');
+    const contextText = document.getElementById('context-text');
+    
+    // Initial state capture for advanced logic
+    const initiallyHadSizes = {{ initially_had_sizes|yesno:"true,false" }};
+    const initialHasSizes = {{ product.has_sizes|yesno:"true,false" }};
+    const initialSelectedSizes = [{% for size in product.sizes.all %}'{{ size.id }}'{% if not forloop.last %},{% endif %}{% endfor %}];
+    
+    function showMessage(message, type = 'info') {
+        dynamicMessages.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                <i class="fa fa-${type === 'warning' ? 'exclamation-triangle' : type === 'success' ? 'check' : 'info-circle'}"></i>
+                ${message}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span>&times;</span>
+                </button>
+            </div>
+        `;
+    }
+    
+    function getSelectedSizes() {
+        return Array.from(sizeCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+    }
+    
+    function handleHasSizesChange() {
+        const hasSizes = hasSizesCheckbox.checked;
+        const selectedSizes = getSelectedSizes();
+        
+        if (initiallyHadSizes) {
+            // Product originally had sizes - data protection mode
+            if (!hasSizes && selectedSizes.length > 0) {
+                // Removing "Has Sizes" but sizes are selected - clear sizes with warning
+                sizeCheckboxes.forEach(cb => cb.checked = false);
+                showMessage('Data Protection: Removing "Has Sizes" cleared all size selections to prevent data inconsistency.', 'warning');
+            }
+        } else {
+            // Product originally had no sizes - configuration mode
+            if (hasSizes && selectedSizes.length === 0) {
+                showMessage('Configuration Guidance: Please select at least one size when "Has Sizes" is enabled.', 'info');
+            }
+        }
+        
+        // Enable/disable size checkboxes
+        sizeCheckboxes.forEach(cb => {
+            cb.disabled = !hasSizes;
+            cb.parentElement.style.opacity = hasSizes ? '1' : '0.5';
+        });
+    }
+    
+    function handleSizeChange() {
+        const hasSizes = hasSizesCheckbox.checked;
+        const selectedSizes = getSelectedSizes();
+        
+        if (initiallyHadSizes) {
+            // Product originally had sizes - data protection mode
+            if (hasSizes && selectedSizes.length === 0) {
+                // Has sizes enabled but no sizes selected - disable has_sizes
+                hasSizesCheckbox.checked = false;
+                showMessage('Auto-adjustment: "Has Sizes" disabled because no sizes were selected.', 'info');
+                handleHasSizesChange();
+            }
+        } else {
+            // Product originally had no sizes - configuration mode
+            if (!hasSizes && selectedSizes.length > 0) {
+                // Sizes selected but has_sizes not enabled - auto-enable
+                hasSizesCheckbox.checked = true;
+                showMessage('Auto-adjustment: "Has Sizes" automatically enabled because sizes were selected.', 'success');
+                handleHasSizesChange();
+            }
+        }
+    }
+    
+    // Event listeners
+    hasSizesCheckbox.addEventListener('change', handleHasSizesChange);
+    sizeCheckboxes.forEach(cb => {
+        cb.addEventListener('change', handleSizeChange);
+    });
+    
+    // Initial setup
+    handleHasSizesChange();
+});
+</script>
+{% endblock %}
