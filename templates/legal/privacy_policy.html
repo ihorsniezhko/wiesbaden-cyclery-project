@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Privacy Policy - Wiesbaden Cyclery{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h3 mb-0"><i class="fa fa-shield"></i> Privacy Policy</h1>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Last Updated:</strong> {{ last_updated }}
+                    </div>
+
+                    <h2>1. Introduction</h2>
+                    <p>Welcome to Wiesbaden Cyclery. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website and use our services.</p>
+
+                    <h2>2. Information We Collect</h2>
+                    <h3>2.1 Personal Information</h3>
+                    <p>We collect personal information that you voluntarily provide to us when you:</p>
+                    <ul>
+                        <li>Register for an account</li>
+                        <li>Make a purchase</li>
+                        <li>Subscribe to our newsletter</li>
+                        <li>Contact us for customer support</li>
+                        <li>Leave product reviews</li>
+                    </ul>
+
+                    <h3>2.2 Information Collected Automatically</h3>
+                    <p>We automatically collect certain information when you visit our website, including:</p>
+                    <ul>
+                        <li>IP address and browser information</li>
+                        <li>Pages visited and time spent on our site</li>
+                        <li>Referring website information</li>
+                        <li>Device and operating system information</li>
+                    </ul>
+
+                    <h2>3. How We Use Your Information</h2>
+                    <p>We use your personal information to:</p>
+                    <ul>
+                        <li>Process and fulfill your orders</li>
+                        <li>Provide customer support</li>
+                        <li>Send order confirmations and updates</li>
+                        <li>Improve our website and services</li>
+                        <li>Send marketing communications (with your consent)</li>
+                        <li>Comply with legal obligations</li>
+                    </ul>
+
+                    <h2>4. Information Sharing and Disclosure</h2>
+                    <p>We do not sell, trade, or rent your personal information to third parties. We may share your information only in the following circumstances:</p>
+                    <ul>
+                        <li>With service providers who help us operate our business (payment processors, shipping companies)</li>
+                        <li>When required by law or to protect our rights</li>
+                        <li>In connection with a business transfer or merger</li>
+                    </ul>
+
+                    <h2>5. Data Security</h2>
+                    <p>We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure.</p>
+
+                    <h2>6. Your Rights Under GDPR</h2>
+                    <p>If you are a resident of the European Union, you have the following rights:</p>
+                    <ul>
+                        <li><strong>Right to Access:</strong> You can request copies of your personal data</li>
+                        <li><strong>Right to Rectification:</strong> You can request correction of inaccurate data</li>
+                        <li><strong>Right to Erasure:</strong> You can request deletion of your personal data</li>
+                        <li><strong>Right to Restrict Processing:</strong> You can request limitation of data processing</li>
+                        <li><strong>Right to Data Portability:</strong> You can request transfer of your data</li>
+                        <li><strong>Right to Object:</strong> You can object to processing of your personal data</li>
+                    </ul>
+
+                    <h2>7. Cookies and Tracking Technologies</h2>
+                    <p>We use cookies and similar tracking technologies to enhance your browsing experience and analyze website traffic. You can manage your cookie preferences using our Cookie Settings.</p>
+
+                    <h2>8. Third-Party Services</h2>
+                    <p>Our website may contain links to third-party websites and services, including:</p>
+                    <ul>
+                        <li>Payment processors (Stripe)</li>
+                        <li>Analytics services (Google Analytics)</li>
+                        <li>Social media platforms</li>
+                    </ul>
+                    <p>These third parties have their own privacy policies, and we are not responsible for their practices.</p>
+
+                    <h2>9. Data Retention</h2>
+                    <p>We retain your personal information only as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required by law.</p>
+
+                    <h2>10. Children's Privacy</h2>
+                    <p>Our services are not intended for children under 16 years of age. We do not knowingly collect personal information from children under 16.</p>
+
+                    <h2>11. Changes to This Privacy Policy</h2>
+                    <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.</p>
+
+                    <h2>12. Contact Us</h2>
+                    <p>If you have any questions about this Privacy Policy or wish to exercise your rights, please contact us:</p>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <strong>Wiesbaden Cyclery</strong><br>
+                            Email: privacy@wiesbaden-cyclery.de<br>
+                            Phone: +49 (0) 611 123456<br>
+                            Address: Wiesbaden, Germany
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-primary">
+                            <i class="fa fa-home"></i> Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

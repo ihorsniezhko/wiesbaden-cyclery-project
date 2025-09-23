@@ -28,6 +28,10 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('cart/', include('shopping_cart.urls')),
     path('orders/', include('orders.urls')),
+    # Legal pages
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
+    path('cookie-settings/', views.cookie_settings, name='cookie_settings'),
     # Test URLs removed for Stage 7 development
     path('', views.index, name='home'),
 ]

@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Terms of Service - Wiesbaden Cyclery{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h3 mb-0"><i class="fa fa-file-text-o"></i> Terms of Service</h1>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Last Updated:</strong> {{ last_updated }}
+                    </div>
+
+                    <h2>1. Acceptance of Terms</h2>
+                    <p>By accessing and using the Wiesbaden Cyclery website and services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.</p>
+
+                    <h2>2. Description of Service</h2>
+                    <p>Wiesbaden Cyclery provides an online platform for purchasing bicycles, cycling accessories, and related products. Our services include:</p>
+                    <ul>
+                        <li>Online product catalog and ordering system</li>
+                        <li>User account management</li>
+                        <li>Order processing and fulfillment</li>
+                        <li>Customer support services</li>
+                        <li>Product reviews and ratings</li>
+                        <li>Newsletter and marketing communications</li>
+                    </ul>
+
+                    <h2>3. User Accounts</h2>
+                    <h3>3.1 Account Registration</h3>
+                    <p>To access certain features of our service, you must register for an account. You agree to:</p>
+                    <ul>
+                        <li>Provide accurate, current, and complete information</li>
+                        <li>Maintain and update your account information</li>
+                        <li>Keep your password secure and confidential</li>
+                        <li>Accept responsibility for all activities under your account</li>
+                    </ul>
+
+                    <h3>3.2 Account Termination</h3>
+                    <p>We reserve the right to terminate or suspend your account at any time for violations of these terms or for any other reason at our sole discretion.</p>
+
+                    <h2>4. Orders and Payments</h2>
+                    <h3>4.1 Order Acceptance</h3>
+                    <p>All orders are subject to acceptance by Wiesbaden Cyclery. We reserve the right to refuse or cancel any order for any reason, including but not limited to:</p>
+                    <ul>
+                        <li>Product availability</li>
+                        <li>Errors in product or pricing information</li>
+                        <li>Suspected fraudulent activity</li>
+                    </ul>
+
+                    <h3>4.2 Pricing and Payment</h3>
+                    <p>All prices are displayed in EUR and include applicable taxes. Payment is processed securely through Stripe. We accept major credit and debit cards.</p>
+
+                    <h3>4.3 Delivery</h3>
+                    <p>We offer delivery throughout Germany. Delivery times and costs are displayed during checkout. Free delivery is available for orders over €50.</p>
+
+                    <h2>5. Returns and Refunds</h2>
+                    <p>We accept returns within 30 days of delivery for unused items in original packaging. Customers are responsible for return shipping costs unless the item is defective or incorrectly shipped.</p>
+
+                    <h2>6. Product Information and Availability</h2>
+                    <p>We strive to provide accurate product information, but we do not warrant that product descriptions or other content is accurate, complete, or error-free. Product availability is subject to change without notice.</p>
+
+                    <h2>7. User Conduct</h2>
+                    <p>You agree not to use our service to:</p>
+                    <ul>
+                        <li>Violate any applicable laws or regulations</li>
+                        <li>Infringe on intellectual property rights</li>
+                        <li>Submit false or misleading information</li>
+                        <li>Engage in fraudulent activities</li>
+                        <li>Interfere with the proper functioning of the website</li>
+                        <li>Submit inappropriate or offensive content in reviews</li>
+                    </ul>
+
+                    <h2>8. Product Reviews</h2>
+                    <p>When submitting product reviews, you agree that:</p>
+                    <ul>
+                        <li>Reviews must be based on your actual experience with the product</li>
+                        <li>Reviews must be honest and not misleading</li>
+                        <li>You will not submit multiple reviews for the same product</li>
+                        <li>Reviews must not contain inappropriate or offensive content</li>
+                        <li>We reserve the right to moderate and remove reviews</li>
+                    </ul>
+
+                    <h2>9. Intellectual Property</h2>
+                    <p>All content on this website, including text, graphics, logos, images, and software, is the property of Wiesbaden Cyclery or its licensors and is protected by copyright and other intellectual property laws.</p>
+
+                    <h2>10. Privacy</h2>
+                    <p>Your privacy is important to us. Please review our <a href="{% url 'privacy_policy' %}">Privacy Policy</a>, which also governs your use of the service.</p>
+
+                    <h2>11. Disclaimers</h2>
+                    <p>Our service is provided "as is" without any warranties, express or implied. We do not guarantee that the service will be uninterrupted, secure, or error-free.</p>
+
+                    <h2>12. Limitation of Liability</h2>
+                    <p>To the maximum extent permitted by law, Wiesbaden Cyclery shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our service.</p>
+
+                    <h2>13. Indemnification</h2>
+                    <p>You agree to indemnify and hold harmless Wiesbaden Cyclery from any claims, damages, or expenses arising from your use of our service or violation of these terms.</p>
+
+                    <h2>14. Governing Law</h2>
+                    <p>These terms are governed by the laws of Germany. Any disputes will be resolved in the courts of Wiesbaden, Germany.</p>
+
+                    <h2>15. Changes to Terms</h2>
+                    <p>We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting. Your continued use of the service constitutes acceptance of the modified terms.</p>
+
+                    <h2>16. Contact Information</h2>
+                    <p>If you have any questions about these Terms of Service, please contact us:</p>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <strong>Wiesbaden Cyclery</strong><br>
+                            Email: legal@wiesbaden-cyclery.de<br>
+                            Phone: +49 (0) 611 123456<br>
+                            Address: Wiesbaden, Germany
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-primary">
+                            <i class="fa fa-home"></i> Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

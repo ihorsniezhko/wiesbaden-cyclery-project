@@ -155,17 +155,23 @@
                     <small class="text-muted">
                         <i class="fa fa-map-marker"></i> Wiesbaden, Germany<br>
                         <i class="fa fa-phone"></i> +49 (0) 611 123456<br>
-                        <i class="fa fa-envelope"></i> info@wiesbaden-cyclery.de
+                        <i class="fa fa-envelope"></i> info@wiesbaden-cyclery.de<br>
+                        <i class="fa fa-facebook" style="color: #007bff;"></i> <a href="https://www.facebook.com/profile.php?id=61580595100397" target="_blank" rel="noopener noreferrer" style="color: #007bff; text-decoration: none;">Follow us on Facebook</a>
                     </small>
                 </div>
             </div>
             <hr class="my-4">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="mb-0 text-muted">&copy; 2024 Wiesbaden Cyclery. All rights reserved.</p>
+                    <p class="mb-0 text-muted">&copy; 2025 Wiesbaden Cyclery. All rights reserved.</p>
+                    <small class="text-muted">
+                        <a href="{% url 'privacy_policy' %}" class="text-primary"><i class="fa fa-shield"></i> Privacy Policy</a> | 
+                        <a href="{% url 'terms_of_service' %}" class="text-primary"><i class="fa fa-file-text-o"></i> Terms of Service</a> | 
+                        <a href="{% url 'cookie_settings' %}" class="text-primary"><i class="fa fa-cog"></i> Cookie Settings</a>
+                    </small>
                 </div>
                 <div class="col-md-6 text-md-right">
-                    <small class="text-muted">Built with <i class="fa fa-heart" style="color: #dc3545;"></i> for cycling enthusiasts.</small>
+                    <small class="text-muted">Built with <i class="fa fa-heart" style="color: #dc3545; margin: 0; padding: 0;"></i> by Ihor Sniezhko for cycling enthusiasts.</small>
                 </div>
             </div>
         </div>
@@ -175,6 +181,107 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     
+    <!-- GDPR Cookie Consent Banner -->
+    <div id="cookie-consent-banner" class="cookie-consent-banner" style="display: none;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="cookie-consent-content">
+                        <h6><i class="fa fa-cookie-bite"></i> Cookie Consent</h6>
+                        <p class="mb-2">We use cookies to enhance your browsing experience, analyze site traffic, and personalize content. By clicking "Accept All", you consent to our use of cookies.</p>
+                        <small>
+                            <a href="{% url 'privacy_policy' %}" class="text-primary">Privacy Policy</a> | 
+                            <a href="{% url 'cookie_settings' %}" class="text-primary">Cookie Settings</a>
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-right">
+                    <div class="cookie-consent-buttons">
+                        <button type="button" class="btn btn-sm btn-light mr-2" id="cookie-decline">
+                            Decline
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary" id="cookie-accept-all">
+                            Accept All
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Consent Styles -->
+    <style>
+    .cookie-consent-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 20px 0;
+        z-index: 9999;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .cookie-consent-content h6 {
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+    
+    .cookie-consent-content p {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+    
+    .cookie-consent-buttons .btn {
+        min-width: 100px;
+    }
+    
+    @media (max-width: 768px) {
+        .cookie-consent-banner .col-md-4 {
+            margin-top: 15px;
+        }
+        
+        .cookie-consent-buttons {
+            text-align: center;
+        }
+    }
+    </style>
+
+    <!-- Cookie Consent JavaScript -->
+    <script>
+    // Simple Cookie Consent Management
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if consent has already been given
+        const consent = localStorage.getItem('cookieConsent');
+        if (!consent) {
+            document.getElementById('cookie-consent-banner').style.display = 'block';
+        }
+        
+        // Accept all cookies
+        document.getElementById('cookie-accept-all').addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', JSON.stringify({
+                essential: true,
+                analytics: true,
+                marketing: true,
+                timestamp: new Date().toISOString()
+            }));
+            document.getElementById('cookie-consent-banner').style.display = 'none';
+        });
+        
+        // Decline non-essential cookies
+        document.getElementById('cookie-decline').addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', JSON.stringify({
+                essential: true,
+                analytics: false,
+                marketing: false,
+                timestamp: new Date().toISOString()
+            }));
+            document.getElementById('cookie-consent-banner').style.display = 'none';
+        });
+    });
+    </script>
+
     {% block extra_js %}{% endblock %}
 </body>
 </html> 
