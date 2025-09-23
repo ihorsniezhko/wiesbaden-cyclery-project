@@ -84,13 +84,25 @@ This project is being developed in stages to demonstrate realistic e-commerce de
 - ✅ **Stage 1**: Project Foundation - Basic Django setup and homepage
 - ✅ **Stage 2**: User Authentication - Registration and login system
 - ✅ **Stage 3**: Product Catalog - Product management and display
-- ⏳ **Stage 4**: Shopping Cart - Cart functionality and calculations
-- ⏳ **Stage 5**: Order Processing - Checkout and order management
-- ⏳ **Stage 6**: Payment Integration - Stripe payment processing
+- ✅ **Stage 4**: Shopping Cart - Cart functionality and calculations
+- ✅ **Stage 5**: Order Processing - Checkout and order management
+- ✅ **Stage 6**: Payment Integration - Stripe payment processing
 - ⏳ **Stage 7**: Email System - Order confirmations and notifications
 - ⏳ **Stage 8**: Enhanced Features - Advanced functionality
 - ⏳ **Stage 9**: Testing Suite - Comprehensive testing
 - ⏳ **Stage 10**: Production Deployment - Heroku deployment
+
+## 📝 Development Notes
+
+### Naming Convention Evolution
+
+**Note**: During early development, some commit messages and documentation used "Task X" instead of "Stage X" naming convention. This inconsistency exists in the Git history for the following:
+
+- **Commit Messages**: Some commits for Stage 6 (Stripe Payment Integration) use "Task 6" in commit messages
+- **GitHub Issues**: All issues have been standardized to use "Stage X" naming
+- **Documentation**: All current documentation uses "Stage X" naming
+
+**Going Forward**: All future commits, issues, and documentation will consistently use the "Stage X" naming convention. This demonstrates a real-world scenario where naming conventions evolve during project development, and Git history preservation takes precedence over perfect consistency.
 
 ## 🧪 Testing
 
