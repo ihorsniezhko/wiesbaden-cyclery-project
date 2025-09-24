@@ -109,12 +109,14 @@
                     {% if product.sizes.all %}
                         <div class="mb-3">
                             <label class="form-label"><strong>Size:</strong></label>
-                            <select class="form-control" name="size" id="id_product_size" required>
-                                <option value="">Select Size</option>
-                                {% for size in product.sizes.all %}
-                                    <option value="{{ size.id }}">{{ size.display_name }}</option>
-                                {% endfor %}
-                            </select>
+                            <div class="w-50">
+                                <select class="form-control" name="size" id="id_product_size" required>
+                                    <option value="">Select Size</option>
+                                    {% for size in product.sizes.all %}
+                                        <option value="{{ size.id }}">{{ size.display_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                     {% endif %}
                     
@@ -128,7 +130,7 @@
                                             type="button" 
                                             data-item_id="{{ product.id }}">
                                         <span class="icon">
-                                            <i class="fas fa-minus"></i>
+                                            <i class="fa fa-minus"></i>
                                         </span>
                                     </button>
                                 </div>
@@ -140,7 +142,7 @@
                                             type="button" 
                                             data-item_id="{{ product.id }}">
                                         <span class="icon">
-                                            <i class="fas fa-plus"></i>
+                                            <i class="fa fa-plus"></i>
                                         </span>
                                     </button>
                                 </div>
@@ -156,7 +158,7 @@
                         </button>
                         <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 mt-2">
                             <span class="icon">
-                                <i class="fas fa-chevron-left"></i>
+                                <i class="fa fa-chevron-left"></i>
                             </span>
                             <span class="text-uppercase">Keep Shopping</span>
                         </a>
@@ -208,7 +210,7 @@
                                     </div>
                                 </div>
                                 <small class="text-muted">
-                                    by {{ review.user.username }} on {{ review.created_at|date:"M d, Y" }}
+                                    by {% if review.user.userprofile.get_full_name %}{{ review.user.userprofile.get_full_name }}{% else %}{{ review.user.username }}{% endif %} on {{ review.created_at|date:"M d, Y" }}
                                 </small>
                             </div>
                             <p class="card-text">{{ review.comment }}</p>
