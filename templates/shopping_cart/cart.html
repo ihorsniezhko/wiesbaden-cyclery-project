@@ -67,7 +67,7 @@
                                                             type="button" 
                                                             data-item_id="{{ item.product.id }}_{{ item.size.id|default:'none' }}">
                                                         <span>
-                                                            <i class="fas fa-minus fa-sm"></i>
+                                                            <i class="fa fa-minus fa-sm"></i>
                                                         </span>
                                                     </button>
                                                 </div>
@@ -79,7 +79,7 @@
                                                             type="button" 
                                                             data-item_id="{{ item.product.id }}_{{ item.size.id|default:'none' }}">
                                                         <span>
-                                                            <i class="fas fa-plus fa-sm"></i>
+                                                            <i class="fa fa-plus fa-sm"></i>
                                                         </span>
                                                     </button>
                                                 </div>
@@ -116,14 +116,14 @@
                             <td colspan="5" class="text-right">
                                 <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
                                     <span class="icon">
-                                        <i class="fas fa-chevron-left"></i>
+                                        <i class="fa fa-chevron-left"></i>
                                     </span>
                                     <span class="text-uppercase">Keep Shopping</span>
                                 </a>
                                 <a href="{% url 'orders:checkout' %}" class="btn btn-black rounded-0 btn-lg">
                                     <span class="text-uppercase">Secure Checkout</span>
                                     <span class="icon">
-                                        <i class="fas fa-lock"></i>
+                                        <i class="fa fa-lock"></i>
                                     </span>
                                 </a>
                             </td>
@@ -134,7 +134,7 @@
                 <p class="lead mb-5">Your cart is empty.</p>
                 <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
                     <span class="icon">
-                        <i class="fas fa-chevron-left"></i>
+                        <i class="fa fa-chevron-left"></i>
                     </span>
                     <span class="text-uppercase">Keep Shopping</span>
                 </a>
