@@ -59,10 +59,34 @@ def merge_carts(source_cart, target_cart):
 def add_to_cart(request, product, size=None, quantity=1):
     """
     Add a product to the cart with specified quantity and size
+    Includes stock validation to prevent overselling
     """
     cart = get_or_create_cart(request)
     
-    # Check if item already exists in cart
+    # Stock validation
+    if not product.in_stock:
+        raise ValueError(f"{product.name} is currently out of stock")
+    
+    # Check current quantity in cart for this product (all sizes combined for simplicity)
+    current_cart_quantity = sum(
+        item.quantity for item in cart.items.filter(product=product)
+    )
+    
+    # Calculate total quantity after addition
+    total_quantity = current_cart_quantity + quantity
+    
+    # Check if total quantity exceeds available stock
+    if total_quantity > product.stock_quantity:
+        available_to_add = product.stock_quantity - current_cart_quantity
+        if available_to_add <= 0:
+            raise ValueError(f"Cannot add more {product.name} - already have maximum available quantity in cart")
+        else:
+            raise ValueError(
+                f"Only {available_to_add} more units of {product.name} can be added to cart "
+                f"(you have {current_cart_quantity}, stock: {product.stock_quantity})"
+            )
+    
+    # Check if item already exists in cart with same size
     existing_item = cart.items.filter(product=product, size=size).first()
     
     if existing_item:
@@ -84,18 +108,41 @@ def add_to_cart(request, product, size=None, quantity=1):
 def update_cart_item(request, product, size=None, quantity=1):
     """
     Update the quantity of a specific cart item
+    Includes stock validation to prevent overselling
     """
     cart = get_or_create_cart(request)
     
     try:
         cart_item = cart.items.get(product=product, size=size)
+        
         if quantity <= 0:
             cart_item.delete()
             return None
         else:
+            # Stock validation for updates
+            if not product.in_stock:
+                raise ValueError(f"{product.name} is currently out of stock")
+            
+            # Check current quantity in cart for this product (excluding the item being updated)
+            other_cart_quantity = sum(
+                item.quantity for item in cart.items.filter(product=product).exclude(id=cart_item.id)
+            )
+            
+            # Calculate total quantity after update
+            total_quantity = other_cart_quantity + quantity
+            
+            # Check if total quantity exceeds available stock
+            if total_quantity > product.stock_quantity:
+                max_allowed = product.stock_quantity - other_cart_quantity
+                raise ValueError(
+                    f"Cannot set quantity to {quantity}. Maximum allowed: {max_allowed} "
+                    f"(stock: {product.stock_quantity}, other items in cart: {other_cart_quantity})"
+                )
+            
             cart_item.quantity = quantity
             cart_item.save()
             return cart_item
+            
     except CartItem.DoesNotExist:
         return None
 
@@ -121,3 +168,27 @@ def clear_cart(request):
     cart = get_or_create_cart(request)
     cart.clear()
     return True
+
+
+def get_available_stock(request, product):
+    """
+    Get the available stock for a product considering items already in user's cart
+    """
+    if not product.in_stock:
+        return 0
+    
+    cart = get_or_create_cart(request)
+    current_cart_quantity = sum(
+        item.quantity for item in cart.items.filter(product=product)
+    )
+    
+    available = product.stock_quantity - current_cart_quantity
+    return max(0, available)
+
+
+def get_cart_quantity_for_product(request, product):
+    """
+    Get the total quantity of a product currently in the user's cart
+    """
+    cart = get_or_create_cart(request)
+    return sum(item.quantity for item in cart.items.filter(product=product))

@@ -279,9 +279,19 @@
             <!-- Stock Status -->
             <div class="mb-3">
                 {% if product.in_stock %}
-                    <span class="badge badge-success">
-                        <i class="fa fa-check"></i> In Stock ({{ product.stock_quantity }} available)
-                    </span>
+                    {% if available_stock > 0 %}
+                        <span class="badge badge-success">
+                            <i class="fa fa-check"></i> In Stock ({{ available_stock }} available to add)
+                        </span>
+                        {% if cart_quantity > 0 %}
+                            <br><small class="text-muted">You have {{ cart_quantity }} in your cart</small>
+                        {% endif %}
+                    {% else %}
+                        <span class="badge badge-warning">
+                            <i class="fa fa-exclamation-triangle"></i> Maximum quantity in cart
+                        </span>
+                        <br><small class="text-muted">You have {{ cart_quantity }} in your cart (all available stock)</small>
+                    {% endif %}
                 {% else %}
                     <span class="badge badge-danger">
                         <i class="fa fa-times"></i> Out of Stock
@@ -290,7 +300,7 @@
             </div>
             
             <!-- Add to Cart Form -->
-            {% if product.in_stock %}
+            {% if product.in_stock and available_stock > 0 %}
                 <form class="form" action="{% url 'shopping_cart:add_to_cart' product.id %}" method="POST">
                     {% csrf_token %}
                     
@@ -322,8 +332,9 @@
                                 </button>
                             </div>
                             <input class="form-control text-center qty_input" type="text"
-                                   name="quantity" value="1" min="1" max="99"
+                                   name="quantity" value="1" min="1" max="{{ available_stock }}"
                                    data-item_id="{{ product.id }}"
+                                   data-max-stock="{{ available_stock }}"
                                    style="max-width: 50px; height: 32px; -webkit-appearance: none; -moz-appearance: textfield;"
                                    readonly>
                             <div class="input-group-append">
@@ -350,9 +361,15 @@
                 </form>
             {% else %}
                 <div class="mb-3">
-                    <button class="btn btn-secondary" disabled style="width: auto; padding: 0.5rem 1rem;">
-                        <i class="fa fa-times mr-2"></i>Out of Stock
-                    </button>
+                    {% if not product.in_stock %}
+                        <button class="btn btn-secondary" disabled style="width: auto; padding: 0.5rem 1rem;">
+                            <i class="fa fa-times mr-2"></i>Out of Stock
+                        </button>
+                    {% else %}
+                        <button class="btn btn-secondary" disabled style="width: auto; padding: 0.5rem 1rem;">
+                            <i class="fa fa-shopping-cart mr-2"></i>Maximum Quantity in Cart
+                        </button>
+                    {% endif %}
                 </div>
             {% endif %}
             
@@ -512,13 +529,20 @@
     $(document).ready(function() {
         console.log('Product page JavaScript loaded');
         
-        // Disable +/- buttons outside 1-99 range
+        // Disable +/- buttons based on stock limits
         function handleEnableDisable(itemId) {
-            var currentValue = parseInt($(`input[data-item_id='${itemId}']`).val());
+            var input = $(`input[data-item_id='${itemId}']`);
+            var currentValue = parseInt(input.val());
+            var maxStock = parseInt(input.data('max-stock')) || 99;
+            
             var minusDisabled = currentValue <= 1;
-            var plusDisabled = currentValue >= 99;
+            var plusDisabled = currentValue >= maxStock;
+            
             $(`.decrement-qty[data-item_id='${itemId}']`).prop('disabled', minusDisabled);
             $(`.increment-qty[data-item_id='${itemId}']`).prop('disabled', plusDisabled);
+            
+            // Update input max attribute
+            input.attr('max', maxStock);
         }
 
         // Ensure proper enabling/disabling of all inputs on page load
@@ -542,7 +566,9 @@
            var itemId = $(this).data('item_id');
            var allQuantityInputs = $(`.qty_input[data-item_id='${itemId}']`);
            var currentValue = parseInt(allQuantityInputs.val());
-           if (currentValue < 99) {
+           var maxStock = parseInt(allQuantityInputs.data('max-stock')) || 99;
+           
+           if (currentValue < maxStock) {
                allQuantityInputs.val(currentValue + 1);
                handleEnableDisable(itemId);
                console.log('Quantity incremented to:', allQuantityInputs.val());

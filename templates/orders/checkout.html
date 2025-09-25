@@ -127,8 +127,9 @@
                             <i class="fa fa-lock"></i> Your payment information is secure and encrypted
                         </small>
                     </div>
-                    <div class="mb-3" id="card-element" style="min-height: 40px; padding: 10px; border: 1px solid #000; border-radius: 4px; background-color: white;">
-                        <div style="color: #aab7c4; font-style: italic;">Loading payment form...</div>
+                    <div class="mb-3" id="card-element-container" style="min-height: 40px; padding: 10px; border: 1px solid #000; border-radius: 4px; background-color: white;">
+                        <div id="card-element-loading" style="color: #aab7c4; font-style: italic;">Loading payment form...</div>
+                        <div id="card-element" style="display: none;"></div>
                     </div>
                     
 
@@ -145,7 +146,8 @@
                     {% if debug %}
                     <div class="mt-3 p-2 bg-light border rounded">
                         <small class="text-muted">
-                            <strong>Test Mode:</strong> Use card number 4242 4242 4242 4242 with any future date and CVC
+                            <strong>Test Mode:</strong> Use card number 4242 4242 4242 4242 with any future date and CVC<br>
+                            <em>Note: HTTPS warnings in development are normal and will be resolved in production.</em>
                         </small>
                     </div>
                     {% endif %}
@@ -233,6 +235,18 @@
                 try {
                     const stripe = Stripe(publicKey);
                     const elements = stripe.elements();
+                    
+                    // Hide loading text and show card element container
+                    const loadingElement = document.getElementById('card-element-loading');
+                    const cardElementDiv = document.getElementById('card-element');
+                    
+                    if (loadingElement) {
+                        loadingElement.style.display = 'none';
+                    }
+                    if (cardElementDiv) {
+                        cardElementDiv.style.display = 'block';
+                    }
+                    
                     const cardElement = elements.create('card', {
                         hidePostalCode: true,
                         style: {
@@ -244,21 +258,36 @@
                         }
                     });
                     
-                    // Mount the card element
+                    // Mount the card element to the empty div
                     cardElement.mount('#card-element');
                     
                     // Handle card changes
                     cardElement.on('change', function(event) {
                         const errorElement = document.getElementById('card-errors');
-                        if (errorElement) {
-                            if (event.error) {
+                        const successElement = document.getElementById('card-success');
+                        
+                        if (event.error) {
+                            if (errorElement) {
                                 errorElement.textContent = event.error.message;
                                 errorElement.style.display = 'block';
-                            } else {
+                            }
+                            if (successElement) {
+                                successElement.style.display = 'none';
+                            }
+                        } else {
+                            if (errorElement) {
                                 errorElement.textContent = '';
                                 errorElement.style.display = 'none';
                             }
+                            if (event.complete && successElement) {
+                                successElement.style.display = 'block';
+                            }
                         }
+                    });
+                    
+                    // Handle element ready event
+                    cardElement.on('ready', function() {
+                        console.log('Stripe Elements ready');
                     });
                     
                     // Handle form submission
@@ -316,10 +345,16 @@
     }
 
     #payment-form .form-control,
-    #card-element {
+    #card-element-container {
         color: #000;
         border: 1px solid #ccc;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    
+    #card-element {
+        padding: 0;
+        border: none;
+        background: transparent;
     }
 
     #payment-form .form-control:focus {
@@ -353,6 +388,34 @@
 
     .stripe-style-input::placeholder {
         color: #87bbfd;
+    }
+
+    /* Fix placeholder colors to match the muted text */
+    .form-control::placeholder {
+        color: #6c757d !important; /* Same color as "Please fill out the form below" text */
+        opacity: 1;
+    }
+    
+    .form-control::-webkit-input-placeholder {
+        color: #6c757d !important;
+        opacity: 1;
+    }
+    
+    .form-control::-moz-placeholder {
+        color: #6c757d !important;
+        opacity: 1;
+    }
+    
+    .form-control:-ms-input-placeholder {
+        color: #6c757d !important;
+        opacity: 1;
+    }
+    
+    /* Increase height of Country select field */
+    select.form-control {
+        height: calc(1.5em + 0.75rem + 4px) !important; /* Slightly taller than default */
+        min-height: 42px !important;
+        padding: 0.5rem 0.75rem !important;
     }
 
     /* Security indicators */

@@ -20,9 +20,28 @@ def cart_view(request):
     free_delivery_threshold = 50.00  # €50 for free delivery
     free_delivery_delta = max(0, free_delivery_threshold - float(cart.subtotal)) if cart else free_delivery_threshold
     
+    # Add stock information for each cart item
+    cart_items_with_stock = []
+    if cart_items:
+        for item in cart_items:
+            # Calculate available stock for this product
+            other_cart_quantity = sum(
+                cart_item.quantity for cart_item in cart_items 
+                if cart_item.product == item.product and cart_item != item
+            )
+            max_available = item.product.stock_quantity - other_cart_quantity
+            
+            cart_items_with_stock.append({
+                'item': item,
+                'max_available': max_available,
+                'stock_warning': item.quantity > item.product.stock_quantity,
+                'exceeds_stock': item.quantity > max_available,
+            })
+    
     context = {
         'cart': cart,
         'cart_items': cart_items,
+        'cart_items_with_stock': cart_items_with_stock,
         'cart_subtotal': cart.subtotal if cart else 0,
         'cart_delivery_cost': cart.delivery_cost if cart else 4.99,
         'cart_total': cart.total if cart else 0,

@@ -12,7 +12,7 @@ Wiesbaden Cyclery is a **full-featured e-commerce platform** built with Django 3
 
 ### 🌟 Key Features
 
-- **🛍️ E-commerce Core**: Product catalog ✅, shopping cart ✅, secure checkout ✅
+- **🛍️ E-commerce Core**: Product catalog ✅, shopping cart ✅, secure checkout ✅, stock tracking ✅
 - **👤 User Management**: Registration, authentication, user profiles ✅
 - **💳 Payment Processing**: Stripe integration with EUR currency support ✅
 - **📧 Email System**: Order confirmations and status updates with Gmail SMTP ✅
@@ -111,6 +111,7 @@ This project is being developed in stages to demonstrate realistic e-commerce de
 - ✅ **Stage 9**: Enhanced Features - Product reviews, context-aware logic, performance optimizations
 - ⏳ **Stage 10**: Testing Suite - Comprehensive testing (66+ automated tests)
 - ✅ **Stage 11**: SEO Optimization - Meta tags, sitemaps, structured data, social media integration
+- ✅ **Stage 12**: Stock Tracking System - Comprehensive inventory management with overselling prevention
 
 ## 📝 Development Notes
 
@@ -174,6 +175,15 @@ All product images are sourced from **Unsplash** under the Unsplash License (fre
 - **Structured Data**: JSON-LD schema markup for business and product information
 - **Social Media Integration**: Open Graph and Twitter Card tags for rich previews
 - **Search Engine Tools**: Robots.txt, canonical URLs, SEO testing page
+
+### Stage 12: Stock Tracking System ✅
+- **Smart Stock Validation**: Prevents overselling with real-time stock checking
+- **Cart-Aware Inventory**: Considers items already in user's cart when calculating availability
+- **Dynamic Stock Display**: Shows available quantities and cart status on product pages
+- **Frontend Validation**: JavaScript controls respect stock limits with visual feedback
+- **Backend Protection**: Server-side validation prevents overselling even if frontend is bypassed
+- **Order Integration**: Stock automatically decremented on successful purchases
+- **User-Friendly Messaging**: Clear stock warnings and availability information
 
 ## 🔧 Development
 

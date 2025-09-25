@@ -130,6 +130,11 @@ def product_detail(request, product_id):
     
     # Initialize review form
     review_form = ReviewForm()
+    
+    # Get stock information for this user
+    from shopping_cart.utils import get_available_stock, get_cart_quantity_for_product
+    available_stock = get_available_stock(request, product)
+    cart_quantity = get_cart_quantity_for_product(request, product)
 
     context = {
         'product': product,
@@ -138,6 +143,8 @@ def product_detail(request, product_id):
         'avg_rating': avg_rating,
         'user_has_reviewed': user_has_reviewed,
         'review_form': review_form,
+        'available_stock': available_stock,
+        'cart_quantity': cart_quantity,
     }
 
     return render(request, 'products/product_detail.html', context)
