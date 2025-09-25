@@ -1,0 +1,346 @@
+/* Wiesbaden Cyclery Base Styles */
+
+/* Typography */
+body {
+    font-family: 'Roboto Serif', serif;
+    line-height: 1.6;
+}
+
+/* Brand Colors */
+:root {
+    --primary-color: #199CF4;
+    --secondary-color: #555;
+    --accent-color: #ffc107;
+    --dark-color: #000;
+    --light-color: #fff;
+}
+
+/* Navigation */
+.navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #0d8ce8;
+    border-color: #0d8ce8;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0d8ce8 100%);
+}
+
+/* Feature Boxes */
+.feature-box {
+    padding: 2rem 1rem;
+    transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    color: #6c757d;
+}
+
+/* Product Detail Page Spacing */
+.product-detail .row {
+    margin-top: 0;
+}
+
+.product-detail h1 {
+    margin-bottom: 1rem;
+}
+
+.product-detail .lead {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .feature-box {
+        padding: 1rem;
+    }
+}
+/* Fi
+lter Sidebar Styles */
+.filter-section {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1rem;
+}
+
+.filter-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.filter-title {
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.list-group-item-action {
+    border: none;
+    padding: 0.75rem 1rem;
+    color: var(--secondary-color);
+    transition: all 0.2s ease;
+}
+
+.list-group-item-action:hover {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+}
+
+.list-group-item-action.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.list-group-item-action.active:hover {
+    background-color: #0d8ce8;
+    color: white;
+}
+
+/* Filter card styling */
+.card-header {
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* Mobile responsive filters */
+@media (max-width: 991px) {
+    .filter-section {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .col-lg-3.col-md-4 {
+        order: 2;
+    }
+    
+    .col-lg-9.col-md-8 {
+        order: 1;
+    }
+}/
+* Filter Dropdown Styles */
+.dropdown-item.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.dropdown-item.active:hover {
+    background-color: #0d8ce8;
+    color: white;
+}
+
+.dropdown-header {
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-primary {
+    background-color: var(--primary-color);
+}
+
+/* Filter button with active state */
+.btn-outline-secondary.filter-active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}/
+* Filter Sidebar Styles (Dropdown-like but always visible) */
+.filter-sidebar .btn[disabled] {
+    opacity: 1;
+    cursor: default;
+    background-color: #f8f9fa;
+    border-color: #6c757d;
+    color: #495057;
+}
+
+.filter-sidebar .card {
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.filter-sidebar .dropdown-header {
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.filter-sidebar .list-group-item-action {
+    border: none;
+    padding: 0.75rem 1rem;
+    color: var(--secondary-color);
+    transition: all 0.2s ease;
+}
+
+.filter-sidebar .list-group-item-action:hover {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+}
+
+.filter-sidebar .list-group-item-action.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.filter-sidebar .list-group-item-action.active:hover {
+    background-color: #0d8ce8;
+    color: white;
+}
+
+/* Mobile responsive filters */
+@media (max-width: 991px) {
+    .filter-sidebar {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .col-lg-3.col-md-4 {
+        order: 2;
+    }
+    
+    .col-lg-9.col-md-8 {
+        order: 1;
+    }
+}/* F
+ilter and Sort Button Width Limitations */
+.filter-sort-btn {
+    min-width: 120px;
+    max-width: 200px;
+    width: 100%;
+}
+
+/* On larger screens, limit the button width */
+@media (min-width: 992px) {
+    .filter-sort-btn {
+        width: auto;
+        min-width: 140px;
+        max-width: 180px;
+    }
+}
+
+/* On extra large screens, further limit the width */
+@media (min-width: 1200px) {
+    .filter-sort-btn {
+        min-width: 150px;
+        max-width: 200px;
+    }
+}
+
+/* Ensure dropdowns align properly with the button */
+.dropdown .dropdown-menu {
+    min-width: 180px;
+}/* Products 
+Toolbar with Compact Spacing */
+.products-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.toolbar-search {
+    flex: 1;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+.toolbar-filter,
+.toolbar-sort {
+    flex-shrink: 0;
+}
+
+/* Responsive behavior */
+@media (max-width: 767px) {
+    .products-toolbar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    
+    .toolbar-search {
+        max-width: none;
+        min-width: auto;
+    }
+    
+    .toolbar-filter,
+    .toolbar-sort {
+        align-self: stretch;
+    }
+    
+    .filter-sort-btn {
+        width: 100% !important;
+        max-width: none !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .products-toolbar {
+        gap: 12px;
+    }
+    
+    .toolbar-search {
+        min-width: 200px;
+        max-width: 300px;
+    }
+}

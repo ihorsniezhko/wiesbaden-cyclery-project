@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SEO Test Page - Wiesbaden Cyclery{% endblock %}
+
+{% block meta_description %}Test page for validating SEO implementation including structured data, meta tags, and canonical URLs.{% endblock %}
+
+{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h1>SEO Implementation Test Page</h1>
+            <p class="lead">This page validates the SEO optimization features implemented in Stage 11.</p>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fa fa-search"></i> SEO Features Implemented
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">✓ Dynamic Meta Descriptions</li>
+                        <li class="list-group-item">✓ SEO-Optimized Title Tags</li>
+                        <li class="list-group-item">✓ Canonical URLs</li>
+                        <li class="list-group-item">✓ Open Graph Tags</li>
+                        <li class="list-group-item">✓ Twitter Card Tags</li>
+                        <li class="list-group-item">✓ Category-specific Keywords</li>
+                        <li class="list-group-item">✓ Product Schema Markup</li>
+                        <li class="list-group-item">✓ Business Schema Markup</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fa fa-cog"></i> Technical SEO Features
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">✓ XML Sitemap Generation</li>
+                        <li class="list-group-item">✓ Robots.txt Configuration</li>
+                        <li class="list-group-item">✓ Structured Data (JSON-LD)</li>
+                        <li class="list-group-item">✓ Social Media Optimization</li>
+                        <li class="list-group-item">✓ Mobile-Friendly Meta Tags</li>
+                        <li class="list-group-item">✓ Search Engine Indexing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fa fa-link"></i> SEO Testing Links
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Sitemap & Robots</h6>
+                            <ul class="list-unstyled">
+                                <li><a href="/sitemap.xml" target="_blank">XML Sitemap</a></li>
+                                <li><a href="/robots.txt" target="_blank">Robots.txt</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Validation Tools</h6>
+                            <ul class="list-unstyled">
+                                <li><a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+                                <li><a href="https://developers.facebook.com/tools/debug/" target="_blank">Facebook Sharing Debugger</a></li>
+                                <li><a href="https://cards-dev.twitter.com/validator" target="_blank">Twitter Card Validator</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h6><i class="fa fa-info-circle"></i> SEO Implementation Summary</h6>
+                <p class="mb-0">
+                    This Wiesbaden Cyclery implementation includes comprehensive SEO optimization features:
+                </p>
+                <ul class="mb-0 mt-2">
+                    <li>Bicycle-specific structured data markup (JSON-LD)</li>
+                    <li>Canonical URLs to prevent duplicate content</li>
+                    <li>Enhanced meta descriptions and title tags</li>
+                    <li>Social media optimization for better sharing</li>
+                    <li>Comprehensive XML sitemaps with product and category URLs</li>
+                    <li>Bicycle-specific schema markup with technical specifications</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

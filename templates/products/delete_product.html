@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Delete {{ product.name }} - Wiesbaden Cyclery{% endblock %}
+
+{% block extra_css %}
+<style>
+    .delete-confirmation {
+        background: #fff5f5;
+        border: 2px solid #fed7d7;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+    }
+    .product-info {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+    .danger-icon {
+        color: #e53e3e;
+        font-size: 4rem;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="delete-confirmation">
+                <i class="fa fa-exclamation-triangle danger-icon"></i>
+                
+                <h2 class="text-danger mb-3">Delete Product</h2>
+                
+                <p class="lead mb-4">
+                    Are you sure you want to permanently delete this product?
+                    <strong>This action cannot be undone.</strong>
+                </p>
+                
+                <!-- Product Information -->
+                <div class="product-info">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                                     class="img-fluid rounded" style="max-height: 100px;">
+                            {% elif product.image_url %}
+                                <img src="{{ product.image_url }}" alt="{{ product.name }}" 
+                                     class="img-fluid rounded" style="max-height: 100px;">
+                            {% else %}
+                                <div class="bg-light d-flex align-items-center justify-content-center rounded" 
+                                     style="height: 100px; width: 100px;">
+                                    <i class="fa fa-image text-muted fa-2x"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-9 text-start">
+                            <h4 class="mb-2">{{ product.name }}</h4>
+                            <p class="mb-1"><strong>Category:</strong> {{ product.category.get_friendly_name }}</p>
+                            <p class="mb-1"><strong>Price:</strong> €{{ product.price }}</p>
+                            <p class="mb-1"><strong>SKU:</strong> {{ product.sku|default:"N/A" }}</p>
+                            <p class="mb-1">
+                                <strong>Stock:</strong> 
+                                {% if product.in_stock %}
+                                    <span class="text-success">In Stock ({{ product.stock_quantity }})</span>
+                                {% else %}
+                                    <span class="text-danger">Out of Stock</span>
+                                {% endif %}
+                            </p>
+                            {% if product.has_sizes and product.sizes.exists %}
+                                <p class="mb-0">
+                                    <strong>Sizes:</strong> 
+                                    {% for size in product.sizes.all %}
+                                        <span class="badge bg-secondary">{{ size.display_name }}</span>
+                                    {% endfor %}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Warning Information -->
+                <div class="alert alert-warning text-start">
+                    <h6><i class="fa fa-warning"></i> What will be deleted:</h6>
+                    <ul class="mb-0">
+                        <li>Product information and specifications</li>
+                        <li>Product images (if uploaded to server)</li>
+                        <li>All customer reviews for this product</li>
+                        <li>Size associations</li>
+                        <li>Stock and inventory records</li>
+                    </ul>
+                </div>
+                
+                <!-- Action Buttons -->
+                <form method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-lg me-3">
+                        <i class="fa fa-trash"></i> Yes, Delete Product
+                    </button>
+                </form>
+                
+                <a href="{% url 'edit_product' product.id %}" class="btn btn-secondary btn-lg me-2">
+                    <i class="fa fa-arrow-left"></i> Cancel
+                </a>
+                
+                <a href="{% url 'product_management' %}" class="btn btn-outline-secondary btn-lg">
+                    <i class="fa fa-list"></i> Back to Management
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

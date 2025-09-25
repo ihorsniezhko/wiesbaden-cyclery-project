@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Wiesbaden Cyclery - Premium Bicycles & Cycling Gear{% endblock %}
+
+{% block meta_description %}Wiesbaden Cyclery - Your premier bicycle shop in Wiesbaden, Germany. Quality road bikes, mountain bikes, electric bikes, and cycling accessories. Expert service, fast delivery, and quality guarantee.{% endblock %}
+
+{% block meta_keywords %}bicycle shop Wiesbaden, road bikes, mountain bikes, electric bikes, cycling accessories, bike repair, cycling gear, Germany, premium bicycles{% endblock %}
+
+{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}
+
+{% block og_title %}Wiesbaden Cyclery - Premium Bicycles & Cycling Gear in Wiesbaden{% endblock %}
+{% block og_description %}Discover premium bicycles and cycling gear at Wiesbaden Cyclery. Expert service, quality guarantee, and fast delivery throughout Germany.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 font-weight-bold mb-4">Welcome to Wiesbaden Cyclery</h1>
+                <p class="lead mb-4">Your premier destination for quality bicycles, expert service, and cycling accessories. Discover our extensive range of road bikes, mountain bikes, and e-bikes.</p>
+                <a href="{% url 'products' %}" class="btn btn-light btn-lg">Shop Now</a>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="fa fa-bicycle" style="font-size: 200px; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="feature-box">
+                    <i class="fa fa-wrench fa-3x text-primary mb-3"></i>
+                    <h5>Expert Service</h5>
+                    <p>Professional repairs and maintenance by certified technicians.</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="feature-box">
+                    <i class="fa fa-truck fa-3x text-primary mb-3"></i>
+                    <h5>Fast Delivery</h5>
+                    <p>Free delivery on orders over €50 throughout the region.</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="feature-box">
+                    <i class="fa fa-check-circle fa-3x text-primary mb-3"></i>
+                    <h5>Quality Guarantee</h5>
+                    <p>All bikes come with manufacturer warranties and our quality promise.</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="feature-box">
+                    <i class="fa fa-lightbulb-o fa-3x text-primary mb-3"></i>
+                    <h5>Expert Advice</h5>
+                    <p>Get personalized recommendations from our cycling specialists.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Shop by Category</h2>
+        <div class="row">
+            {% for category in all_categories %}
+                <div class="col-lg col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center d-flex flex-column">
+                            <i class="fa fa-{% if 'road' in category.name %}road{% elif 'mountain' in category.name %}tree{% elif 'electric' in category.name %}bolt{% elif 'accessories' in category.name %}wrench{% elif 'components' in category.name %}cogs{% elif 'sale' in category.name %}tag{% else %}bicycle{% endif %} fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">{{ category.get_friendly_name }}</h5>
+                            <p class="card-text flex-grow-1">
+                                {% if 'road' in category.name %}High-performance bikes for speed and endurance on paved roads.
+                                {% elif 'mountain' in category.name %}Rugged bikes built for off-road adventures and trail riding.
+                                {% elif 'electric' in category.name %}Modern e-bikes with motor assistance for effortless cycling.
+                                {% elif 'accessories' in category.name %}Essential gear and accessories for every cyclist.
+                                {% elif 'components' in category.name %}Quality bike parts and components for maintenance and upgrades.
+                                {% elif 'sale' in category.name %}Great deals and discounted items for smart shoppers.
+                                {% else %}Quality cycling products for all your needs.
+                                {% endif %}
+                            </p>
+                            <a href="{% url 'products' %}?category={{ category.name }}" class="btn btn-primary mt-auto">View {{ category.get_friendly_name }}</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

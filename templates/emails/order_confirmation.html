@@ -1,0 +1,73 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Order Confirmation - {{ order.order_number }}{% endblock %}
+
+{% block header_subtitle %}Order Confirmation{% endblock %}
+
+{% block content %}
+<h2>✅ Order Confirmed!</h2>
+
+<p>Dear {{ order.full_name }},</p>
+
+<p>Thank you for your order! We're excited to confirm that we've received your order and it's being processed.</p>
+
+<div class="order-details">
+    <h3>📋 Order Details</h3>
+    <p><strong>Order Number:</strong> {{ order.order_number }}</p>
+    <p><strong>Order Date:</strong> {{ order.date|date:"F d, Y" }}</p>
+    <p><strong>Order Status:</strong> {{ order.get_status_display }}</p>
+</div>
+
+<div class="order-details">
+    <h3>🛍️ Items Ordered</h3>
+    {% for item in order.lineitems.all %}
+    <div class="order-item">
+        <strong>{{ item.product.name }}</strong>
+        {% if item.product_size %}(Size: {{ item.product_size }}){% endif %}
+        <br>
+        Quantity: {{ item.quantity }} × €{{ item.product.price }} = €{{ item.lineitem_total }}
+    </div>
+    {% endfor %}
+    
+    <div class="order-item">
+        <strong>Subtotal:</strong> €{{ order.order_total }}
+    </div>
+    <div class="order-item">
+        <strong>Delivery:</strong> €{{ order.delivery_cost }}
+    </div>
+    <div class="order-item total-row">
+        <strong>Grand Total: €{{ order.grand_total }}</strong>
+    </div>
+</div>
+
+<div class="order-details">
+    <h3>🚚 Delivery Information</h3>
+    <p>
+        <strong>{{ order.full_name }}</strong><br>
+        {{ order.street_address1 }}<br>
+        {% if order.street_address2 %}{{ order.street_address2 }}<br>{% endif %}
+        {{ order.town_or_city }}, {{ order.postcode }}<br>
+        {{ order.country.name }}
+    </p>
+    <p><strong>Phone:</strong> {{ order.phone_number }}</p>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}/orders/tracking/" class="button">
+        🔍 Track Your Order
+    </a>
+</div>
+
+<h3>📞 What's Next?</h3>
+<ul>
+    <li>✉️ You'll receive email updates as your order progresses</li>
+    <li>📦 Your order will be processed within 1-2 business days</li>
+    <li>🚚 You'll receive tracking information once shipped</li>
+    <li>📞 Contact us at info@wiesbaden-cyclery.de if you have questions</li>
+</ul>
+
+<p>Thank you for choosing Wiesbaden Cyclery!</p>
+
+<p>Best regards,<br>
+<strong>The Wiesbaden Cyclery Team</strong></p>
+{% endblock %}

@@ -1,0 +1,514 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Wiesbaden Cyclery - Premium Bicycle Shop{% endblock %}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}Wiesbaden Cyclery - Your premier destination for quality bicycles, cycling accessories, and expert service in Wiesbaden, Germany.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}bicycles, cycling, bike shop, Wiesbaden, road bikes, mountain bikes, electric bikes, cycling accessories{% endblock %}">
+    <meta name="author" content="Wiesbaden Cyclery">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="{% block og_title %}{% firstof page_title 'Wiesbaden Cyclery' %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% firstof page_description 'Wiesbaden Cyclery - Your premier destination for quality bicycles, cycling accessories, and expert service in Wiesbaden, Germany.' %}{% endblock %}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/og-default.jpg' %}{% endblock %}">
+    <meta property="og:site_name" content="Wiesbaden Cyclery">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{% firstof page_title 'Wiesbaden Cyclery' %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% firstof page_description 'Wiesbaden Cyclery - Your premier destination for quality bicycles, cycling accessories, and expert service in Wiesbaden, Germany.' %}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/og-default.jpg' %}{% endblock %}">
+    
+    <!-- Structured Data for Business -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Wiesbaden Cyclery",
+        "description": "Premier bicycle shop in Wiesbaden, Germany offering quality bicycles, cycling accessories, and expert service.",
+        "url": "{{ request.build_absolute_uri }}",
+        "telephone": "+49-611-123456",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Wilhelmstraße 123",
+            "addressLocality": "Wiesbaden",
+            "postalCode": "65183",
+            "addressCountry": "DE"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "50.0826",
+            "longitude": "8.2417"
+        },
+        "openingHours": [
+            "Mo-Fr 09:00-18:00",
+            "Sa 09:00-16:00"
+        ],
+        "priceRange": "€€",
+        "image": "{% static 'images/og-default.jpg' %}",
+        "sameAs": [
+            "https://www.facebook.com/wiesbadencyclery",
+            "https://www.instagram.com/wiesbadencyclery"
+        ]
+    }
+    </script>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand font-weight-bold" href="{% url 'home' %}">
+                <i class="fa fa-bicycle text-primary"></i>
+                WIESBADEN CYCLERY
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="{% url 'products' %}" id="productsDropdown" role="button" data-toggle="dropdown">
+                            Products
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'products' %}">
+                                <i class="fa fa-th-large"></i> All Products
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'products' %}?category=sale_items">
+                                <i class="fa fa-tag"></i> Sale Items
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Categories</h6>
+                            {% for category in all_categories %}
+                                <a class="dropdown-item" href="{% url 'products' %}?category={{ category.name }}">
+                                    <i class="fa fa-{% if 'bike' in category.name %}bicycle{% elif category.name == 'accessories' %}cog{% elif category.name == 'components' %}wrench{% else %}tag{% endif %}"></i> 
+                                    {{ category.get_friendly_name }}
+                                </a>
+                            {% endfor %}
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">Accessories & Gear</h6>
+                            <a class="dropdown-item" href="{% url 'products' %}?category=accessories">
+                                <i class="fa fa-wrench"></i> Accessories
+                            </a>
+                            <a class="dropdown-item" href="{% url 'products' %}?category=components">
+                                <i class="fa fa-cogs"></i> Components
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'orders:order_tracking' %}">Track Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shopping_cart:cart' %}">
+                            <i class="fa fa-shopping-cart"></i> Cart
+                            {% if cart_total_items > 0 %}
+                                <span class="badge badge-warning">{{ cart_total_items }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                                <i class="fa fa-user"></i> 
+                                {% if user.userprofile.get_full_name %}
+                                    {{ user.userprofile.get_full_name }}
+                                {% else %}
+                                    {{ user.username }}
+                                {% endif %}
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{% url 'profile' %}">
+                                    <i class="fa fa-user"></i> My Profile
+                                </a>
+                                <a class="dropdown-item" href="{% url 'orders:order_history' %}">
+                                    <i class="fa fa-list"></i> Order History
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'account_logout' %}">
+                                    <i class="fa fa-sign-out"></i> Sign Out
+                                </a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_login' %}">
+                                <i class="fa fa-sign-in"></i> Sign In
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_signup' %}">
+                                <i class="fa fa-user-plus"></i> Sign Up
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <h5><i class="fa fa-bicycle text-primary"></i> Wiesbaden Cyclery</h5>
+                    <p>Your premier destination for quality bicycles and cycling accessories in Wiesbaden.</p>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'products' %}" class="text-light"><i class="fa fa-th-large"></i> All Products</a></li>
+                        <li><a href="{% url 'products' %}?category=sale_items" class="text-light"><i class="fa fa-tag"></i> Sale Items</a></li>
+                        <li><a href="{% url 'orders:order_tracking' %}" class="text-light"><i class="fa fa-search"></i> Track Order</a></li>
+                        <li><a href="{% url 'shopping_cart:cart' %}" class="text-light"><i class="fa fa-shopping-cart"></i> Shopping Cart</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Services</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li><i class="fa fa-wrench"></i> Expert Repairs</li>
+                        <li><i class="fa fa-truck"></i> Fast Delivery</li>
+                        <li><i class="fa fa-shield"></i> Quality Guarantee</li>
+                        <li><i class="fa fa-phone"></i> Customer Support</li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Newsletter</h5>
+                    <p class="text-muted mb-3">Get cycling tips and special offers!</p>
+                    
+                    <!-- Mailchimp Newsletter Signup - Inline Layout -->
+                    <div id="mc_embed_shell">
+                        <div id="mc_embed_signup">
+                            <form action="https://herokuapp.us8.list-manage.com/subscribe/post?u=dfe8a06ce5f839c617520138e&amp;id=bb94b89177&amp;f_id=00c10de1f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+                                <div id="mc_embed_signup_scroll">
+                                    <!-- Inline Form Layout -->
+                                    <div class="input-group mb-2">
+                                        <input type="email" name="EMAIL" class="form-control required email" id="mce-EMAIL" placeholder="Your email" required="" value="">
+                                        <div class="input-group-append">
+                                            <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary" value="Subscribe">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- GDPR Compliance Checkbox -->
+                                    <div class="form-check mb-2">
+                                        <input type="checkbox" class="form-check-input" id="gdpr-consent" name="gdpr" required>
+                                        <label class="form-check-label text-muted small" for="gdpr-consent">
+                                            I agree to receive cycling tips and special offers via email. You can unsubscribe at any time.
+                                        </label>
+                                    </div>
+                                    
+                                    <div id="mce-responses" class="clear foot">
+                                        <div class="response" id="mce-error-response" style="display: none;"></div>
+                                        <div class="response" id="mce-success-response" style="display: none;"></div>
+                                    </div>
+                                    <div aria-hidden="true" style="position: absolute; left: -5000px;">
+                                        <input type="text" name="b_dfe8a06ce5f839c617520138e_bb94b89177" tabindex="-1" value="">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <small class="text-muted">
+                        <i class="fa fa-map-marker"></i> Wiesbaden, Germany<br>
+                        <i class="fa fa-phone"></i> +49 (0) 611 123456<br>
+                        <i class="fa fa-envelope"></i> info@wiesbaden-cyclery.de<br>
+                        <i class="fa fa-facebook text-primary"></i> <a href="https://www.facebook.com/profile.php?id=61580595100397" target="_blank" rel="noopener noreferrer" class="text-primary" style="text-decoration: none;">Follow us on Facebook</a>
+                    </small>
+                </div>
+            </div>
+            <hr class="my-1">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-muted">&copy; 2025 Wiesbaden Cyclery. All rights reserved.</p>
+                    <small class="text-muted">
+                        <a href="{% url 'privacy_policy' %}" class="text-primary"><i class="fa fa-shield"></i> Privacy Policy</a> | 
+                        <a href="{% url 'terms_of_service' %}" class="text-primary"><i class="fa fa-file-text-o"></i> Terms of Service</a> | 
+                        <a href="{% url 'cookie_settings' %}" class="text-primary"><i class="fa fa-cog"></i> Cookie Settings</a>
+                    </small>
+                </div>
+                <div class="col-md-6 text-md-right">
+                    <small class="text-muted">Built with <i class="fa fa-heart" style="color: #dc3545; margin: 0; padding: 0;"></i> by Ihor Sniezhko for cycling enthusiasts.</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- GDPR Cookie Consent Banner -->
+    <div id="cookie-consent-banner" class="cookie-consent-banner" style="display: none;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="cookie-consent-content">
+                        <h6><i class="fa fa-cookie-bite"></i> Cookie Consent</h6>
+                        <p class="mb-2">We use cookies to enhance your browsing experience, analyze site traffic, and personalize content. By clicking "Accept All", you consent to our use of cookies.</p>
+                        <small>
+                            <a href="{% url 'privacy_policy' %}" class="text-primary">Privacy Policy</a> | 
+                            <a href="{% url 'cookie_settings' %}" class="text-primary">Cookie Settings</a>
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-right">
+                    <div class="cookie-consent-buttons">
+                        <button type="button" class="btn btn-sm btn-light mr-2" id="cookie-decline">
+                            Decline
+                        </button>
+                        <button type="button" class="btn btn-sm btn-primary" id="cookie-accept-all">
+                            Accept All
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Consent Styles -->
+    <style>
+    .cookie-consent-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 20px 0;
+        z-index: 9999;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .cookie-consent-content h6 {
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+    
+    .cookie-consent-content p {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+    
+    .cookie-consent-buttons .btn {
+        min-width: 100px;
+    }
+    
+    @media (max-width: 768px) {
+        .cookie-consent-banner .col-md-4 {
+            margin-top: 15px;
+        }
+        
+        .cookie-consent-buttons {
+            text-align: center;
+        }
+    }
+    </style>
+
+    <!-- Cookie Consent JavaScript -->
+    <script>
+    // Simple Cookie Consent Management
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if consent has already been given
+        const consent = localStorage.getItem('cookieConsent');
+        if (!consent) {
+            document.getElementById('cookie-consent-banner').style.display = 'block';
+        }
+        
+        // Accept all cookies
+        document.getElementById('cookie-accept-all').addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', JSON.stringify({
+                essential: true,
+                analytics: true,
+                marketing: true,
+                timestamp: new Date().toISOString()
+            }));
+            document.getElementById('cookie-consent-banner').style.display = 'none';
+        });
+        
+        // Decline non-essential cookies
+        document.getElementById('cookie-decline').addEventListener('click', function() {
+            localStorage.setItem('cookieConsent', JSON.stringify({
+                essential: true,
+                analytics: false,
+                marketing: false,
+                timestamp: new Date().toISOString()
+            }));
+            document.getElementById('cookie-consent-banner').style.display = 'none';
+        });
+    });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 
+   <!-- Mailchimp Newsletter Validation -->
+    <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
+    <script type="text/javascript">
+        (function($) {
+            window.fnames = new Array(); 
+            window.ftypes = new Array();
+            fnames[0]='EMAIL';ftypes[0]='email';
+            fnames[1]='FNAME';ftypes[1]='text';
+            fnames[2]='LNAME';ftypes[2]='text';
+            fnames[3]='ADDRESS';ftypes[3]='address';
+            fnames[4]='PHONE';ftypes[4]='phone';
+            fnames[5]='BIRTHDAY';ftypes[5]='birthday';
+            fnames[6]='COMPANY';ftypes[6]='text';
+        }(jQuery));
+        var $mcj = jQuery.noConflict(true);
+        
+        // Enhanced form validation and GDPR compliance
+        $(document).ready(function() {
+            $('#mc-embedded-subscribe-form').on('submit', function(e) {
+                var email = $('#mce-EMAIL').val();
+                var gdprConsent = $('#gdpr-consent').is(':checked');
+                
+                // Clear previous messages
+                $('#mce-error-response, #mce-success-response').hide();
+                
+                // Email format validation
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email || !emailRegex.test(email)) {
+                    $('#mce-error-response').text('Please enter a valid email address.').show();
+                    e.preventDefault();
+                    return false;
+                }
+                
+                // GDPR consent validation
+                if (!gdprConsent) {
+                    $('#mce-error-response').text('Please agree to receive our newsletter to continue.').show();
+                    e.preventDefault();
+                    return false;
+                }
+                
+                // Show loading state
+                $('#mc-embedded-subscribe').val('Subscribing...').prop('disabled', true);
+                
+                // Allow form to submit normally to Mailchimp
+                return true;
+            });
+            
+            // Handle successful subscription (if staying on same page)
+            if (window.location.hash === '#newsletter-success') {
+                $('#mce-success-response').text('Thank you for subscribing! Check your email to confirm.').show();
+            }
+        });
+    </script>
+
+    <!-- Mailchimp Custom Styles -->
+    <style>
+    #mc_embed_signup {
+        background: transparent !important;
+        clear: left;
+        font: 14px Helvetica,Arial,sans-serif;
+        width: 100% !important;
+        max-width: 300px;
+    }
+
+    /* Inline Input Group Styling */
+    #mc_embed_signup .input-group {
+        margin-bottom: 10px !important;
+    }
+    #mc_embed_signup .form-control {
+        border-color: #ced4da !important;
+        font-size: 14px !important;
+    }
+    #mc_embed_signup .form-control:focus {
+        border-color: #007bff !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+    }
+    #mc_embed_signup .btn-primary {
+        background-color: #007bff !important;
+        border-color: #007bff !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        padding: 0.375rem 0.75rem !important;
+        white-space: nowrap !important;
+    }
+    #mc_embed_signup .btn-primary:hover {
+        background-color: #0056b3 !important;
+        border-color: #0056b3 !important;
+    }
+    #mc_embed_signup .btn-primary:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+    }
+    
+    /* GDPR Checkbox Styling */
+    #mc_embed_signup .form-check {
+        margin-top: 8px !important;
+        margin-bottom: 5px !important;
+    }
+    #mc_embed_signup .form-check-input {
+        margin-top: 0.2rem !important;
+    }
+    #mc_embed_signup .form-check-label {
+        font-size: 12px !important;
+        line-height: 1.3 !important;
+        margin-left: 0.25rem !important;
+    }
+    
+    #mc_embed_signup #mce-responses {
+        margin-top: 10px !important;
+    }
+    #mc_embed_signup .response {
+        font-size: 12px !important;
+        margin-top: 5px !important;
+    }
+    #mc_embed_signup #mce-error-response {
+        color: #dc3545 !important;
+    }
+    #mc_embed_signup #mce-success-response {
+        color: #28a745 !important;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+        #mc_embed_signup .input-group {
+            flex-direction: column !important;
+        }
+        #mc_embed_signup .input-group-append {
+            margin-top: 10px !important;
+        }
+        #mc_embed_signup .btn-primary {
+            width: 100% !important;
+        }
+        #mc_embed_signup .form-check-label {
+            font-size: 11px !important;
+        }
+    }
+    </style>

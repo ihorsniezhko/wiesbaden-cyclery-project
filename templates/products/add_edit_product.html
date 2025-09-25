@@ -1,0 +1,714 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if is_editing %}Edit {{ product.name }}{% else %}Add New Product{% endif %} - Wiesbaden Cyclery{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .form-section h5 {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #007bff;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .bicycle-specs {
+        background: #f8fffe;
+        border-left: 4px solid #28a745;
+    }
+    
+    /* Improved checkbox styling */
+    .option-group {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .option-row {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 120px;
+    }
+    
+    .checkbox-wrapper input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+    }
+    
+    .checkbox-wrapper label {
+        margin: 0;
+        font-weight: 500;
+        color: #495057;
+        cursor: pointer;
+    }
+    
+    /* Compact stock quantity field */
+    .stock-quantity-compact {
+        max-width: 120px;
+    }
+    
+    .stock-quantity-compact input {
+        text-align: center;
+        font-weight: 500;
+    }
+    
+    /* Size selection styling */
+    .size-selection-area {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 12px;
+    }
+    
+    .size-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+    }
+    
+    .size-option {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border: 2px solid #dee2e6;
+        border-radius: 8px;
+        padding: 12px 8px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        min-height: 50px;
+    }
+    
+    .size-option:hover {
+        border-color: #007bff;
+        background: #f0f8ff;
+    }
+    
+    .size-option input[type="checkbox"] {
+        display: none;
+    }
+    
+    .size-option input[type="checkbox"]:checked + label {
+        color: #007bff;
+        font-weight: 600;
+    }
+    
+    .size-option input[type="checkbox"]:checked {
+        background: #007bff;
+    }
+    
+    .size-option.selected {
+        border-color: #007bff;
+        background: #e3f2fd;
+    }
+    
+    .size-option label {
+        margin: 0;
+        cursor: pointer;
+        font-weight: 500;
+        text-align: center;
+        width: 100%;
+    }
+    
+    /* Form field improvements */
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        padding: 10px 12px;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 6px;
+    }
+    
+    .required-field {
+        color: #dc3545;
+        font-weight: 600;
+    }
+    
+    .context-info {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 20px;
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+        .option-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .size-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .stock-quantity-compact {
+            max-width: 100%;
+        }
+    }
+    
+    /* Visual feedback for disabled sections */
+    .section-disabled {
+        opacity: 0.6;
+        pointer-events: none;
+        background: #f8f9fa !important;
+    }
+    
+    .section-enabled {
+        opacity: 1;
+        pointer-events: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2>
+                        <i class="fa {% if is_editing %}fa-edit{% else %}fa-plus{% endif %}"></i>
+                        {% if is_editing %}Edit Product: {{ product.name }}{% else %}Add New Product{% endif %}
+                    </h2>
+                    <p class="text-muted">
+                        {% if is_editing %}
+                            Update product information and specifications
+                        {% else %}
+                            Create a new product with complete specifications
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <a href="{% url 'product_management' %}" class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Back to Management
+                    </a>
+                    {% if is_editing %}
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-info">
+                            <i class="fa fa-eye"></i> View Product
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Context-Aware Information -->
+            {% if is_editing and initially_had_sizes %}
+            <div class="context-info">
+                <i class="fa fa-info-circle"></i>
+                <strong>Context-Aware Mode:</strong> This product originally had sizes. The system will apply data protection measures to prevent inconsistencies.
+            </div>
+            {% endif %}
+
+            <!-- Form -->
+            <form method="post" enctype="multipart/form-data" id="productForm">
+                {% csrf_token %}
+                
+                <!-- Basic Information -->
+                <div class="form-section">
+                    <h5><i class="fa fa-info-circle"></i> Basic Information</h5>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">
+                                    {{ form.name.label }} <span class="required-field">*</span>
+                                </label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger small">{{ form.name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form.sku.id_for_label }}" class="form-label">{{ form.sku.label }}</label>
+                                {{ form.sku }}
+                                {% if form.sku.errors %}
+                                    <div class="text-danger small">{{ form.sku.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form.category.id_for_label }}" class="form-label">
+                                    {{ form.category.label }} <span class="required-field">*</span>
+                                </label>
+                                {{ form.category }}
+                                {% if form.category.errors %}
+                                    <div class="text-danger small">{{ form.category.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form.price.id_for_label }}" class="form-label">
+                                    {{ form.price.label }} <span class="required-field">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">€</span>
+                                    {{ form.price }}
+                                </div>
+                                {% if form.price.errors %}
+                                    <div class="text-danger small">{{ form.price.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="{{ form.rating.id_for_label }}" class="form-label">{{ form.rating.label }}</label>
+                                <div class="input-group">
+                                    {{ form.rating }}
+                                    <span class="input-group-text">★</span>
+                                </div>
+                                {% if form.rating.errors %}
+                                    <div class="text-danger small">{{ form.rating.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            {{ form.description.label }} <span class="required-field">*</span>
+                        </label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small">{{ form.description.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Stock Management -->
+                <div class="form-section">
+                    <h5><i class="fa fa-warehouse"></i> Stock Management</h5>
+                    
+                    <div class="option-group">
+                        <div class="option-row">
+                            <div class="checkbox-wrapper">
+                                {{ form.in_stock }}
+                                <label for="{{ form.in_stock.id_for_label }}">
+                                    {{ form.in_stock.label }}
+                                </label>
+                            </div>
+                            
+                            <div class="stock-quantity-compact" id="stockQuantitySection">
+                                <label for="{{ form.stock_quantity.id_for_label }}" class="form-label small">
+                                    Quantity <span class="required-field">*</span>
+                                </label>
+                                {{ form.stock_quantity }}
+                                {% if form.stock_quantity.errors %}
+                                    <div class="text-danger small mt-1">{{ form.stock_quantity.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        {% if form.in_stock.errors %}
+                            <div class="text-danger small mt-2">{{ form.in_stock.errors.0 }}</div>
+                        {% endif %}
+                        
+                        <small class="text-muted d-block mt-2">
+                            <i class="fa fa-info-circle"></i> 
+                            Stock quantity must be greater than 0 when product is marked as in stock
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Size Configuration -->
+                <div class="form-section">
+                    <h5><i class="fa fa-ruler"></i> Size Configuration</h5>
+                    
+                    <div class="option-group">
+                        <div class="checkbox-wrapper">
+                            {{ form.has_sizes }}
+                            <label for="{{ form.has_sizes.id_for_label }}">
+                                {{ form.has_sizes.label }}
+                            </label>
+                        </div>
+                        
+                        {% if form.has_sizes.errors %}
+                            <div class="text-danger small mt-2">{{ form.has_sizes.errors.0 }}</div>
+                        {% endif %}
+                        
+                        <div id="sizesSection" class="size-selection-area">
+                            <label class="form-label">Available Sizes</label>
+                            <div class="size-grid">
+                                {% for choice in form.sizes %}
+                                    <div class="size-option" data-size="{{ choice.choice_value }}">
+                                        {{ choice.tag }}
+                                        <label for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% if form.sizes.errors %}
+                                <div class="text-danger small mt-2">{{ form.sizes.errors.0 }}</div>
+                            {% endif %}
+                            <small class="text-muted d-block mt-2">
+                                <i class="fa fa-info-circle"></i> 
+                                Select all sizes that will be available for this product
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bicycle Specifications -->
+                <div class="form-section bicycle-specs">
+                    <h5><i class="fa fa-bicycle"></i> Bicycle Specifications</h5>
+                    <p class="text-muted small mb-3">These fields are recommended for bicycle categories (Road Bikes, Mountain Bikes, Electric Bikes)</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.wheel_size.id_for_label }}" class="form-label">{{ form.wheel_size.label }}</label>
+                                {{ form.wheel_size }}
+                                {% if form.wheel_size.errors %}
+                                    <div class="text-danger small">{{ form.wheel_size.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.gear_system.id_for_label }}" class="form-label">{{ form.gear_system.label }}</label>
+                                {{ form.gear_system }}
+                                {% if form.gear_system.errors %}
+                                    <div class="text-danger small">{{ form.gear_system.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.bicycle_features.id_for_label }}" class="form-label">{{ form.bicycle_features.label }}</label>
+                        {{ form.bicycle_features }}
+                        {% if form.bicycle_features.errors %}
+                            <div class="text-danger small">{{ form.bicycle_features.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Images -->
+                <div class="form-section">
+                    <h5><i class="fa fa-image"></i> Product Images</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.image.id_for_label }}" class="form-label">{{ form.image.label }}</label>
+                                {{ form.image }}
+                                {% if form.image.errors %}
+                                    <div class="text-danger small">{{ form.image.errors.0 }}</div>
+                                {% endif %}
+                                {% if is_editing and product.image %}
+                                    <div class="mt-2">
+                                        <small class="text-muted">Current image:</small><br>
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 100px; max-height: 100px;" class="img-thumbnail">
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="{{ form.image_url.id_for_label }}" class="form-label">{{ form.image_url.label }}</label>
+                                {{ form.image_url }}
+                                {% if form.image_url.errors %}
+                                    <div class="text-danger small">{{ form.image_url.errors.0 }}</div>
+                                {% endif %}
+                                <small class="form-text text-muted">Alternative to file upload</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Errors -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <!-- Action Buttons -->
+                <div class="form-section">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fa {% if is_editing %}fa-save{% else %}fa-plus{% endif %}"></i>
+                                {% if is_editing %}Update Product{% else %}Create Product{% endif %}
+                            </button>
+                            <a href="{% url 'product_management' %}" class="btn btn-secondary btn-lg ms-2">
+                                <i class="fa fa-times"></i> Cancel
+                            </a>
+                        </div>
+                        {% if is_editing %}
+                        <div>
+                            <a href="{% url 'delete_product' product.id %}" class="btn btn-danger btn-lg" 
+                               onclick="return confirm('Are you sure you want to delete this product?')">
+                                <i class="fa fa-trash"></i> Delete Product
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Enhanced form management with improved UX
+document.addEventListener('DOMContentLoaded', function() {
+    const hasSizesCheckbox = document.getElementById('id_has_sizes');
+    const sizesSection = document.getElementById('sizesSection');
+    const sizeCheckboxes = document.querySelectorAll('input[name="sizes"]');
+    const sizeOptions = document.querySelectorAll('.size-option');
+    
+    // Stock management elements
+    const inStockCheckbox = document.getElementById('id_in_stock');
+    const stockQuantitySection = document.getElementById('stockQuantitySection');
+    const stockQuantityInput = document.getElementById('id_stock_quantity');
+    
+    // Enhanced size section toggle with smooth animations
+    function toggleSizesSection() {
+        if (hasSizesCheckbox.checked) {
+            sizesSection.classList.remove('section-disabled');
+            sizesSection.classList.add('section-enabled');
+            sizesSection.style.display = 'block';
+        } else {
+            sizesSection.classList.add('section-disabled');
+            sizesSection.classList.remove('section-enabled');
+            // Clear all size selections when has_sizes is disabled
+            sizeCheckboxes.forEach(cb => {
+                cb.checked = false;
+                updateSizeOptionVisual(cb);
+            });
+        }
+    }
+    
+    // Enhanced stock quantity section toggle
+    function toggleStockQuantitySection() {
+        if (inStockCheckbox.checked) {
+            stockQuantitySection.classList.remove('section-disabled');
+            stockQuantitySection.classList.add('section-enabled');
+            stockQuantitySection.style.display = 'block';
+            stockQuantityInput.required = true;
+            // Set default value if empty
+            if (!stockQuantityInput.value || stockQuantityInput.value === '0') {
+                stockQuantityInput.value = '1';
+            }
+        } else {
+            stockQuantitySection.classList.add('section-disabled');
+            stockQuantitySection.classList.remove('section-enabled');
+            stockQuantityInput.required = false;
+            stockQuantityInput.value = '0';
+        }
+    }
+    
+    // Visual feedback for size options
+    function updateSizeOptionVisual(checkbox) {
+        const sizeOption = checkbox.closest('.size-option');
+        if (checkbox.checked) {
+            sizeOption.classList.add('selected');
+        } else {
+            sizeOption.classList.remove('selected');
+        }
+    }
+    
+    // Smart size selection logic
+    function checkSizeSelection() {
+        const anySizeSelected = Array.from(sizeCheckboxes).some(cb => cb.checked);
+        
+        if (anySizeSelected && !hasSizesCheckbox.checked) {
+            hasSizesCheckbox.checked = true;
+            toggleSizesSection();
+            showNotification('✓ "Has Sizes" automatically enabled', 'success');
+        } else if (!anySizeSelected && hasSizesCheckbox.checked) {
+            // Don't auto-disable to prevent accidental data loss
+            showNotification('ℹ Select at least one size or disable "Has Sizes"', 'info');
+        }
+    }
+    
+    // Enhanced stock quantity validation
+    function validateStockQuantity() {
+        if (inStockCheckbox.checked) {
+            const quantity = parseInt(stockQuantityInput.value);
+            if (isNaN(quantity) || quantity <= 0) {
+                stockQuantityInput.classList.add('is-invalid');
+                stockQuantityInput.setCustomValidity('Stock quantity must be greater than 0 when product is in stock');
+                return false;
+            } else {
+                stockQuantityInput.classList.remove('is-invalid');
+                stockQuantityInput.classList.add('is-valid');
+                stockQuantityInput.setCustomValidity('');
+                return true;
+            }
+        } else {
+            stockQuantityInput.classList.remove('is-invalid', 'is-valid');
+            stockQuantityInput.setCustomValidity('');
+            return true;
+        }
+    }
+    
+    // Notification system
+    function showNotification(message, type = 'info') {
+        // Remove existing notifications
+        const existing = document.querySelector('.form-notification');
+        if (existing) existing.remove();
+        
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} alert-dismissible fade show form-notification`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            min-width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        `;
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto-remove after 4 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 4000);
+    }
+    
+    // Initialize visual states
+    function initializeForm() {
+        // Set initial size option visuals
+        sizeCheckboxes.forEach(updateSizeOptionVisual);
+        
+        // Set initial section states
+        toggleSizesSection();
+        toggleStockQuantitySection();
+        
+        // Validate initial stock quantity
+        validateStockQuantity();
+    }
+    
+    // Event listeners for sizes
+    hasSizesCheckbox.addEventListener('change', toggleSizesSection);
+    
+    sizeCheckboxes.forEach(cb => {
+        cb.addEventListener('change', function() {
+            updateSizeOptionVisual(cb);
+            checkSizeSelection();
+        });
+    });
+    
+    // Make size options clickable
+    sizeOptions.forEach(option => {
+        option.addEventListener('click', function(e) {
+            if (e.target.type !== 'checkbox') {
+                const checkbox = option.querySelector('input[type="checkbox"]');
+                if (!sizesSection.classList.contains('section-disabled')) {
+                    checkbox.checked = !checkbox.checked;
+                    updateSizeOptionVisual(checkbox);
+                    checkSizeSelection();
+                }
+            }
+        });
+    });
+    
+    // Event listeners for stock
+    inStockCheckbox.addEventListener('change', toggleStockQuantitySection);
+    stockQuantityInput.addEventListener('input', validateStockQuantity);
+    stockQuantityInput.addEventListener('blur', validateStockQuantity);
+    
+    // Enhanced form validation
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Validate stock quantity
+        if (!validateStockQuantity()) {
+            isValid = false;
+            stockQuantityInput.focus();
+            showNotification('⚠ Please enter a valid stock quantity greater than 0', 'danger');
+        }
+        
+        // Validate sizes
+        if (hasSizesCheckbox.checked) {
+            const anySizeSelected = Array.from(sizeCheckboxes).some(cb => cb.checked);
+            if (!anySizeSelected) {
+                isValid = false;
+                showNotification('⚠ Please select at least one size when "Has Sizes" is enabled', 'danger');
+            }
+        }
+        
+        if (!isValid) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Category-specific field highlighting
+    const categoryField = document.getElementById('id_category');
+    const bicycleSpecs = document.querySelector('.bicycle-specs');
+    
+    function highlightBicycleFields() {
+        if (!categoryField || !bicycleSpecs) return;
+        
+        const selectedCategory = categoryField.value;
+        const bicycleCategories = ['1', '2', '3']; // Adjust IDs as needed
+        
+        if (bicycleCategories.includes(selectedCategory)) {
+            bicycleSpecs.style.borderLeftColor = '#28a745';
+            bicycleSpecs.style.background = '#f8fffe';
+        } else {
+            bicycleSpecs.style.borderLeftColor = '#6c757d';
+            bicycleSpecs.style.background = '#ffffff';
+        }
+    }
+    
+    if (categoryField) {
+        categoryField.addEventListener('change', highlightBicycleFields);
+        highlightBicycleFields(); // Initial state
+    }
+    
+    // Initialize everything
+    initializeForm();
+});
+</script>
+{% endblock %}

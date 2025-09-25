@@ -1,0 +1,30 @@
+[
+  {
+    "model": "products.product_sizes",
+    "fields": {
+      "product": 18,
+      "size": 1
+    }
+  },
+  {
+    "model": "products.product_sizes", 
+    "fields": {
+      "product": 18,
+      "size": 2
+    }
+  },
+  {
+    "model": "products.product_sizes",
+    "fields": {
+      "product": 18,
+      "size": 3
+    }
+  },
+  {
+    "model": "products.product_sizes",
+    "fields": {
+      "product": 18,
+      "size": 4
+    }
+  }
+]

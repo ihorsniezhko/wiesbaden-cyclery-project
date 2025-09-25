@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cache %}
+
+{% block title %}{% if current_categories %}{% for category in current_categories %}{{ category.get_friendly_name }}{% if not forloop.last %}, {% endif %}{% endfor %} - {% endif %}{% if search_term %}Search: {{ search_term }} - {% endif %}Wiesbaden Cyclery{% endblock %}
+
+{% block meta_description %}{% if current_categories %}Shop {{ current_categories.0.get_friendly_name|lower }} at Wiesbaden Cyclery. {% endif %}{% if search_term %}Find {{ search_term }} and more cycling products. {% endif %}Quality bicycles, accessories, and expert service in Wiesbaden, Germany.{% endblock %}
+
+{% block meta_keywords %}{% if current_categories %}{{ current_categories.0.get_friendly_name|lower }}, {% endif %}{% if search_term %}{{ search_term }}, {% endif %}bicycles, cycling, bike shop, Wiesbaden, cycling accessories, bicycle parts{% endblock %}
+
+{% block canonical_url %}{{ request.build_absolute_uri|striptags }}{% endblock %}
+
+{% block og_title %}{% if current_categories %}{{ current_categories.0.get_friendly_name }} - {% endif %}{% if search_term %}{{ search_term }} - {% endif %}Wiesbaden Cyclery{% endblock %}
+{% block og_description %}{% if current_categories %}Explore our {{ current_categories.0.get_friendly_name|lower }} collection. {% endif %}{% if search_term %}Search results for {{ search_term }}. {% endif %}Premium bicycles and cycling gear at Wiesbaden Cyclery.{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="my-3">
+        <ol class="breadcrumb bg-transparent p-0">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+            </li>
+            {% if current_category %}
+                <li class="breadcrumb-item active" aria-current="page">
+                    {{ current_category.get_friendly_name }}
+                </li>
+            {% else %}
+                <li class="breadcrumb-item active" aria-current="page">All Products</li>
+            {% endif %}
+        </ol>
+    </nav>
+    
+    <!-- Search, Filter and Sort Bar -->
+    <div class="products-toolbar mb-4">
+        <div class="toolbar-search">
+            <form method="GET" action="{% url 'products' %}">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="q" placeholder="What are you looking for?" value="{{ search_term|default:'' }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        {% if show_size_filter %}
+        <div class="toolbar-filter">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle filter-sort-btn" type="button" id="filterDropdown" data-toggle="dropdown">
+                    Filter by
+                    {% if request.GET.size %}
+                        <span class="badge badge-primary ml-1">{{ request.GET.size }}</span>
+                    {% endif %}
+                </button>
+                <div class="dropdown-menu">
+                    <h6 class="dropdown-header">Frame Size</h6>
+                    <a class="dropdown-item {% if not request.GET.size %}active{% endif %}" 
+                       href="{% url 'products' %}{% if request.GET.category %}?category={{ request.GET.category }}{% endif %}">
+                        All Sizes
+                    </a>
+                    <a class="dropdown-item {% if request.GET.size == 'S' %}active{% endif %}" 
+                       href="{% url 'products' %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}size=S">
+                        Small (S)
+                    </a>
+                    <a class="dropdown-item {% if request.GET.size == 'M' %}active{% endif %}" 
+                       href="{% url 'products' %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}size=M">
+                        Medium (M)
+                    </a>
+                    <a class="dropdown-item {% if request.GET.size == 'L' %}active{% endif %}" 
+                       href="{% url 'products' %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}size=L">
+                        Large (L)
+                    </a>
+                    <a class="dropdown-item {% if request.GET.size == 'XL' %}active{% endif %}" 
+                       href="{% url 'products' %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}size=XL">
+                        Extra Large (XL)
+                    </a>
+                    {% if request.GET.size %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-muted" 
+                           href="{% url 'products' %}{% if request.GET.category %}?category={{ request.GET.category }}{% endif %}">
+                            <i class="fa fa-times"></i> Clear Filter
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="toolbar-sort">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle filter-sort-btn" type="button" id="sortDropdown" data-toggle="dropdown">
+                    Sort By
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'products' %}?sort=price&direction=asc">Price (Low to High)</a>
+                    <a class="dropdown-item" href="{% url 'products' %}?sort=price&direction=desc">Price (High to Low)</a>
+                    <a class="dropdown-item" href="{% url 'products' %}?sort=name&direction=asc">Name (A-Z)</a>
+                    <a class="dropdown-item" href="{% url 'products' %}?sort=rating&direction=desc">Rating</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Products Grid -->
+    <div class="row">
+        {% for product in products %}
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+                    {% cache 300 product_card product.id product.updated_at %}
+                    <div class="card h-100">
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 180px;" loading="lazy">
+                            {% else %}
+                                <i class="fa fa-bicycle fa-4x text-muted"></i>
+                            {% endif %}
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title">{{ product.name }}</h6>
+                            <p class="card-text text-muted small">{{ product.description|truncatewords:15 }}</p>
+                            
+                            {% if product.rating %}
+                                <div class="mb-2">
+                                    <small class="text-warning">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= product.rating %}
+                                                <i class="fa fa-star"></i>
+                                            {% else %}
+                                                <i class="fa fa-star-o"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                        ({{ product.rating }})
+                                    </small>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="text-primary mb-0">€{{ product.price }}</h5>
+                                    {% if product.in_stock %}
+                                        <small class="text-success">In Stock</small>
+                                    {% else %}
+                                        <small class="text-danger">Out of Stock</small>
+                                    {% endif %}
+                                </div>
+                                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm mt-2 btn-block">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endcache %}
+                </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <h4>No products found</h4>
+                <p>Try adjusting your search criteria or browse all products.</p>
+                <a href="{% url 'products' %}" class="btn btn-primary">View All Products</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+    
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="Products pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

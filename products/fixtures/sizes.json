@@ -1,0 +1,38 @@
+[
+  {
+    "model": "products.size",
+    "pk": 1,
+    "fields": {
+      "name": "S",
+      "display_name": "S",
+      "sort_order": 1
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 2,
+    "fields": {
+      "name": "M",
+      "display_name": "M",
+      "sort_order": 2
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 3,
+    "fields": {
+      "name": "L",
+      "display_name": "L",
+      "sort_order": 3
+    }
+  },
+  {
+    "model": "products.size",
+    "pk": 4,
+    "fields": {
+      "name": "XL",
+      "display_name": "XL",
+      "sort_order": 4
+    }
+  }
+]

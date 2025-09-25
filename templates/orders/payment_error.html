@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="row">
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="overlay"></div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <hr>
+            <h2 class="logo-font mb-4 text-danger">
+                <i class="fa fa-exclamation-triangle"></i> Payment Error
+            </h2>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{ recovery_info.message }}</h4>
+                    
+                    {% if order %}
+                    <div class="alert alert-info">
+                        <strong>Order Number:</strong> {{ order.order_number }}<br>
+                        <strong>Amount:</strong> €{{ order.grand_total|floatformat:2 }}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <h5>What you can do:</h5>
+                        <ul class="list-group list-group-flush">
+                            {% for instruction in recovery_info.instructions %}
+                            <li class="list-group-item">
+                                <i class="fa fa-check-circle text-success"></i> {{ instruction }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <div class="mt-4">
+                        {% if recovery_info.action == 'retry_payment' or recovery_info.action == 'wait_retry' %}
+                        <button id="retry-payment-btn" class="btn btn-primary btn-lg">
+                            <i class="fa fa-redo"></i> Try Payment Again
+                        </button>
+                        {% endif %}
+                        
+                        {% if recovery_info.action == 'try_different_card' %}
+                        <a href="{% url 'orders:checkout' %}" class="btn btn-primary btn-lg">
+                            <i class="fa fa-credit-card"></i> Use Different Card
+                        </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'shopping_cart:cart' %}" class="btn btn-outline-secondary btn-lg ml-2">
+                            <i class="fa fa-shopping-cart"></i> Back to Cart
+                        </a>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-top">
+                        <h6>Need Help?</h6>
+                        <p class="text-muted">
+                            If you continue to experience issues, please contact our support team:
+                        </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Email:</strong><br>
+                                <a href="mailto:{{ support_email }}">{{ support_email }}</a>
+                            </div>
+                            {% if support_phone %}
+                            <div class="col-md-6">
+                                <strong>Phone:</strong><br>
+                                <a href="tel:{{ support_phone }}">{{ support_phone }}</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        {% if order %}
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                Please reference order number <strong>{{ order.order_number }}</strong> when contacting support.
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Retry Payment Modal -->
+<div class="modal fade" id="retryPaymentModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Retry Payment</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="retry-status">
+                    <p>Setting up payment retry...</p>
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="retry-error" style="display: none;">
+                    <div class="alert alert-danger">
+                        <strong>Retry Failed:</strong> <span id="retry-error-message"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" id="proceed-retry-btn" class="btn btn-primary" style="display: none;">
+                    Proceed to Payment
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script type="text/javascript">
+    // Retry payment functionality
+    $('#retry-payment-btn').click(function() {
+        {% if payment_intent_id %}
+        $('#retryPaymentModal').modal('show');
+        
+        // Request payment retry
+        fetch('{% url "orders:ajax_retry_payment" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val(),
+            },
+            body: JSON.stringify({
+                original_payment_intent_id: '{{ payment_intent_id }}'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                $('#retry-status').html(`
+                    <div class="alert alert-success">
+                        <strong>Retry Ready!</strong> Click "Proceed to Payment" to try again.
+                    </div>
+                `);
+                $('#proceed-retry-btn').show().click(function() {
+                    // Redirect to checkout with new payment intent
+                    window.location.href = '{% url "orders:checkout" %}?retry=true&payment_intent=' + data.payment_intent_id;
+                });
+            } else {
+                $('#retry-status').hide();
+                $('#retry-error').show();
+                $('#retry-error-message').text(data.error);
+            }
+        })
+        .catch(error => {
+            $('#retry-status').hide();
+            $('#retry-error').show();
+            $('#retry-error-message').text('Network error. Please try again.');
+        });
+        {% else %}
+        // No payment intent ID, redirect to checkout
+        window.location.href = '{% url "orders:checkout" %}';
+        {% endif %}
+    });
+    
+    // Auto-hide alerts after 10 seconds
+    setTimeout(function() {
+        $('.alert').fadeOut();
+    }, 10000);
+</script>
+{% endblock %}
