@@ -13,6 +13,160 @@
 {% block og_title %}{% if current_categories %}{{ current_categories.0.get_friendly_name }} - {% endif %}{% if search_term %}{{ search_term }} - {% endif %}Wiesbaden Cyclery{% endblock %}
 {% block og_description %}{% if current_categories %}Explore our {{ current_categories.0.get_friendly_name|lower }} collection. {% endif %}{% if search_term %}Search results for {{ search_term }}. {% endif %}Premium bicycles and cycling gear at Wiesbaden Cyclery.{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Pagination styling to match View Details buttons exactly - BLUE FILLED STYLE */
+    .pagination {
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    
+    .pagination .page-item {
+        margin: 0 0.25rem;
+    }
+    
+    .pagination .page-link {
+        color: white;
+        border: 1px solid #199CF4;
+        background-color: #199CF4;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: normal;
+        border-radius: 0.25rem;
+        text-decoration: none;
+        transition: all 0.15s ease-in-out;
+        min-width: 44px;
+        text-align: center;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: #0d8ce8;
+        border-color: #0d8ce8;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .pagination .page-link:focus {
+        box-shadow: 0 0 0 0.2rem rgba(25, 156, 244, 0.25);
+        border-color: #199CF4;
+        background-color: #199CF4;
+        color: white;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #0d8ce8;
+        border-color: #0d8ce8;
+        color: white;
+        font-weight: bold;
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        color: white;
+        background-color: #6c757d;
+        border-color: #6c757d;
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+    
+    .pagination .page-item.disabled .page-link:hover {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+    
+    /* Match the View Details button styling */
+    .btn-primary, .btn-outline-primary {
+        background-color: #199CF4 !important;
+        border-color: #199CF4 !important;
+        color: white !important;
+        min-height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .btn-primary:hover, .btn-outline-primary:hover {
+        background-color: #0d8ce8 !important;
+        border-color: #0d8ce8 !important;
+        color: white !important;
+    }
+    
+    .btn-primary:focus, .btn-outline-primary:focus {
+        box-shadow: 0 0 0 0.2rem rgba(25, 156, 244, 0.25);
+        background-color: #199CF4 !important;
+        border-color: #199CF4 !important;
+        color: white !important;
+    }
+    
+    /* Ensure price text matches button color */
+    .text-primary, .price-text {
+        color: #199CF4 !important;
+    }
+    
+    /* Search button styling */
+    .btn-primary {
+        background-color: #199CF4;
+        border-color: #199CF4;
+    }
+    
+    /* Product card hover effects */
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border: 1px solid #e9ecef;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    /* Toolbar styling */
+    .products-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #e9ecef;
+        margin-bottom: 1.5rem;
+    }
+    
+    .toolbar-search {
+        flex: 1;
+        min-width: 250px;
+    }
+    
+    .filter-sort-btn {
+        border-color: #199CF4;
+        color: #199CF4;
+    }
+    
+    .filter-sort-btn:hover {
+        background-color: #199CF4;
+        border-color: #199CF4;
+        color: white;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .products-toolbar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .toolbar-search {
+            min-width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pagination .page-link {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <!-- Breadcrumbs -->
@@ -138,14 +292,14 @@
                             
                             <div class="mt-auto">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="text-primary mb-0">€{{ product.price }}</h5>
+                                    <h5 class="text-primary mb-0" style="color: #199CF4 !important;">€{{ product.price }}</h5>
                                     {% if product.in_stock %}
                                         <small class="text-success">In Stock</small>
                                     {% else %}
                                         <small class="text-danger">Out of Stock</small>
                                     {% endif %}
                                 </div>
-                                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm mt-2 btn-block">
+                                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-sm mt-2 btn-block" style="height: 38px; display: flex; align-items: center; justify-content: center;">
                                     View Details
                                 </a>
                             </div>

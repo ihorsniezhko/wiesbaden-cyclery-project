@@ -13,7 +13,7 @@
       "image_url": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
       "in_stock": true,
       "stock_quantity": 15,
-      "frame_size": "56cm",
+
       "wheel_size": "700c",
       "gear_system": "Shimano Claris 16-speed",
       "bicycle_features": "Aluminum frame, carbon fork, endurance geometry"
@@ -33,7 +33,7 @@
       "image_url": "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=800",
       "in_stock": true,
       "stock_quantity": 8,
-      "frame_size": "54cm",
+
       "wheel_size": "700c",
       "gear_system": "Shimano 105 22-speed",
       "bicycle_features": "Lightweight aluminum frame, aggressive geometry, performance-oriented"

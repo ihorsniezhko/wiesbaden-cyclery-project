@@ -44,6 +44,155 @@
     }{% endif %}
 }
 </script>
+
+<style>
+    /* Product page styling to match cart design */
+    .qty_input {
+        border-left: none;
+        border-right: none;
+        text-align: center;
+        background-color: #f8f9fa;
+        cursor: default;
+    }
+    
+    .qty_input:focus {
+        box-shadow: none;
+        border-color: #199CF4;
+        background-color: #f8f9fa;
+    }
+    
+    /* Hide number input arrows */
+    .qty_input::-webkit-outer-spin-button,
+    .qty_input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
+    .qty_input[type=number] {
+        -moz-appearance: textfield;
+    }
+    
+    /* Consistent button styling - ALL BUTTONS BLUE FILLED */
+    .btn-outline-primary, .btn-primary {
+        background-color: #199CF4 !important;
+        border-color: #199CF4 !important;
+        color: white !important;
+        min-height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: auto !important;
+        max-width: 200px;
+    }
+    
+    .btn-outline-primary:hover, .btn-primary:hover {
+        background-color: #0d8ce8 !important;
+        border-color: #0d8ce8 !important;
+        color: white !important;
+    }
+    
+    .btn-outline-primary:focus, .btn-primary:focus {
+        background-color: #199CF4 !important;
+        border-color: #199CF4 !important;
+        color: white !important;
+        box-shadow: 0 0 0 0.2rem rgba(25, 156, 244, 0.25);
+    }
+    
+    /* Ensure price text matches button color */
+    .text-primary, .price-text {
+        color: #199CF4 !important;
+    }
+    
+    /* Quantity buttons - override general button styling to match input height exactly */
+    .decrement-qty, .increment-qty {
+        height: 32px !important;
+        min-height: 32px !important;
+        padding: 0.25rem 0.5rem !important;
+        line-height: 1 !important;
+        border: 1px solid #199CF4 !important;
+    }
+    
+    /* Quantity control buttons - smaller and more compact */
+    .decrement-qty, .increment-qty {
+        height: 32px !important;
+        min-height: 32px !important;
+        padding: 0.25rem 0.5rem !important;
+        line-height: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: auto !important;
+        max-width: none !important;
+    }
+    
+    /* Quantity input field */
+    .qty_input {
+        height: 32px !important;
+        border-left: none;
+        border-right: none;
+        text-align: center;
+        background-color: #f8f9fa;
+        cursor: default;
+    }
+    
+    .text-primary {
+        color: #199CF4 !important;
+    }
+    
+    /* Size select styling */
+    .form-control:focus {
+        border-color: #199CF4;
+        box-shadow: 0 0 0 0.2rem rgba(25, 156, 244, 0.25);
+    }
+    
+    /* Product detail specific styling */
+    .product-detail .card {
+        border: 1px solid #e9ecef;
+        transition: box-shadow 0.15s ease-in-out;
+    }
+    
+    .product-detail .card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    /* Badge styling */
+    .badge-success {
+        background-color: #28a745;
+    }
+    
+    .badge-danger {
+        background-color: #dc3545;
+    }
+    
+    /* Review form styling */
+    .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    /* Related products styling */
+    .related-products .card {
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .related-products .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .btn {
+            font-size: 0.875rem;
+            padding: 0.375rem 0.75rem;
+            max-width: 150px;
+        }
+        
+        .input-group {
+            width: 110px !important;
+        }
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -101,7 +250,7 @@
                 </div>
             {% endif %}
             
-            <h3 class="text-primary mb-3">€{{ product.price }}</h3>
+            <h3 class="text-primary mb-3" style="color: #199CF4 !important;">€{{ product.price }}</h3>
             
             <p class="lead">{{ product.description }}</p>
             
@@ -149,7 +298,7 @@
                     {% if product.sizes.all %}
                         <div class="mb-3">
                             <label class="form-label"><strong>Size:</strong></label>
-                            <div class="w-50">
+                            <div style="max-width: 200px;">
                                 <select class="form-control" name="size" id="id_product_size" required>
                                     <option value="">Select Size</option>
                                     {% for size in product.sizes.all %}
@@ -163,29 +312,27 @@
                     <!-- Quantity Selection -->
                     <div class="mb-3">
                         <label class="form-label"><strong>Quantity:</strong></label>
-                        <div class="form-group w-50">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <button class="decrement-qty btn btn-black rounded-0" 
-                                            type="button" 
-                                            data-item_id="{{ product.id }}">
-                                        <span class="icon">
-                                            <i class="fa fa-minus"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <input class="form-control qty_input" type="number"
-                                       name="quantity" value="1" min="1" max="99"
-                                       data-item_id="{{ product.id }}">
-                                <div class="input-group-append">
-                                    <button class="increment-qty btn btn-black rounded-0"
-                                            type="button" 
-                                            data-item_id="{{ product.id }}">
-                                        <span class="icon">
-                                            <i class="fa fa-plus"></i>
-                                        </span>
-                                    </button>
-                                </div>
+                        <div class="input-group input-group-sm" style="width: 120px;">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-primary decrement-qty" 
+                                        type="button" 
+                                        data-item_id="{{ product.id }}"
+                                        style="height: 32px; min-height: 32px; padding: 0.25rem 0.5rem; line-height: 1;">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <input class="form-control text-center qty_input" type="text"
+                                   name="quantity" value="1" min="1" max="99"
+                                   data-item_id="{{ product.id }}"
+                                   style="max-width: 50px; height: 32px; -webkit-appearance: none; -moz-appearance: textfield;"
+                                   readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary increment-qty"
+                                        type="button" 
+                                        data-item_id="{{ product.id }}"
+                                        style="height: 32px; min-height: 32px; padding: 0.25rem 0.5rem; line-height: 1;">
+                                    <i class="fa fa-plus"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -193,21 +340,18 @@
                     <!-- Submit Buttons -->
                     <div class="mb-3">
                         <input type="hidden" name="redirect_to" value="product_detail">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="fa fa-shopping-cart"></i> Add to Cart
+                        <button type="submit" class="btn btn-primary mr-2 mb-2" style="width: auto; padding: 0.5rem 1rem;">
+                            <i class="fa fa-shopping-cart mr-2"></i>Add to Cart
                         </button>
-                        <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 mt-2">
-                            <span class="icon">
-                                <i class="fa fa-chevron-left"></i>
-                            </span>
-                            <span class="text-uppercase">Keep Shopping</span>
+                        <a href="{% url 'products' %}" class="btn btn-outline-primary mb-2" style="width: auto; padding: 0.5rem 1rem;">
+                            <i class="fa fa-chevron-left mr-2"></i>Keep Shopping
                         </a>
                     </div>
                 </form>
             {% else %}
                 <div class="mb-3">
-                    <button class="btn btn-secondary btn-lg" disabled>
-                        <i class="fa fa-times"></i> Out of Stock
+                    <button class="btn btn-secondary" disabled style="width: auto; padding: 0.5rem 1rem;">
+                        <i class="fa fa-times mr-2"></i>Out of Stock
                     </button>
                 </div>
             {% endif %}
@@ -307,7 +451,7 @@
                                     {{ review_form.comment }}
                                 </div>
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-star"></i> Submit Review
+                                    <i class="fa fa-star mr-2"></i>Submit Review
                                 </button>
                             </form>
                         </div>
@@ -334,7 +478,7 @@
                 <hr>
             </div>
         </div>
-        <div class="row">
+        <div class="row related-products">
             {% for related_product in related_products %}
                 <div class="col-lg-3 col-md-6 mb-4">
                     <div class="card h-100">
@@ -345,12 +489,14 @@
                                 <i class="fa fa-bicycle fa-3x text-muted"></i>
                             {% endif %}
                         </div>
-                        <div class="card-body">
+                        <div class="card-body d-flex flex-column">
                             <h6 class="card-title">{{ related_product.name }}</h6>
-                            <p class="text-primary">€{{ related_product.price }}</p>
-                            <a href="{% url 'product_detail' related_product.id %}" class="btn btn-outline-primary btn-sm">
-                                View Details
-                            </a>
+                            <p class="text-primary" style="color: #199CF4 !important;">€{{ related_product.price }}</p>
+                            <div class="mt-auto">
+                                <a href="{% url 'product_detail' related_product.id %}" class="btn btn-outline-primary btn-sm" style="height: 38px; display: flex; align-items: center; justify-content: center; width: 100%;">
+                                    View Details
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -363,46 +509,59 @@
 {% block postloadjs %}
 {{ block.super }}
 <script type="text/javascript">
-    // Disable +/- buttons outside 1-99 range
-    function handleEnableDisable(itemId) {
-        var currentValue = parseInt($(`input[data-item_id='${itemId}']`).val());
-        var minusDisabled = currentValue < 2;
-        var plusDisabled = currentValue > 98;
-        $(`.decrement-qty[data-item_id='${itemId}']`).prop('disabled', minusDisabled);
-        $(`.increment-qty[data-item_id='${itemId}']`).prop('disabled', plusDisabled);
-    }
+    $(document).ready(function() {
+        console.log('Product page JavaScript loaded');
+        
+        // Disable +/- buttons outside 1-99 range
+        function handleEnableDisable(itemId) {
+            var currentValue = parseInt($(`input[data-item_id='${itemId}']`).val());
+            var minusDisabled = currentValue <= 1;
+            var plusDisabled = currentValue >= 99;
+            $(`.decrement-qty[data-item_id='${itemId}']`).prop('disabled', minusDisabled);
+            $(`.increment-qty[data-item_id='${itemId}']`).prop('disabled', plusDisabled);
+        }
 
-    // Ensure proper enabling/disabling of all inputs on page load
-    var allQtyInputs = $('.qty_input');
-    for(var i = 0; i < allQtyInputs.length; i++){
-        var itemId = $(allQtyInputs[i]).data('item_id');
-        handleEnableDisable(itemId);
-    }
+        // Ensure proper enabling/disabling of all inputs on page load
+        var allQtyInputs = $('.qty_input');
+        console.log('Found quantity inputs:', allQtyInputs.length);
+        for(var i = 0; i < allQtyInputs.length; i++){
+            var itemId = $(allQtyInputs[i]).data('item_id');
+            handleEnableDisable(itemId);
+        }
 
-    // Check enable/disable every time the input is changed
-    $('.qty_input').change(function() {
-        var itemId = $(this).data('item_id');
-        handleEnableDisable(itemId);
-    });
+        // Check enable/disable every time the input is changed
+        $('.qty_input').change(function() {
+            var itemId = $(this).data('item_id');
+            handleEnableDisable(itemId);
+        });
 
-    // Increment quantity
-    $('.increment-qty').click(function(e) {
-       e.preventDefault();
-       var itemId = $(this).data('item_id');
-       var allQuantityInputs = $(`.qty_input[data-item_id='${itemId}']`);
-       var currentValue = parseInt(allQuantityInputs.val());
-       allQuantityInputs.val(currentValue + 1);
-       handleEnableDisable(itemId);
-    });
+        // Increment quantity
+        $('.increment-qty').click(function(e) {
+           e.preventDefault();
+           console.log('Increment button clicked');
+           var itemId = $(this).data('item_id');
+           var allQuantityInputs = $(`.qty_input[data-item_id='${itemId}']`);
+           var currentValue = parseInt(allQuantityInputs.val());
+           if (currentValue < 99) {
+               allQuantityInputs.val(currentValue + 1);
+               handleEnableDisable(itemId);
+               console.log('Quantity incremented to:', allQuantityInputs.val());
+           }
+        });
 
-    // Decrement quantity
-    $('.decrement-qty').click(function(e) {
-       e.preventDefault();
-       var itemId = $(this).data('item_id');
-       var allQuantityInputs = $(`.qty_input[data-item_id='${itemId}']`);
-       var currentValue = parseInt(allQuantityInputs.val());
-       allQuantityInputs.val(currentValue - 1);
-       handleEnableDisable(itemId);
+        // Decrement quantity
+        $('.decrement-qty').click(function(e) {
+           e.preventDefault();
+           console.log('Decrement button clicked');
+           var itemId = $(this).data('item_id');
+           var allQuantityInputs = $(`.qty_input[data-item_id='${itemId}']`);
+           var currentValue = parseInt(allQuantityInputs.val());
+           if (currentValue > 1) {
+               allQuantityInputs.val(currentValue - 1);
+               handleEnableDisable(itemId);
+               console.log('Quantity decremented to:', allQuantityInputs.val());
+           }
+        });
     });
 </script>
 {% endblock %}

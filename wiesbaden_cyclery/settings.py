@@ -226,3 +226,6 @@ else:
 # Email configuration for both environments
 EMAIL_SUBJECT_PREFIX = '[Wiesbaden Cyclery] '
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# Free delivery threshold
+FREE_DELIVERY_THRESHOLD = config('FREE_DELIVERY_THRESHOLD', default=50.00, cast=float)

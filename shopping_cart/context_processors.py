@@ -1,3 +1,4 @@
+from django.conf import settings
 from .models import Cart
 
 
@@ -11,6 +12,8 @@ def cart_contents(request):
     subtotal = 0
     delivery_cost = 0
     total = 0
+    free_delivery_threshold = getattr(settings, 'FREE_DELIVERY_THRESHOLD', 50.00)
+    free_delivery_delta = free_delivery_threshold  # Default to full amount needed
 
     try:
         if request.user.is_authenticated:
@@ -28,6 +31,9 @@ def cart_contents(request):
             subtotal = cart.subtotal
             delivery_cost = cart.delivery_cost
             total = cart.total
+            
+            # Calculate free delivery delta using settings threshold
+            free_delivery_delta = max(0, free_delivery_threshold - float(subtotal))
 
     except Exception:
         # Fallback to empty cart if any errors occur
@@ -40,6 +46,7 @@ def cart_contents(request):
         'cart_subtotal': subtotal,
         'cart_delivery_cost': delivery_cost,
         'cart_total': total,
+        'free_delivery_delta': free_delivery_delta,
     }
 
     return context

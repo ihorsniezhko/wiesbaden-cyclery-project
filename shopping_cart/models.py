@@ -46,8 +46,9 @@ class Cart(models.Model):
 
     @property
     def delivery_cost(self):
-        """Calculate delivery cost - free over €50"""
-        if self.subtotal >= Decimal('50.00'):
+        """Calculate delivery cost - free over threshold"""
+        free_delivery_threshold = Decimal(str(getattr(settings, 'FREE_DELIVERY_THRESHOLD', 50.00)))
+        if self.subtotal >= free_delivery_threshold:
             return Decimal('0.00')
         return Decimal('4.99')
 

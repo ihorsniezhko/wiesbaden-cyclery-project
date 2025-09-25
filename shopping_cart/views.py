@@ -16,9 +16,17 @@ def cart_view(request):
     cart = get_or_create_cart(request)
     cart_items = cart.items.select_related('product', 'size').all() if cart else []
     
+    # Calculate free delivery delta
+    free_delivery_threshold = 50.00  # €50 for free delivery
+    free_delivery_delta = max(0, free_delivery_threshold - float(cart.subtotal)) if cart else free_delivery_threshold
+    
     context = {
         'cart': cart,
         'cart_items': cart_items,
+        'cart_subtotal': cart.subtotal if cart else 0,
+        'cart_delivery_cost': cart.delivery_cost if cart else 4.99,
+        'cart_total': cart.total if cart else 0,
+        'free_delivery_delta': free_delivery_delta,
     }
     
     return render(request, 'shopping_cart/cart.html', context)
