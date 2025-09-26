@@ -98,6 +98,69 @@ footer {
     margin-bottom: 1.5rem;
 }
 
+/* Newsletter Form Responsive Styling - Force inline layout */
+#mc_embed_signup .input-group {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    width: 100%;
+}
+
+#mc_embed_signup .input-group .form-control {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+}
+
+#mc_embed_signup .input-group-append {
+    flex-shrink: 0 !important;
+    display: flex !important;
+}
+
+#mc_embed_signup .input-group-append .btn {
+    white-space: nowrap !important;
+    border-radius: 0 0.25rem 0.25rem 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* Specific styling for narrow screens */
+@media (max-width: 580px) {
+    #mc_embed_signup .input-group {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+    }
+    
+    #mc_embed_signup .form-control {
+        font-size: 14px !important;
+        padding: 0.5rem 0.75rem !important;
+        flex: 1 1 auto !important;
+        min-width: 120px !important;
+    }
+    
+    #mc_embed_signup .input-group-append .btn {
+        font-size: 14px !important;
+        padding: 0.5rem 0.75rem !important;
+        min-width: 90px !important;
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+    }
+}
+
+/* Extra narrow screens */
+@media (max-width: 400px) {
+    #mc_embed_signup .form-control {
+        min-width: 100px !important;
+        font-size: 13px !important;
+        padding: 0.4rem 0.6rem !important;
+    }
+    
+    #mc_embed_signup .input-group-append .btn {
+        font-size: 13px !important;
+        padding: 0.4rem 0.6rem !important;
+        min-width: 80px !important;
+    }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .hero-section h1 {
