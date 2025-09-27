@@ -43,6 +43,8 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', views.robots_txt, name='robots_txt'),
     path('seo-test/', views.seo_test, name='seo_test'),
+    # Categories page
+    path('categories/', views.categories, name='categories'),
     # Test URLs removed for Stage 7 development
     path('', views.index, name='home'),
 ]

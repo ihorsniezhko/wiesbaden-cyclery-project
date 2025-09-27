@@ -1,6 +1,6 @@
 {% block header %}
 =====================================
-🚴 WIESBADEN CYCLERY
+WIESBADEN CYCLERY
 {% block header_subtitle %}Your Premium Bicycle Shop{% endblock %}
 =====================================
 {% endblock %}
@@ -12,9 +12,9 @@
 {% block footer %}
 -------------------------------------
 Wiesbaden Cyclery
-📍 Your Premier Destination for Quality Bicycles
-📧 info@wiesbaden-cyclery.de
-📞 +49 (0) 611 123456
+Your Premier Destination for Quality Bicycles
+Email: info@wiesbaden-cyclery.de
+Phone: +49 (0) 611 123456
 
 © {% now "Y" %} Wiesbaden Cyclery. All rights reserved.
 This email was sent regarding your order.

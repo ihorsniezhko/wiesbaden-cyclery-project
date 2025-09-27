@@ -13,6 +13,13 @@ def index(request):
     return render(request, 'home/index.html')
 
 
+def categories(request):
+    """
+    Categories page view
+    """
+    return render(request, 'categories/categories.html')
+
+
 def privacy_policy(request):
     """A view to return the privacy policy page"""
     context = {

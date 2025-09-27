@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shop by Category - Wiesbaden Cyclery{% endblock %}
+
+{% block meta_description %}Browse our bicycle categories - road bikes, mountain bikes, electric bikes, accessories, and components. Find the perfect cycling gear at Wiesbaden Cyclery.{% endblock %}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="row">
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mb-2">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="my-3">
+        <ol class="breadcrumb bg-transparent p-0">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Categories</li>
+        </ol>
+    </nav>
+
+
+
+    <!-- Categories Section -->
+    <div class="row">
+        {% for category in all_categories %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <i class="fa fa-{% if 'road' in category.name %}road{% elif 'mountain' in category.name %}tree{% elif 'electric' in category.name %}bolt{% elif 'accessories' in category.name %}wrench{% elif 'components' in category.name %}cogs{% elif 'sale' in category.name %}tag{% else %}bicycle{% endif %} fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">{{ category.get_friendly_name }}</h5>
+                        <p class="card-text flex-grow-1">
+                            {% if 'road' in category.name %}High-performance bikes for speed and endurance on paved roads.
+                            {% elif 'mountain' in category.name %}Rugged bikes built for off-road adventures and trail riding.
+                            {% elif 'electric' in category.name %}Modern e-bikes with motor assistance for effortless cycling.
+                            {% elif 'accessories' in category.name %}Essential gear and accessories for every cyclist.
+                            {% elif 'components' in category.name %}Quality bike parts and components for maintenance and upgrades.
+                            {% elif 'sale' in category.name %}Great deals and discounted items for smart shoppers.
+                            {% else %}Quality cycling products for all your needs.
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'products' %}?category={{ category.name }}" class="btn btn-primary mt-auto">View</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

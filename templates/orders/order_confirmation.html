@@ -89,10 +89,10 @@
                                 {% if item.size %}
                                     <small class="text-muted">Size: {{ item.size.display_name }}</small><br>
                                 {% endif %}
-                                <small class="text-muted">Qty: {{ item.quantity }} × €{{ item.product.price }}</small>
+                                <small class="text-muted">Qty: {{ item.quantity }} × €{{ item.product.price|floatformat:2 }}</small>
                             </div>
                             <div class="col-4 text-right">
-                                <p class="mb-0">€{{ item.lineitem_total }}</p>
+                                <p class="mb-0">€{{ item.lineitem_total|floatformat:2 }}</p>
                             </div>
                         </div>
                         {% if not forloop.last %}<hr class="my-2">{% endif %}
@@ -106,36 +106,30 @@
                             <p class="mb-0"><strong>Total:</strong></p>
                         </div>
                         <div class="col-4 text-right">
-                            <p class="mb-1">€{{ order.order_total }}</p>
-                            <p class="mb-1">€{{ order.delivery_cost }}</p>
-                            <p class="mb-0"><strong>€{{ order.grand_total }}</strong></p>
+                            <p class="mb-1">€{{ order.order_total|floatformat:2 }}</p>
+                            <p class="mb-1">€{{ order.delivery_cost|floatformat:2 }}</p>
+                            <p class="mb-0"><strong>€{{ order.grand_total|floatformat:2 }}</strong></p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="mt-3">
-                <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-block">
-                    <span class="icon">
-                        <i class="fa fa-chevron-left"></i>
-                    </span>
-                    <span class="text-uppercase">Continue Shopping</span>
+                <a href="{% url 'categories' %}" class="btn btn-secondary btn-lg btn-block" style="white-space: nowrap;">
+                    <i class="fa fa-chevron-left mr-2"></i>
+                    Continue Shopping
                 </a>
                 
                 {% if user.is_authenticated %}
-                    <a href="{% url 'orders:order_history' %}" class="btn btn-black rounded-0 btn-block mt-2">
-                        <span class="text-uppercase">View Order History</span>
-                        <span class="icon">
-                            <i class="fa fa-list"></i>
-                        </span>
+                    <a href="{% url 'orders:order_history' %}" class="btn btn-primary btn-lg btn-block mt-2" style="white-space: nowrap;">
+                        <i class="fa fa-list mr-2"></i>
+                        View Order History
                     </a>
                 {% endif %}
                 
-                <a href="{% url 'orders:order_tracking' %}" class="btn btn-info rounded-0 btn-block mt-2">
-                    <span class="text-uppercase">Track This Order</span>
-                    <span class="icon">
-                        <i class="fa fa-search"></i>
-                    </span>
+                <a href="{% url 'orders:order_tracking' %}" class="btn btn-primary btn-lg btn-block mt-2" style="white-space: nowrap;">
+                    <i class="fa fa-search mr-2"></i>
+                    Track This Order
                 </a>
             </div>
         </div>
@@ -155,6 +149,42 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Fix icon sizes on mobile to prevent overlap */
+    @media (max-width: 768px) {
+        .alert-heading i {
+            font-size: 1.2rem !important;
+            margin-right: 0.5rem;
+        }
+        
+        .alert-info h6 i {
+            font-size: 1rem !important;
+            margin-right: 0.25rem;
+        }
+        
+        .btn i {
+            font-size: 0.9rem !important;
+        }
+        
+        /* Ensure proper spacing for mobile */
+        .alert-heading {
+            font-size: 1.3rem;
+            line-height: 1.4;
+        }
+        
+        .card-header h5 {
+            font-size: 1.1rem;
+        }
+    }
+    
+    /* General icon size improvements */
+    .fa {
+        vertical-align: middle;
+    }
+</style>
 {% endblock %}
 
 {% block postloadjs %}

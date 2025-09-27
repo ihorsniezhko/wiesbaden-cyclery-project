@@ -3,32 +3,32 @@
 {% block header_subtitle %}Order Confirmation{% endblock %}
 
 {% block content %}
-✅ ORDER CONFIRMED!
+ORDER CONFIRMED!
 
 Dear {{ order.full_name }},
 
 Thank you for your order! We're excited to confirm that we've received your order and it's being processed.
 
-📋 ORDER DETAILS
+ORDER DETAILS
 ================
 Order Number: {{ order.order_number }}
 Order Date: {{ order.date|date:"F d, Y" }}
 Order Status: {{ order.get_status_display }}
 
-🛍️ ITEMS ORDERED
+ITEMS ORDERED
 ================
 {% for item in order.lineitems.all %}
 {{ item.product.name }}{% if item.product_size %} (Size: {{ item.product_size }}){% endif %}
-Quantity: {{ item.quantity }} × €{{ item.product.price }} = €{{ item.lineitem_total }}
+Quantity: {{ item.quantity }} × €{{ item.product.price|floatformat:2 }} = €{{ item.lineitem_total|floatformat:2 }}
 
 {% endfor %}
-Subtotal: €{{ order.order_total }}
-Delivery: €{{ order.delivery_cost }}
+Subtotal: €{{ order.order_total|floatformat:2 }}
+Delivery: €{{ order.delivery_cost|floatformat:2 }}
 ================
-GRAND TOTAL: €{{ order.grand_total }}
+GRAND TOTAL: €{{ order.grand_total|floatformat:2 }}
 ================
 
-🚚 DELIVERY INFORMATION
+DELIVERY INFORMATION
 =======================
 {{ order.full_name }}
 {{ order.street_address1 }}
@@ -37,17 +37,17 @@ GRAND TOTAL: €{{ order.grand_total }}
 {{ order.country.name }}
 Phone: {{ order.phone_number }}
 
-🔍 TRACK YOUR ORDER
+TRACK YOUR ORDER
 ===================
-Visit: {{ site_url }}/orders/tracking/
+Visit: {{ site_url }}{% url 'orders:order_tracking' %}
 Use your order number and email address to track progress.
 
-📞 WHAT'S NEXT?
+WHAT'S NEXT?
 ===============
-✉️ You'll receive email updates as your order progresses
-📦 Your order will be processed within 1-2 business days
-🚚 You'll receive tracking information once shipped
-📞 Contact us at info@wiesbaden-cyclery.de if you have questions
+- You'll receive email updates as your order progresses
+- Your order will be processed within 1-2 business days
+- You'll receive tracking information once shipped
+- Contact us at info@wiesbaden-cyclery.de if you have questions
 
 Thank you for choosing Wiesbaden Cyclery!
 

@@ -122,8 +122,63 @@
     }
     
     .size-option.selected {
-        border-color: #007bff;
-        background: #e3f2fd;
+        border-color: #007bff !important;
+        background-color: #e3f2fd !important;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+        transform: scale(1.02) !important;
+    }
+    
+    /* More specific selector to ensure highlighting works */
+    .size-selection-area .size-option.selected {
+        border: 2px solid #007bff !important;
+        background-color: #e3f2fd !important;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+    }
+    
+    /* Custom File Input Styling */
+    .custom-file-input-wrapper {
+        position: relative;
+    }
+    
+    .file-input-display {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .file-select-btn {
+        border: 2px solid #007bff;
+        background: white;
+        color: #007bff;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        cursor: pointer !important;
+    }
+    
+    .file-select-btn:hover {
+        background: #007bff;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+    }
+    
+    .file-select-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 1px 2px rgba(0, 123, 255, 0.3);
+    }
+    
+    .file-name-display {
+        font-size: 14px;
+        color: #6c757d;
+        font-style: italic;
+    }
+    
+    .file-name-display.has-file {
+        color: #28a745;
+        font-style: normal;
+        font-weight: 500;
     }
     
     .size-option label {
@@ -194,6 +249,11 @@
         opacity: 1;
         pointer-events: auto;
     }
+    
+    /* CRITICAL: Prevent button text wrapping */
+    .btn {
+        white-space: nowrap !important;
+    }
 </style>
 {% endblock %}
 
@@ -217,11 +277,11 @@
                     </p>
                 </div>
                 <div>
-                    <a href="{% url 'product_management' %}" class="btn btn-secondary">
+                    <a href="{% url 'product_management' %}" class="btn btn-secondary btn-lg">
                         <i class="fa fa-arrow-left"></i> Back to Management
                     </a>
                     {% if is_editing %}
-                        <a href="{% url 'product_detail' product.id %}" class="btn btn-info">
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-info btn-lg">
                             <i class="fa fa-eye"></i> View Product
                         </a>
                     {% endif %}
@@ -232,7 +292,7 @@
             {% if is_editing and initially_had_sizes %}
             <div class="context-info">
                 <i class="fa fa-info-circle"></i>
-                <strong>Context-Aware Mode:</strong> This product originally had sizes. The system will apply data protection measures to prevent inconsistencies.
+                <strong>Edit Mode:</strong> You are now editing the product you created. This product originally had sizes, so the system will apply data protection measures to prevent inconsistencies.
             </div>
             {% endif %}
 
@@ -430,8 +490,27 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="{{ form.image.id_for_label }}" class="form-label">{{ form.image.label }}</label>
-                                {{ form.image }}
+                                <label for="id_image" class="form-label">{{ form.image.label }}</label>
+                                
+                                <!-- Custom File Input Implementation -->
+                                <div class="custom-file-input-wrapper">
+                                    <input type="file" 
+                                           id="id_image" 
+                                           name="image" 
+                                           accept="image/*"
+                                           class="form-control-file"
+                                           style="display: none;">
+                                    
+                                    <div class="file-input-display">
+                                        <button type="button" 
+                                                class="btn btn-primary file-select-btn" 
+                                                onclick="document.getElementById('id_image').click()">
+                                            <i class="fa fa-upload"></i> Choose File
+                                        </button>
+                                        <span class="file-name-display ms-2 text-muted" id="fileNameDisplay">No file chosen</span>
+                                    </div>
+                                </div>
+                                
                                 {% if form.image.errors %}
                                     <div class="text-danger small">{{ form.image.errors.0 }}</div>
                                 {% endif %}
@@ -503,18 +582,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const stockQuantitySection = document.getElementById('stockQuantitySection');
     const stockQuantityInput = document.getElementById('id_stock_quantity');
     
-    // Enhanced size section toggle with smooth animations
+    // Clear and simple size section toggle
     function toggleSizesSection() {
         if (hasSizesCheckbox.checked) {
+            // Enable size selection
             sizesSection.classList.remove('section-disabled');
             sizesSection.classList.add('section-enabled');
-            sizesSection.style.display = 'block';
+            sizesSection.style.opacity = '1';
+            sizesSection.style.pointerEvents = 'auto';
+            
+            // Enable all size checkboxes
+            sizeCheckboxes.forEach(cb => {
+                cb.disabled = false;
+            });
         } else {
+            // Disable size selection and clear all selections
             sizesSection.classList.add('section-disabled');
             sizesSection.classList.remove('section-enabled');
-            // Clear all size selections when has_sizes is disabled
+            sizesSection.style.opacity = '0.5';
+            sizesSection.style.pointerEvents = 'none';
+            
+            // CRITICAL: Clear all size selections when "Has Sizes" is disabled
             sizeCheckboxes.forEach(cb => {
                 cb.checked = false;
+                cb.disabled = true;
                 updateSizeOptionVisual(cb);
             });
         }
@@ -539,28 +630,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Visual feedback for size options
+    // Visual feedback for size options - immediate and reliable
     function updateSizeOptionVisual(checkbox) {
         const sizeOption = checkbox.closest('.size-option');
         if (checkbox.checked) {
             sizeOption.classList.add('selected');
+            // Force immediate visual styling with maximum specificity
+            sizeOption.style.setProperty('border', '2px solid #007bff', 'important');
+            sizeOption.style.setProperty('background-color', '#e3f2fd', 'important');
+            sizeOption.style.setProperty('box-shadow', '0 0 0 2px rgba(0, 123, 255, 0.25)', 'important');
+            sizeOption.style.setProperty('transform', 'scale(1.02)', 'important');
         } else {
             sizeOption.classList.remove('selected');
+            // Reset to default styling immediately
+            sizeOption.style.setProperty('border', '2px solid #dee2e6', 'important');
+            sizeOption.style.setProperty('background-color', 'white', 'important');
+            sizeOption.style.setProperty('box-shadow', 'none', 'important');
+            sizeOption.style.setProperty('transform', 'scale(1)', 'important');
         }
     }
     
-    // Smart size selection logic
+    // Simple and clear size selection logic
     function checkSizeSelection() {
-        const anySizeSelected = Array.from(sizeCheckboxes).some(cb => cb.checked);
+        // Query fresh each time to get current DOM state (fixes timing issue)
+        const currentSizeCheckboxes = document.querySelectorAll('input[name="sizes"]');
+        const anySizeSelected = Array.from(currentSizeCheckboxes).some(cb => cb.checked);
         
+        // ONLY Rule: If sizes are selected but "Has Sizes" is not checked → automatically enable "Has Sizes"
+        // Do NOT touch "Has Sizes" if it's already checked - let user manage their selections freely
         if (anySizeSelected && !hasSizesCheckbox.checked) {
             hasSizesCheckbox.checked = true;
             toggleSizesSection();
             showNotification('✓ "Has Sizes" automatically enabled', 'success');
-        } else if (!anySizeSelected && hasSizesCheckbox.checked) {
-            // Don't auto-disable to prevent accidental data loss
-            showNotification('ℹ Select at least one size or disable "Has Sizes"', 'info');
         }
+        
+        // Do NOT automatically disable "Has Sizes" when no sizes are selected
+        // Let the user manage "Has Sizes" checkbox manually
     }
     
     // Enhanced stock quantity validation
@@ -631,25 +736,46 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listeners for sizes
     hasSizesCheckbox.addEventListener('change', toggleSizesSection);
     
+    // Immediate visual feedback for checkboxes
     sizeCheckboxes.forEach(cb => {
+        // Single event listener for immediate response
         cb.addEventListener('change', function() {
+            // Update visual immediately - no delay
             updateSizeOptionVisual(cb);
             checkSizeSelection();
         });
     });
     
-    // Make size options clickable
+    // Make size options clickable with immediate visual feedback
     sizeOptions.forEach(option => {
         option.addEventListener('click', function(e) {
-            if (e.target.type !== 'checkbox') {
+            if (e.target.type !== 'checkbox' && e.target.tagName !== 'LABEL') {
                 const checkbox = option.querySelector('input[type="checkbox"]');
                 if (!sizesSection.classList.contains('section-disabled')) {
+                    // Toggle checkbox state immediately
                     checkbox.checked = !checkbox.checked;
+                    // Update visual immediately
                     updateSizeOptionVisual(checkbox);
-                    checkSizeSelection();
+                    // Trigger change event for other logic
+                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
                 }
             }
         });
+        
+        // Also handle label clicks for immediate response
+        const label = option.querySelector('label');
+        if (label) {
+            label.addEventListener('click', function(e) {
+                const checkbox = option.querySelector('input[type="checkbox"]');
+                if (!sizesSection.classList.contains('section-disabled')) {
+                    // Let the default label behavior handle the checkbox
+                    // But ensure immediate visual update
+                    setTimeout(() => {
+                        updateSizeOptionVisual(checkbox);
+                    }, 1); // Minimal delay to let checkbox state update
+                }
+            });
+        }
     });
     
     // Event listeners for stock
@@ -705,6 +831,24 @@ document.addEventListener('DOMContentLoaded', function() {
     if (categoryField) {
         categoryField.addEventListener('change', highlightBicycleFields);
         highlightBicycleFields(); // Initial state
+    }
+    
+    // File input handling
+    const fileInput = document.getElementById('id_image');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    
+    if (fileInput && fileNameDisplay) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                fileNameDisplay.textContent = file.name;
+                fileNameDisplay.classList.add('has-file');
+                showNotification(`✓ File selected: ${file.name}`, 'success');
+            } else {
+                fileNameDisplay.textContent = 'No file chosen';
+                fileNameDisplay.classList.remove('has-file');
+            }
+        });
     }
     
     // Initialize everything

@@ -59,9 +59,11 @@
                                        placeholder="Enter your email address" 
                                        required>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">
-                                <i class="fa fa-search"></i> Track Order
-                            </button>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg" style="white-space: nowrap; min-width: 200px;">
+                                    <i class="fa fa-search mr-2"></i>Track Order
+                                </button>
+                            </div>
                         </form>
                         
                         <hr>
@@ -203,18 +205,18 @@
                         {% endif %}
 
                         <!-- Actions -->
-                        <div class="mt-4">
-                            <a href="{% url 'orders:order_tracking' %}" class="btn btn-outline-primary">
+                        <div class="mt-4 d-flex flex-wrap justify-content-start" style="gap: 0.75rem;">
+                            <a href="{% url 'orders:order_tracking' %}" class="btn btn-primary btn-lg order-action-btn">
                                 <i class="fa fa-search"></i> Track Another Order
                             </a>
                             
                             {% if user.is_authenticated and order.user_profile.user == user %}
-                                <a href="{% url 'orders:order_detail' order.order_number %}" class="btn btn-primary ml-2">
+                                <a href="{% url 'orders:order_detail' order.order_number %}" class="btn btn-primary btn-lg order-action-btn">
                                     <i class="fa fa-eye"></i> View Full Details
                                 </a>
                             {% endif %}
                             
-                            <a href="{% url 'products' %}" class="btn btn-success ml-2">
+                            <a href="{% url 'products' %}" class="btn btn-secondary btn-lg order-action-btn">
                                 <i class="fa fa-shopping-cart"></i> Continue Shopping
                             </a>
                         </div>
@@ -231,19 +233,11 @@
 <style>
     .timeline {
         position: relative;
-        padding-left: 40px;
+        padding-left: 60px;
         margin-top: 20px;
     }
 
-    .timeline::before {
-        content: '';
-        position: absolute;
-        left: 20px;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: #dee2e6;
-    }
+
 
     .timeline-item {
         position: relative;
@@ -252,7 +246,7 @@
 
     .timeline-marker {
         position: absolute;
-        left: -30px;
+        left: -49px;
         top: 5px;
         width: 40px;
         height: 40px;
@@ -264,6 +258,7 @@
         justify-content: center;
         font-size: 14px;
         color: #6c757d;
+        z-index: 1;
     }
 
     .timeline-item.active .timeline-marker {
@@ -278,9 +273,19 @@
         color: white;
     }
 
+    .timeline-content {
+        position: relative;
+        z-index: 2;
+        min-height: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
     .timeline-content h6 {
         margin-bottom: 5px;
         font-size: 16px;
+        font-weight: 600;
     }
 
     .timeline-content p {
@@ -295,6 +300,23 @@
 
     #order_number {
         text-transform: uppercase;
+    }
+
+    /* Button layout improvements */
+    .d-flex.gap-2 > * {
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .d-flex.gap-2 > *:last-child {
+        margin-right: 0;
+    }
+    
+    /* Ensure buttons don't stack on mobile */
+    @media (min-width: 768px) {
+        .d-flex.gap-2 {
+            flex-wrap: nowrap;
+        }
     }
 </style>
 

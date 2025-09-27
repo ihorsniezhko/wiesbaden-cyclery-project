@@ -186,10 +186,20 @@ def add_review(request, product_id):
 
 @staff_member_required
 def product_management(request):
-    """Product management view with advanced logic"""
+    """Product management view with advanced logic and search"""
     
     # Performance optimization: select_related and prefetch_related for admin interface
     products = Product.objects.select_related('category').prefetch_related('sizes').order_by('name')
+    
+    # Search functionality
+    search_query = request.GET.get('search', '')
+    if search_query:
+        products = products.filter(
+            Q(name__icontains=search_query) |
+            Q(sku__icontains=search_query) |
+            Q(category__name__icontains=search_query) |
+            Q(category__friendly_name__icontains=search_query)
+        )
     
     # Pagination
     paginator = Paginator(products, 20)  # Show 20 products per page
@@ -199,6 +209,7 @@ def product_management(request):
     context = {
         'products': page_obj,
         'page_obj': page_obj,
+        'search_query': search_query,
     }
     
     return render(request, 'products/product_management.html', context)

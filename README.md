@@ -23,6 +23,7 @@ Wiesbaden Cyclery is a **full-featured e-commerce platform** built with Django 3
 - **🔍 SEO Optimization**: Meta tags, XML sitemaps, structured data, social sharing ✅
 - **📱 Responsive Design**: Bootstrap 4 with mobile-first approach ✅
 - **🌐 Social Media**: Facebook Business page integration ✅
+- **📊 Analytics**: Facebook Pixel and Google Analytics 4 integration ✅
 - **☁️ Cloud Ready**: Prepared for AWS S3 and production deployment
 
 ## 🛠️ Technology Stack
@@ -63,6 +64,14 @@ Copy `.env.example` to `.env` and configure your settings:
 ```env
 DEBUG=True
 SECRET_KEY=your-secret-key-here
+
+# Email settings (Gmail SMTP)
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+
+# Analytics (optional)
+FB_PIXEL_ID=123456789012345
+GA_MEASUREMENT_ID=G-XXXXXXXXXX
 
 # For production with Code Institute PostgreSQL:
 # CI_DATABASE_URL=your_code_institute_database_url_here
@@ -184,6 +193,60 @@ All product images are sourced from **Unsplash** under the Unsplash License (fre
 - **Backend Protection**: Server-side validation prevents overselling even if frontend is bypassed
 - **Order Integration**: Stock automatically decremented on successful purchases
 - **User-Friendly Messaging**: Clear stock warnings and availability information
+
+### Analytics & Tracking Integration ✅
+- **Facebook Pixel Support**: Complete e-commerce tracking for Facebook advertising campaigns
+- **Google Analytics 4**: Modern web analytics with enhanced e-commerce tracking
+- **Privacy Compliant**: Conditional loading based on configuration, respects GDPR
+- **E-commerce Events**: ViewContent, AddToCart, Purchase, Lead, and Search tracking
+- **Template Integration**: Easy custom event implementation via template blocks
+
+## 📊 Analytics & Tracking
+
+### Facebook Pixel Integration
+Complete Facebook Pixel support for e-commerce tracking and advertising campaigns:
+
+```env
+# Add to your .env file
+FB_PIXEL_ID=123456789012345
+```
+
+**Features:**
+- ✅ **Automatic Page View Tracking** - Works immediately when Pixel ID is configured
+- ✅ **E-commerce Event Support** - ViewContent, AddToCart, Purchase tracking ready
+- ✅ **Custom Event Template Block** - Easy integration in any template
+- ✅ **Privacy Compliant** - Only loads when configured, respects cookie consent
+- ✅ **Testing Ready** - Compatible with Facebook Pixel Helper and Events Manager
+
+**Common Events:**
+```html
+<!-- Product View Tracking -->
+{% block facebook_pixel_events %}
+<script>
+fbq('track', 'ViewContent', {
+    content_type: 'product',
+    content_ids: ['{{ product.id }}'],
+    content_name: '{{ product.name }}',
+    value: {{ product.price }},
+    currency: 'EUR'
+});
+</script>
+{% endblock %}
+```
+
+### Google Analytics 4
+Modern web analytics with enhanced e-commerce tracking:
+
+```env
+# Add to your .env file
+GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+**Setup Documentation:**
+- 📖 **Complete Guide**: `docs/facebook-pixel-setup.md`
+- 🧪 **Testing Instructions**: Facebook Pixel Helper and Events Manager integration
+- 🔒 **Privacy Compliance**: GDPR considerations and cookie consent integration
+- 📈 **Best Practices**: Standard events, value tracking, and performance monitoring
 
 ## 🔧 Development
 
