@@ -62,11 +62,8 @@ class ProductForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Image URL (optional)'
             }),
-            'rating': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'step': '0.1',
-                'min': '0',
-                'max': '5'
+            'rating': forms.Select(attrs={
+                'class': 'form-select'
             }),
             'sizes': forms.CheckboxSelectMultiple(),
         }
@@ -86,7 +83,7 @@ class ProductForm(forms.ModelForm):
             'bicycle_features': 'Bicycle Features',
             'image': 'Product Image',
             'image_url': 'Image URL',
-            'rating': 'Rating (0-5)',
+            'rating': 'Rating (1-5)',
         }
 
     def __init__(self, *args, **kwargs):
@@ -97,6 +94,23 @@ class ProductForm(forms.ModelForm):
         
         # Make sizes field show display names
         self.fields['sizes'].queryset = Size.objects.all().order_by('sort_order')
+        
+        # Check if product previously had sizes - if so, disable the has_sizes checkbox
+        if self.instance and self.instance.pk:
+            # Check if this product previously had sizes assigned
+            previously_had_sizes = self.instance.sizes.exists()
+            if previously_had_sizes:
+                # Disable the has_sizes field and add a help text
+                self.fields['has_sizes'].disabled = True
+                self.fields['has_sizes'].help_text = (
+                    "This product previously had sizes assigned. "
+                    "The 'Has Sizes' option cannot be disabled to maintain data integrity."
+                )
+                # Add a CSS class to style the disabled field
+                self.fields['has_sizes'].widget.attrs.update({
+                    'class': 'form-check-input disabled-field',
+                    'title': 'Cannot be disabled - product previously had sizes'
+                })
 
     def clean(self):
         """Custom validation with context-aware logic"""
@@ -117,6 +131,19 @@ class ProductForm(forms.ModelForm):
         if not in_stock:
             cleaned_data['stock_quantity'] = 0
         
+        # CRITICAL: Prevent disabling has_sizes if product previously had sizes
+        if self.instance and self.instance.pk:
+            previously_had_sizes = self.instance.sizes.exists()
+            if previously_had_sizes:
+                # Force has_sizes to True for products that previously had sizes
+                cleaned_data['has_sizes'] = True
+                # If user somehow tried to submit has_sizes=False, show specific error
+                if self.data.get('has_sizes') == 'False' or not self.data.get('has_sizes'):
+                    self.add_error('has_sizes', 
+                        "Cannot disable 'Has Sizes' for products that previously had sizes assigned. "
+                        "This maintains data integrity and prevents confusion."
+                    )
+        
         # Size validation
         if has_sizes and not sizes:
             raise forms.ValidationError(
@@ -126,6 +153,13 @@ class ProductForm(forms.ModelForm):
         # Auto-clear sizes when has_sizes is False
         if not has_sizes:
             cleaned_data['sizes'] = []
+        
+        # Rating validation
+        rating = cleaned_data.get('rating')
+        if rating is not None and rating not in [1, 2, 3, 4, 5]:
+            raise forms.ValidationError(
+                "Rating must be an integer from 1 to 5."
+            )
         
         # Category-specific validation
         bicycle_categories = ['road_bikes', 'mountain_bikes', 'electric_bikes']

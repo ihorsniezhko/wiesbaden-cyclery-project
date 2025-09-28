@@ -14,6 +14,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const sizesField = document.querySelector('.field-sizes');
     const sizeCheckboxes = document.querySelectorAll('input[name="sizes"]');
     
+    // Check if has_sizes is disabled due to previous size assignments
+    function handleDisabledHasSizes() {
+        if (hasSizesCheckbox && hasSizesCheckbox.disabled) {
+            // Add visual styling for disabled field
+            const hasSizesField = document.querySelector('.field-has_sizes');
+            if (hasSizesField) {
+                hasSizesField.style.opacity = '0.6';
+                hasSizesField.style.pointerEvents = 'none';
+                
+                // Add a visual indicator
+                const helpText = hasSizesField.querySelector('.help');
+                if (helpText) {
+                    helpText.style.color = '#666';
+                    helpText.style.fontStyle = 'italic';
+                    helpText.style.fontSize = '0.9em';
+                }
+                
+                // Add an icon or visual cue
+                const label = hasSizesField.querySelector('label');
+                if (label && !label.querySelector('.disabled-icon')) {
+                    const icon = document.createElement('span');
+                    icon.className = 'disabled-icon';
+                    icon.innerHTML = ' 🔒';
+                    icon.title = 'Field is locked - product previously had sizes';
+                    label.appendChild(icon);
+                }
+            }
+        }
+    }
+    
     function toggleStockQuantityField() {
         if (inStockCheckbox && stockQuantityField) {
             if (inStockCheckbox.checked) {
@@ -82,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial state
     toggleStockQuantityField();
     toggleSizesField();
+    handleDisabledHasSizes();
     
     // Event listeners
     if (inStockCheckbox) {

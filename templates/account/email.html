@@ -46,14 +46,14 @@
                             {% endfor %}
                             
                             <div class="form-group mt-4">
-                                <div class="btn-group d-flex" role="group">
-                                    <button class="btn btn-outline-primary" type="submit" name="action_primary">
+                                <div class="d-flex flex-wrap justify-content-center">
+                                    <button class="btn btn-primary mr-3 mb-2" type="submit" name="action_primary">
                                         <i class="fa fa-star"></i> {% trans 'Make Primary' %}
                                     </button>
-                                    <button class="btn btn-outline-info" type="submit" name="action_send">
+                                    <button class="btn btn-secondary mr-3 mb-2" type="submit" name="action_send">
                                         <i class="fa fa-envelope"></i> {% trans 'Re-send Verification' %}
                                     </button>
-                                    <button class="btn btn-outline-danger" type="submit" name="action_remove">
+                                    <button class="btn btn-danger mb-2" type="submit" name="action_remove">
                                         <i class="fa fa-trash"></i> {% trans 'Remove' %}
                                     </button>
                                 </div>
@@ -85,7 +85,7 @@
                                 {% endif %}
                             </div>
                             <div class="form-group">
-                                <button name="action_add" type="submit" class="btn px-4 py-2" style="background-color: #199CF4; color: white;">
+                                <button name="action_add" type="submit" class="btn btn-primary">
                                     <i class="fa fa-plus"></i> {% trans "Add E-mail" %}
                                 </button>
                             </div>

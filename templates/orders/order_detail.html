@@ -108,7 +108,7 @@
                                                 {% endif %}
                                                 <div>
                                                     <strong>{{ item.product.name }}</strong>
-                                                    <a href="{% url 'product_detail' item.product.id %}#reviews" class="btn btn-sm btn-outline-primary ml-2" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">
+                                                    <a href="{% url 'product_detail' item.product.id %}#reviews" class="btn btn-sm btn-primary ml-2">
                                                         <i class="fa fa-star"></i> Review
                                                     </a><br>
                                                     <small class="text-muted">SKU: {{ item.product.sku }}</small>

@@ -23,6 +23,18 @@
         font-size: 4rem;
         margin-bottom: 20px;
     }
+    
+    /* Button consistency */
+    .btn {
+        white-space: nowrap !important;
+        min-height: 38px;
+    }
+    
+    .btn-lg {
+        min-height: 48px;
+        font-size: 1.125rem;
+        padding: 0.5rem 1rem;
+    }
 </style>
 {% endblock %}
 
@@ -106,7 +118,7 @@
                     <i class="fa fa-arrow-left"></i> Cancel
                 </a>
                 
-                <a href="{% url 'product_management' %}" class="btn btn-outline-secondary btn-lg">
+                <a href="{% url 'product_management' %}" class="btn btn-secondary btn-lg">
                     <i class="fa fa-list"></i> Back to Management
                 </a>
             </div>

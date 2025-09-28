@@ -30,6 +30,14 @@
     <meta name="twitter:description" content="{% block twitter_description %}{% firstof page_description 'Wiesbaden Cyclery - Your premier destination for quality bicycles, cycling accessories, and expert service in Wiesbaden, Germany.' %}{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/og-default.jpg' %}{% endblock %}">
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'icons/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icons/favicon-16x16.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/favicon-32x32.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'icons/android-chrome-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{% static 'icons/android-chrome-512x512.png' %}">
+    
     <!-- Structured Data for Business -->
     <script type="application/ld+json">
     {
@@ -106,7 +114,7 @@
     </script>
     {% endif %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
@@ -214,7 +222,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main>
+    <main class="flex-grow-1">
         {% block content %}
         {% endblock %}
     </main>
@@ -420,9 +428,8 @@
     <!-- Custom Facebook Pixel events can be added in child templates -->
     {% endblock %}
     {% endif %}
-</body>
-</html> 
-   <!-- Mailchimp Newsletter Validation -->
+    
+    <!-- Mailchimp Newsletter Validation -->
     <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
     <script type="text/javascript">
         (function($) {

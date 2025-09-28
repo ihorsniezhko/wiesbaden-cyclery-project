@@ -48,14 +48,16 @@
     .checkbox-wrapper {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 12px;
         min-width: 120px;
+        margin-bottom: 8px;
     }
     
     .checkbox-wrapper input[type="checkbox"] {
         width: 18px;
         height: 18px;
         margin: 0;
+        flex-shrink: 0;
     }
     
     .checkbox-wrapper label {
@@ -63,6 +65,26 @@
         font-weight: 500;
         color: #495057;
         cursor: pointer;
+        line-height: 1.4;
+        white-space: nowrap;
+    }
+    
+    /* Size configuration specific styling */
+    .size-config-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .size-config-checkbox {
+        flex-shrink: 0;
+    }
+    
+    .size-config-help {
+        flex: 1;
+        margin-top: 2px;
+        padding-left: 10px;
     }
     
     /* Compact stock quantity field */
@@ -75,64 +97,101 @@
         font-weight: 500;
     }
     
-    /* Size selection styling */
-    .size-selection-area {
+    /* Size Configuration Styling - Match Screenshot */
+    .size-config-container {
         background: #f8f9fa;
         border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .section-title {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #007bff;
+    }
+    
+    .has-sizes-section {
+        margin-bottom: 20px;
+    }
+    
+    .size-info-text, .size-help-text {
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+    
+    .lock-icon {
+        font-size: 0.875rem;
+    }
+    
+    .available-sizes-section {
+        background: white;
+        border-radius: 6px;
         padding: 16px;
-        margin-top: 12px;
+        border: 1px solid #dee2e6;
     }
     
-    .size-grid {
+    .sizes-label {
+        color: #6c757d;
+        font-weight: 500;
+        margin-bottom: 12px;
+    }
+    
+    .sizes-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
         gap: 12px;
-        margin-top: 12px;
+        margin-bottom: 16px;
     }
     
-    .size-option {
+    .size-box {
         display: flex;
         align-items: center;
         justify-content: center;
         background: white;
         border: 2px solid #dee2e6;
-        border-radius: 8px;
+        border-radius: 6px;
         padding: 12px 8px;
         transition: all 0.2s ease;
         cursor: pointer;
-        min-height: 50px;
+        min-height: 48px;
+        position: relative;
     }
     
-    .size-option:hover {
+    .size-box:hover {
         border-color: #007bff;
-        background: #f0f8ff;
+        background: #f8f9fa;
     }
     
-    .size-option input[type="checkbox"] {
+    .size-box input[type="checkbox"] {
         display: none;
     }
     
-    .size-option input[type="checkbox"]:checked + label {
-        color: #007bff;
-        font-weight: 600;
+    .size-label {
+        margin: 0;
+        cursor: pointer;
+        font-weight: 500;
+        text-align: center;
+        width: 100%;
+        color: #495057;
     }
     
-    .size-option input[type="checkbox"]:checked {
-        background: #007bff;
-    }
-    
-    .size-option.selected {
+    .size-box.selected {
         border-color: #007bff !important;
         background-color: #e3f2fd !important;
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
-        transform: scale(1.02) !important;
+        box-shadow: 0 0 0 1px rgba(0, 123, 255, 0.25) !important;
     }
     
-    /* More specific selector to ensure highlighting works */
-    .size-selection-area .size-option.selected {
-        border: 2px solid #007bff !important;
-        background-color: #e3f2fd !important;
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+    .size-box.selected .size-label {
+        color: #007bff !important;
+        font-weight: 600 !important;
+    }
+    
+    .size-selection-info {
+        font-size: 0.875rem;
+        color: #6c757d;
     }
     
     /* Custom File Input Styling */
@@ -147,24 +206,33 @@
     }
     
     .file-select-btn {
-        border: 2px solid #007bff;
-        background: white;
-        color: #007bff;
+        /* Use standard Bootstrap primary button styling */
+        background-color: #007bff !important;
+        border-color: #007bff !important;
+        color: white !important;
         padding: 8px 16px;
         border-radius: 6px;
-        font-weight: 500;
+        font-weight: 400 !important;        /* Match category View button font weight */
+        font-size: 1rem !important;         /* Match category View button font size */
         transition: all 0.2s ease;
         cursor: pointer !important;
     }
     
     .file-select-btn:hover {
-        background: #007bff;
-        color: white;
+        background-color: #0056b3 !important;
+        border-color: #0056b3 !important;
+        color: white !important;
+        font-weight: 400 !important;        /* Maintain consistent font weight on hover */
+        font-size: 1rem !important;         /* Maintain consistent font size on hover */
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
     }
     
     .file-select-btn:active {
+        background-color: #004085 !important;
+        border-color: #004085 !important;
+        font-weight: 400 !important;        /* Maintain consistent font weight on active */
+        font-size: 1rem !important;         /* Maintain consistent font size on active */
         transform: translateY(0);
         box-shadow: 0 1px 2px rgba(0, 123, 255, 0.3);
     }
@@ -181,13 +249,7 @@
         font-weight: 500;
     }
     
-    .size-option label {
-        margin: 0;
-        cursor: pointer;
-        font-weight: 500;
-        text-align: center;
-        width: 100%;
-    }
+
     
     /* Form field improvements */
     .form-control, .form-select {
@@ -281,7 +343,7 @@
                         <i class="fa fa-arrow-left"></i> Back to Management
                     </a>
                     {% if is_editing %}
-                        <a href="{% url 'product_detail' product.id %}" class="btn btn-info btn-lg">
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-primary btn-lg">
                             <i class="fa fa-eye"></i> View Product
                         </a>
                     {% endif %}
@@ -414,37 +476,47 @@
 
                 <!-- Size Configuration -->
                 <div class="form-section">
-                    <h5><i class="fa fa-ruler"></i> Size Configuration</h5>
+                    <h5 class="section-title">Size Configuration</h5>
                     
-                    <div class="option-group">
-                        <div class="checkbox-wrapper">
-                            {{ form.has_sizes }}
-                            <label for="{{ form.has_sizes.id_for_label }}">
-                                {{ form.has_sizes.label }}
-                            </label>
+                    <div class="size-config-container">
+                        <!-- Has Sizes Checkbox -->
+                        <div class="has-sizes-section">
+                            <div class="form-check d-flex align-items-center">
+                                {{ form.has_sizes }}
+                                <label for="{{ form.has_sizes.id_for_label }}" class="form-check-label ms-2 mb-0">
+                                    Has Sizes
+                                    {% if form.has_sizes.field.disabled %}
+                                        <span class="lock-icon ms-1" title="Field is locked - product previously had sizes">🔒</span>
+                                    {% endif %}
+                                </label>
+                            </div>
+                            {% if form.has_sizes.field.disabled %}
+                                <div class="size-info-text mt-2">
+                                    <i class="fa fa-info-circle text-muted"></i>
+                                    <span class="text-muted">This product previously had sizes assigned. The 'Has Sizes' option cannot be disabled to maintain data integrity.</span>
+                                </div>
+                            {% else %}
+                                <div class="size-help-text mt-2">
+                                    <span class="text-muted">Check this box if the product comes in different sizes (S, M, L, XL)</span>
+                                </div>
+                            {% endif %}
                         </div>
-                        
-                        {% if form.has_sizes.errors %}
-                            <div class="text-danger small mt-2">{{ form.has_sizes.errors.0 }}</div>
-                        {% endif %}
-                        
-                        <div id="sizesSection" class="size-selection-area">
-                            <label class="form-label">Available Sizes</label>
-                            <div class="size-grid">
+
+                        <!-- Available Sizes Section -->
+                        <div class="available-sizes-section mt-4" id="sizesSection">
+                            <h6 class="sizes-label mb-3">Available Sizes</h6>
+                            <div class="sizes-grid">
                                 {% for choice in form.sizes %}
-                                    <div class="size-option" data-size="{{ choice.choice_value }}">
+                                    <div class="size-box" data-size="{{ choice.choice_value }}">
                                         {{ choice.tag }}
-                                        <label for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
+                                        <label for="{{ choice.id_for_label }}" class="size-label">{{ choice.choice_label }}</label>
                                     </div>
                                 {% endfor %}
                             </div>
-                            {% if form.sizes.errors %}
-                                <div class="text-danger small mt-2">{{ form.sizes.errors.0 }}</div>
-                            {% endif %}
-                            <small class="text-muted d-block mt-2">
-                                <i class="fa fa-info-circle"></i> 
-                                Select all sizes that will be available for this product
-                            </small>
+                            <div class="size-selection-info mt-3">
+                                <i class="fa fa-info-circle text-muted"></i>
+                                <span class="text-muted">Select all sizes that will be available for this product</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -556,8 +628,7 @@
                         </div>
                         {% if is_editing %}
                         <div>
-                            <a href="{% url 'delete_product' product.id %}" class="btn btn-danger btn-lg" 
-                               onclick="return confirm('Are you sure you want to delete this product?')">
+                            <a href="{% url 'delete_product' product.id %}" class="btn btn-danger btn-lg">
                                 <i class="fa fa-trash"></i> Delete Product
                             </a>
                         </div>
@@ -575,7 +646,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hasSizesCheckbox = document.getElementById('id_has_sizes');
     const sizesSection = document.getElementById('sizesSection');
     const sizeCheckboxes = document.querySelectorAll('input[name="sizes"]');
-    const sizeOptions = document.querySelectorAll('.size-option');
+    const sizeOptions = document.querySelectorAll('.size-box');
     
     // Stock management elements
     const inStockCheckbox = document.getElementById('id_in_stock');
@@ -584,6 +655,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Clear and simple size section toggle
     function toggleSizesSection() {
+        // Check if has_sizes checkbox is disabled (product previously had sizes)
+        if (hasSizesCheckbox.disabled) {
+            // If disabled, always show sizes section as enabled since has_sizes is locked to true
+            sizesSection.classList.remove('section-disabled');
+            sizesSection.classList.add('section-enabled');
+            sizesSection.style.opacity = '1';
+            sizesSection.style.pointerEvents = 'auto';
+            
+            // Enable all size checkboxes
+            sizeCheckboxes.forEach(cb => {
+                cb.disabled = false;
+            });
+            return;
+        }
+        
         if (hasSizesCheckbox.checked) {
             // Enable size selection
             sizesSection.classList.remove('section-disabled');
@@ -630,28 +716,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Visual feedback for size options - immediate and reliable
+    // Visual feedback for size boxes - immediate and reliable
     function updateSizeOptionVisual(checkbox) {
-        const sizeOption = checkbox.closest('.size-option');
+        const sizeBox = checkbox.closest('.size-box');
         if (checkbox.checked) {
-            sizeOption.classList.add('selected');
-            // Force immediate visual styling with maximum specificity
-            sizeOption.style.setProperty('border', '2px solid #007bff', 'important');
-            sizeOption.style.setProperty('background-color', '#e3f2fd', 'important');
-            sizeOption.style.setProperty('box-shadow', '0 0 0 2px rgba(0, 123, 255, 0.25)', 'important');
-            sizeOption.style.setProperty('transform', 'scale(1.02)', 'important');
+            sizeBox.classList.add('selected');
         } else {
-            sizeOption.classList.remove('selected');
-            // Reset to default styling immediately
-            sizeOption.style.setProperty('border', '2px solid #dee2e6', 'important');
-            sizeOption.style.setProperty('background-color', 'white', 'important');
-            sizeOption.style.setProperty('box-shadow', 'none', 'important');
-            sizeOption.style.setProperty('transform', 'scale(1)', 'important');
+            sizeBox.classList.remove('selected');
         }
     }
     
     // Simple and clear size selection logic
     function checkSizeSelection() {
+        // Skip auto-adjustment if has_sizes is disabled (product previously had sizes)
+        if (hasSizesCheckbox.disabled) {
+            return;
+        }
+        
         // Query fresh each time to get current DOM state (fixes timing issue)
         const currentSizeCheckboxes = document.querySelectorAll('input[name="sizes"]');
         const anySizeSelected = Array.from(currentSizeCheckboxes).some(cb => cb.checked);
@@ -731,10 +812,36 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Validate initial stock quantity
         validateStockQuantity();
+        
+        // Initialize file input handling
+        const fileInput = document.getElementById('id_image');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        
+        console.log('File input elements:', { fileInput, fileNameDisplay });
+        
+        if (fileInput && fileNameDisplay) {
+            console.log('Setting up file input event listener');
+            fileInput.addEventListener('change', function(e) {
+                console.log('File input changed:', e.target.files);
+                const file = e.target.files[0];
+                if (file) {
+                    fileNameDisplay.textContent = file.name;
+                    fileNameDisplay.classList.add('has-file');
+                    showNotification(`✓ File selected: ${file.name}`, 'success');
+                } else {
+                    fileNameDisplay.textContent = 'No file chosen';
+                    fileNameDisplay.classList.remove('has-file');
+                }
+            });
+        } else {
+            console.error('File input elements not found');
+        }
     }
     
     // Event listeners for sizes
-    hasSizesCheckbox.addEventListener('change', toggleSizesSection);
+    if (!hasSizesCheckbox.disabled) {
+        hasSizesCheckbox.addEventListener('change', toggleSizesSection);
+    }
     
     // Immediate visual feedback for checkboxes
     sizeCheckboxes.forEach(cb => {
@@ -833,23 +940,7 @@ document.addEventListener('DOMContentLoaded', function() {
         highlightBicycleFields(); // Initial state
     }
     
-    // File input handling
-    const fileInput = document.getElementById('id_image');
-    const fileNameDisplay = document.getElementById('fileNameDisplay');
-    
-    if (fileInput && fileNameDisplay) {
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                fileNameDisplay.textContent = file.name;
-                fileNameDisplay.classList.add('has-file');
-                showNotification(`✓ File selected: ${file.name}`, 'success');
-            } else {
-                fileNameDisplay.textContent = 'No file chosen';
-                fileNameDisplay.classList.remove('has-file');
-            }
-        });
-    }
+
     
     // Initialize everything
     initializeForm();

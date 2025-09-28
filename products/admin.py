@@ -2,7 +2,55 @@
 Admin configuration for products app
 """
 from django.contrib import admin
+from django import forms
 from .models import Product, Category, Size, Review
+
+
+class ProductAdminForm(forms.ModelForm):
+    """Custom admin form for Product with has_sizes validation"""
+    
+    class Meta:
+        model = Product
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Check if product previously had sizes - if so, disable the has_sizes checkbox
+        if self.instance and self.instance.pk:
+            previously_had_sizes = self.instance.sizes.exists()
+            if previously_had_sizes:
+                # Disable the has_sizes field and add help text
+                self.fields['has_sizes'].disabled = True
+                self.fields['has_sizes'].help_text = (
+                    "This product previously had sizes assigned. "
+                    "The 'Has Sizes' option cannot be disabled to maintain data integrity."
+                )
+                # Add styling to indicate disabled state
+                self.fields['has_sizes'].widget.attrs.update({
+                    'style': 'opacity: 0.6; cursor: not-allowed;',
+                    'title': 'Cannot be disabled - product previously had sizes'
+                })
+    
+    def clean(self):
+        """Custom validation for admin form"""
+        cleaned_data = super().clean()
+        has_sizes = cleaned_data.get('has_sizes')
+        
+        # CRITICAL: Prevent disabling has_sizes if product previously had sizes
+        if self.instance and self.instance.pk:
+            previously_had_sizes = self.instance.sizes.exists()
+            if previously_had_sizes:
+                # Force has_sizes to True for products that previously had sizes
+                cleaned_data['has_sizes'] = True
+                # If user somehow tried to submit has_sizes=False, show specific error
+                if self.data.get('has_sizes') == 'False' or not self.data.get('has_sizes'):
+                    self.add_error('has_sizes', 
+                        "Cannot disable 'Has Sizes' for products that previously had sizes assigned. "
+                        "This maintains data integrity and prevents confusion."
+                    )
+        
+        return cleaned_data
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -39,6 +87,8 @@ class ReviewInline(admin.TabularInline):
 
 class ProductAdmin(admin.ModelAdmin):
     """Admin configuration for Product"""
+    
+    form = ProductAdminForm
     
     list_display = (
         'sku',
