@@ -23,9 +23,9 @@ def create_sample_products():
     
     # Get categories
     try:
-        road_bikes = Category.objects.get(name='Road Bikes')
-        mountain_bikes = Category.objects.get(name='Mountain Bikes')
-        accessories = Category.objects.get(name='Accessories')
+        road_bikes = Category.objects.get(name='road_bikes')
+        mountain_bikes = Category.objects.get(name='mountain_bikes')
+        accessories = Category.objects.get(name='accessories')
         
         print("✅ Categories found")
     except Category.DoesNotExist as e:
