@@ -1,0 +1,1 @@
+web: gunicorn wiesbaden_cyclery.wsgi:application

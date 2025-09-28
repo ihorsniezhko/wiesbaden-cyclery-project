@@ -284,7 +284,30 @@
     }
     
     /* Responsive improvements */
-    @media (max-width: 768px) {
+    
+    /* Medium screen width fix (884px - 1236px) - Header button layout */
+    @media (max-width: 1236px) and (min-width: 885px) {
+        .d-flex.justify-content-between.align-items-center {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 20px;
+        }
+        
+        .d-flex.justify-content-between.align-items-center > div:last-child {
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            align-self: flex-end;
+        }
+        
+        /* Ensure buttons maintain proper sizing */
+        .d-flex.justify-content-between.align-items-center .btn-lg {
+            white-space: nowrap;
+            min-width: auto;
+        }
+    }
+    
+    @media (max-width: 884px) {
         .option-row {
             flex-direction: column;
             align-items: flex-start;
@@ -297,6 +320,43 @@
         
         .stock-quantity-compact {
             max-width: 100%;
+        }
+        
+        /* Mobile button spacing - Header buttons */
+        .d-flex.justify-content-between.align-items-center {
+            flex-direction: column;
+            align-items: stretch !important;
+            gap: 16px;
+        }
+        
+        .d-flex.justify-content-between.align-items-center > div {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .d-flex.justify-content-between.align-items-center > div:last-child {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        /* Mobile button spacing - Form action buttons */
+        .form-section .d-flex.justify-content-between {
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .form-section .d-flex.justify-content-between > div {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        /* Ensure buttons take full width on mobile */
+        .btn-lg {
+            width: 100%;
+            text-align: center;
         }
     }
     

@@ -474,3 +474,81 @@ Toolbar with Compact Spacing */
     font-size: 1rem !important;           /* SAME font size as standard buttons */
     font-weight: 400 !important;          /* SAME font weight as standard buttons */
 }
+
+/* CRITICAL: Responsive Button Layout Fixes */
+/* Medium screen width fix (884px - 1236px) - Header button layout */
+@media (max-width: 1236px) and (min-width: 885px) {
+    /* Fix header button layout in forms and management pages */
+    .d-flex.justify-content-between.align-items-center {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 20px;
+    }
+    
+    .d-flex.justify-content-between.align-items-center > div:last-child {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        align-self: flex-end;
+    }
+    
+    /* Ensure buttons maintain proper sizing */
+    .d-flex.justify-content-between.align-items-center .btn-lg {
+        white-space: nowrap;
+        min-width: auto;
+    }
+    
+    /* Fix button groups in cards and sections */
+    .card-header .d-flex.justify-content-between,
+    .form-section .d-flex.justify-content-between {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .card-header .d-flex.justify-content-between > div,
+    .form-section .d-flex.justify-content-between > div {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+}
+
+/* Small screen responsive button fixes */
+@media (max-width: 884px) {
+    /* Stack header buttons vertically on small screens */
+    .d-flex.justify-content-between.align-items-center {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 16px;
+    }
+    
+    .d-flex.justify-content-between.align-items-center > div {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .d-flex.justify-content-between.align-items-center > div:last-child {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    /* Stack form action buttons vertically */
+    .form-section .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .form-section .d-flex.justify-content-between > div {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    /* Ensure buttons take full width on mobile */
+    .btn-lg {
+        width: 100%;
+        text-align: center;
+    }
+}

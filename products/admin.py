@@ -35,7 +35,6 @@ class ProductAdminForm(forms.ModelForm):
     def clean(self):
         """Custom validation for admin form"""
         cleaned_data = super().clean()
-        has_sizes = cleaned_data.get('has_sizes')
         
         # CRITICAL: Prevent disabling has_sizes if product previously had sizes
         if self.instance and self.instance.pk:
@@ -43,12 +42,8 @@ class ProductAdminForm(forms.ModelForm):
             if previously_had_sizes:
                 # Force has_sizes to True for products that previously had sizes
                 cleaned_data['has_sizes'] = True
-                # If user somehow tried to submit has_sizes=False, show specific error
-                if self.data.get('has_sizes') == 'False' or not self.data.get('has_sizes'):
-                    self.add_error('has_sizes', 
-                        "Cannot disable 'Has Sizes' for products that previously had sizes assigned. "
-                        "This maintains data integrity and prevents confusion."
-                    )
+                # Don't validate disabled fields - when field is disabled, 
+                # browser doesn't send it and we shouldn't show validation errors
         
         return cleaned_data
 

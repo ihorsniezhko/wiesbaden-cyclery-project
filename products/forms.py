@@ -137,12 +137,14 @@ class ProductForm(forms.ModelForm):
             if previously_had_sizes:
                 # Force has_sizes to True for products that previously had sizes
                 cleaned_data['has_sizes'] = True
-                # If user somehow tried to submit has_sizes=False, show specific error
-                if self.data.get('has_sizes') == 'False' or not self.data.get('has_sizes'):
-                    self.add_error('has_sizes', 
-                        "Cannot disable 'Has Sizes' for products that previously had sizes assigned. "
-                        "This maintains data integrity and prevents confusion."
-                    )
+                # Only show error if user explicitly tried to disable it (field is not disabled)
+                # When field is disabled, browser doesn't send it, so we shouldn't validate it
+                if not self.fields['has_sizes'].disabled:
+                    if self.data.get('has_sizes') == 'False' or not self.data.get('has_sizes'):
+                        self.add_error('has_sizes', 
+                            "Cannot disable 'Has Sizes' for products that previously had sizes assigned. "
+                            "This maintains data integrity and prevents confusion."
+                        )
         
         # Size validation
         if has_sizes and not sizes:
