@@ -335,7 +335,7 @@
                 </div>
                 <div class="col-md-4 text-md-right">
                     <div class="cookie-consent-buttons">
-                        <button type="button" class="btn btn-sm btn-light mr-2" id="cookie-decline">
+                        <button type="button" class="btn btn-sm btn-light" id="cookie-decline">
                             Decline
                         </button>
                         <button type="button" class="btn btn-sm btn-primary" id="cookie-accept-all">
@@ -371,8 +371,16 @@
         font-size: 14px;
     }
     
+    .cookie-consent-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+    
     .cookie-consent-buttons .btn {
         min-width: 100px;
+        flex-shrink: 0;
     }
     
     @media (max-width: 768px) {
@@ -382,6 +390,14 @@
         
         .cookie-consent-buttons {
             text-align: center;
+            justify-content: center;
+        }
+    }
+    
+    /* Ensure buttons stay in single row at 846px width */
+    @media (min-width: 769px) and (max-width: 991px) {
+        .cookie-consent-buttons {
+            justify-content: flex-end;
         }
     }
     </style>
