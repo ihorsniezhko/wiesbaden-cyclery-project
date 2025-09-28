@@ -1,0 +1,221 @@
+/*
+Wiesbaden Cyclery - Color Standards
+Consistent color scheme across the entire project
+*/
+
+/* Primary Brand Colors */
+:root {
+    --wc-primary-blue: #199CF4;
+    --wc-primary-blue-hover: #0d8ce8;
+    --wc-primary-blue-focus: rgba(25, 156, 244, 0.25);
+    --wc-secondary-gray: #6c757d;
+    --wc-light-gray: #f8f9fa;
+    --wc-border-gray: #e9ecef;
+    --wc-success-green: #28a745;
+    --wc-danger-red: #dc3545;
+    --wc-white: #ffffff;
+    --wc-dark: #212529;
+}
+
+/* Universal Button Styling - Primary Blue */
+.btn-primary {
+    background-color: var(--wc-primary-blue) !important;
+    border-color: var(--wc-primary-blue) !important;
+    color: var(--wc-white) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--wc-primary-blue-hover) !important;
+    border-color: var(--wc-primary-blue-hover) !important;
+    color: var(--wc-white) !important;
+}
+
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem var(--wc-primary-blue-focus) !important;
+}
+
+/* Outline Primary Buttons - Consistent with Filled */
+.btn-outline-primary {
+    background-color: var(--wc-primary-blue) !important;
+    border-color: var(--wc-primary-blue) !important;
+    color: var(--wc-white) !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    background-color: var(--wc-primary-blue-hover) !important;
+    border-color: var(--wc-primary-blue-hover) !important;
+    color: var(--wc-white) !important;
+}
+
+.btn-outline-primary:focus {
+    box-shadow: 0 0 0 0.2rem var(--wc-primary-blue-focus) !important;
+}
+
+/* Text Primary Color */
+.text-primary {
+    color: var(--wc-primary-blue) !important;
+}
+
+/* Links */
+a.text-primary:hover,
+a.text-primary:focus {
+    color: var(--wc-primary-blue-hover) !important;
+}
+
+/* Form Controls */
+.form-control:focus {
+    border-color: var(--wc-primary-blue) !important;
+    box-shadow: 0 0 0 0.2rem var(--wc-primary-blue-focus) !important;
+}
+
+/* Pagination */
+.pagination .page-link {
+    color: var(--wc-white) !important;
+    border: 1px solid var(--wc-primary-blue) !important;
+    background-color: var(--wc-primary-blue) !important;
+}
+
+.pagination .page-link:hover {
+    background-color: var(--wc-primary-blue-hover) !important;
+    border-color: var(--wc-primary-blue-hover) !important;
+    color: var(--wc-white) !important;
+}
+
+.pagination .page-link:focus {
+    box-shadow: 0 0 0 0.2rem var(--wc-primary-blue-focus) !important;
+    border-color: var(--wc-primary-blue) !important;
+    background-color: var(--wc-primary-blue) !important;
+    color: var(--wc-white) !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--wc-primary-blue-hover) !important;
+    border-color: var(--wc-primary-blue-hover) !important;
+    color: var(--wc-white) !important;
+}
+
+/* Badges */
+.badge-primary {
+    background-color: var(--wc-primary-blue) !important;
+    color: var(--wc-white) !important;
+}
+
+/* Alerts */
+.alert-primary {
+    background-color: rgba(25, 156, 244, 0.1) !important;
+    border-color: var(--wc-primary-blue) !important;
+    color: var(--wc-primary-blue) !important;
+}
+
+/* Progress Bars */
+.progress-bar {
+    background-color: var(--wc-primary-blue) !important;
+}
+
+/* Navigation */
+.navbar-brand:hover,
+.nav-link:hover {
+    color: var(--wc-primary-blue) !important;
+}
+
+/* Cards */
+.card-header.bg-primary {
+    background-color: var(--wc-primary-blue) !important;
+    border-color: var(--wc-primary-blue) !important;
+}
+
+/* Dropdowns */
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--wc-primary-blue) !important;
+    color: var(--wc-white) !important;
+}
+
+/* Icons */
+.fa.text-primary,
+.fas.text-primary,
+.far.text-primary {
+    color: var(--wc-primary-blue) !important;
+}
+
+/* Price Text */
+.price-text {
+    color: var(--wc-primary-blue) !important;
+}
+
+/* Product Links */
+.product-info h6 a:hover {
+    color: var(--wc-primary-blue) !important;
+}
+
+/* Quantity Input Focus */
+.qty_input:focus {
+    border-color: var(--wc-primary-blue) !important;
+}
+
+/* Size Select Focus */
+.form-select:focus {
+    border-color: var(--wc-primary-blue) !important;
+    box-shadow: 0 0 0 0.2rem var(--wc-primary-blue-focus) !important;
+}
+
+/* Star Ratings */
+.star-rating .fa-star {
+    color: #ffc107 !important; /* Keep stars gold */
+}
+
+/* Success and Error States */
+.text-success {
+    color: var(--wc-success-green) !important;
+}
+
+.text-danger {
+    color: var(--wc-danger-red) !important;
+}
+
+.badge-success {
+    background-color: var(--wc-success-green) !important;
+}
+
+.badge-danger {
+    background-color: var(--wc-danger-red) !important;
+}
+
+/* Secondary Elements */
+.btn-secondary {
+    background-color: var(--wc-secondary-gray) !important;
+    border-color: var(--wc-secondary-gray) !important;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62 !important;
+    border-color: #545b62 !important;
+}
+
+/* Light Backgrounds */
+.bg-light {
+    background-color: var(--wc-light-gray) !important;
+}
+
+/* Borders */
+.border-primary {
+    border-color: var(--wc-primary-blue) !important;
+}
+
+/* Custom Elements */
+.wc-primary-bg {
+    background-color: var(--wc-primary-blue) !important;
+    color: var(--wc-white) !important;
+}
+
+.wc-primary-text {
+    color: var(--wc-primary-blue) !important;
+}
+
+.wc-primary-border {
+    border-color: var(--wc-primary-blue) !important;
+}

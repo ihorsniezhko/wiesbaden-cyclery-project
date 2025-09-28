@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %} - Page Not Found{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <!-- Hero Section with Cycling Theme -->
+            <div class="error-hero text-center py-5 my-4">
+                <div class="py-4">
+                    <!-- Cycling Icon -->
+                    <div class="error-icon mb-4">
+                        <i class="fa fa-bicycle fa-4x text-primary"></i>
+                    </div>
+                    
+                    <!-- Error Message -->
+                    <h1 class="error-title mb-3">404 - Route Not Found</h1>
+                    <p class="error-subtitle mb-4">
+                        Looks like you've taken a wrong turn on your cycling journey!<br>
+                        The page you're looking for doesn't exist.
+                    </p>
+                    
+                    <!-- Action Buttons -->
+                    <div class="error-buttons d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
+                        <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
+                            <i class="fa fa-home me-2"></i>Back to Home
+                        </a>
+                        <a href="{% url 'products' %}" class="btn btn-secondary btn-lg">
+                            <i class="fa fa-shopping-bag me-2"></i>Shop Products
+                        </a>
+                        <a href="{% url 'categories' %}" class="btn btn-secondary btn-lg">
+                            <i class="fa fa-th-large me-2"></i>Browse Categories
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Helpful Navigation Section -->
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="text-center mb-4">
+                <h3 class="section-title">Popular Destinations</h3>
+                <p class="section-subtitle">Here are some popular pages you might be looking for:</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center g-4 mb-5">
+        <div class="col-12 col-lg-10">
+            <div class="row g-4">
+                <!-- Bicycles Category -->
+                <div class="col-md-4">
+                    <div class="category-card text-center p-4">
+                        <div class="category-icon mb-3">
+                            <i class="fa fa-bicycle fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="category-title">Bicycles</h5>
+                        <p class="category-description">Explore our collection of high-quality bicycles for every rider.</p>
+                        <a href="{% url 'products' %}" class="btn btn-primary">View Bicycles</a>
+                    </div>
+                </div>
+                
+                <!-- Accessories Category -->
+                <div class="col-md-4">
+                    <div class="category-card text-center p-4">
+                        <div class="category-icon mb-3">
+                            <i class="fa fa-wrench fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="category-title">Accessories</h5>
+                        <p class="category-description">Find the perfect accessories to enhance your cycling experience.</p>
+                        <a href="{% url 'products' %}?category=accessories" class="btn btn-primary">View Accessories</a>
+                    </div>
+                </div>
+                
+                <!-- Components Category -->
+                <div class="col-md-4">
+                    <div class="category-card text-center p-4">
+                        <div class="category-icon mb-3">
+                            <i class="fa fa-cogs fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="category-title">Components</h5>
+                        <p class="category-description">Upgrade your bike with premium components and parts.</p>
+                        <a href="{% url 'products' %}?category=components" class="btn btn-primary">View Components</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Search Section -->
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="search-section p-4 text-center">
+                <h4 class="search-title mb-3">Still can't find what you're looking for?</h4>
+                <p class="search-subtitle mb-4">Try searching for products or browse our categories</p>
+                
+                <!-- Search Form -->
+                <form method="GET" action="{% url 'products' %}" class="search-form mb-4">
+                    <div class="input-group">
+                        <input type="text" 
+                               name="q" 
+                               class="form-control form-control-lg" 
+                               placeholder="Search for products..."
+                               aria-label="Search products">
+                        <button class="btn btn-primary btn-lg" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Contact Info -->
+                <div class="contact-info">
+                    <p class="contact-label mb-2">Need help? Contact our support team:</p>
+                    <p class="contact-email">
+                        <i class="fa fa-envelope"></i> info@wiesbaden-cyclery.de
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styles for 404 Page -->
+<style>
+/* Error Page Styles */
+.error-hero {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.error-icon {
+    margin-bottom: 1rem;
+}
+
+.error-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #212529;
+    margin-bottom: 1rem;
+}
+
+.error-subtitle {
+    font-size: 1.25rem;
+    color: #6c757d;
+    line-height: 1.5;
+}
+
+.error-buttons {
+    gap: 1rem !important;
+}
+
+.error-buttons .btn {
+    min-width: 180px;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    white-space: nowrap !important;
+    font-family: inherit !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin-bottom: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-buttons .btn-lg {
+    padding: 0.5rem 1rem !important;
+    min-height: 48px !important;
+    height: 48px !important;
+}
+
+.error-buttons .btn i {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+.error-buttons .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Section Styles */
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+/* Category Cards */
+.category-card {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.category-icon {
+    margin-bottom: 1rem;
+}
+
+.category-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.75rem;
+}
+
+.category-description {
+    font-size: 0.95rem;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+/* Search Section */
+.search-section {
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.search-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+.search-subtitle {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.search-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.contact-label {
+    font-size: 0.95rem;
+    color: #6c757d;
+}
+
+.contact-email {
+    font-size: 1rem;
+    color: #212529;
+    font-weight: 500;
+}
+
+/* Universal Button Styles - Consistent Heights */
+.btn {
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    white-space: nowrap !important;
+    font-family: inherit !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    text-decoration: none;
+}
+
+.btn-lg {
+    min-height: 48px !important;
+    height: 48px !important;
+    padding: 0.5rem 1rem !important;
+}
+
+.btn i {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Button Color Styles - Consistent with Project */
+.btn-primary {
+    background-color: #199CF4 !important;
+    border-color: #199CF4 !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover {
+    background-color: #0d8ce8 !important;
+    border-color: #0d8ce8 !important;
+    color: #ffffff !important;
+}
+
+/* Text primary color consistency */
+.text-primary {
+    color: #199CF4 !important;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #ffffff;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+    border-color: #545b62;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .error-title {
+        font-size: 2rem;
+    }
+    
+    .error-buttons {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+    }
+    
+    .error-buttons .btn {
+        width: 100%;
+        max-width: 280px;
+        margin-bottom: 0;
+    }
+    
+    .category-card {
+        margin-bottom: 1rem;
+    }
+    
+    .search-form {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .error-hero {
+        margin: 1rem 0;
+        padding: 2rem 1rem;
+    }
+    
+    .error-title {
+        font-size: 1.75rem;
+    }
+    
+    .error-subtitle {
+        font-size: 1rem;
+    }
+}
+</style>
+{% endblock %}

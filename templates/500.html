@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %} - Server Error{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <!-- Hero Section with Cycling Theme -->
+            <div class="text-center py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px; margin: 2rem 0;">
+                <div class="py-4">
+                    <!-- Cycling Icon -->
+                    <div class="mb-4">
+                        <i class="fas fa-tools" style="font-size: 4rem; color: #dc3545; opacity: 0.8;"></i>
+                    </div>
+                    
+                    <!-- Error Message -->
+                    <h1 class="display-4 fw-bold text-dark mb-3">500 - Maintenance Break</h1>
+                    <p class="lead text-muted mb-4">
+                        Our bike shop is currently undergoing some maintenance!<br>
+                        We're working hard to get everything back on track.
+                    </p>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-flex flex-column flex-md-row gap-3 justify-content-center align-items-center">
+                        <a href="{% url 'home' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-home me-2"></i>Back to Home
+                        </a>
+                        <button onclick="window.location.reload()" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-redo me-2"></i>Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Information Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-light p-4 rounded-3 text-center">
+                <h4 class="mb-3">What happened?</h4>
+                <p class="text-muted mb-4">
+                    We're experiencing a temporary technical issue. Our team has been notified and is working to resolve it quickly.
+                </p>
+                
+                <!-- Contact Info -->
+                <div class="mt-4">
+                    <p class="text-muted mb-2">If the problem persists, please contact us:</p>
+                    <p class="text-dark">
+                        <i class="fas fa-envelope me-2"></i>info@wiesbaden-cyclery.de
+                    </p>
+                </div>
+                
+                <!-- Refresh Button -->
+                <div class="mt-4">
+                    <button onclick="window.location.reload()" class="btn btn-primary btn-lg">
+                        <i class="fas fa-sync-alt me-2"></i>Refresh Page
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styles for 500 Page -->
+<style>
+.btn {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Ensure consistent button styling */
+.btn {
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    white-space: nowrap !important;
+    font-family: inherit !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+}
+
+.btn-lg {
+    padding: 0.5rem 1rem !important;
+    min-height: 48px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2.5rem;
+    }
+    
+    .d-flex.flex-md-row {
+        flex-direction: column !important;
+    }
+    
+    .btn-lg {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+</style>
+{% endblock %}
