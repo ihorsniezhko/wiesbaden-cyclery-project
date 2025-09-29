@@ -1,0 +1,752 @@
+[
+  {
+    "model": "products.product",
+    "pk": 101,
+    "fields": {
+      "name": "Urban E-Commuter Pro",
+      "description": "Modern electric bike perfect for city commuting with 50km range and integrated lights. Features a sleek design and comfortable riding position for daily urban travel.",
+      "price": "2299.99",
+      "category": 3,
+      "rating": 5,
+      "image": "products/electric_bikes/electric_bike_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano 8-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 102,
+    "fields": {
+      "name": "Mountain E-Explorer",
+      "description": "Powerful electric mountain bike with robust motor assistance for challenging trails. Built for adventure with premium suspension and all-terrain capabilities.",
+      "price": "3199.99",
+      "category": 3,
+      "rating": 5,
+      "image": "products/electric_bikes/electric_bike_2.jpg",
+      "has_sizes": true,
+      "wheel_size": "29\"",
+      "gear_system": "Shimano Deore XT"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 103,
+    "fields": {
+      "name": "City E-Cruiser",
+      "description": "Comfortable electric cruiser bike with step-through frame design. Perfect for leisurely rides with excellent battery life and smooth operation.",
+      "price": "1899.99",
+      "category": 3,
+      "rating": 4,
+      "image": "products/electric_bikes/electric_bike_3.jpg",
+      "has_sizes": true,
+      "wheel_size": "26\"",
+      "gear_system": "Shimano Nexus 7-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 104,
+    "fields": {
+      "name": "Performance E-Road",
+      "description": "High-performance electric road bike for serious cyclists. Lightweight carbon frame with advanced motor integration for enhanced speed and efficiency.",
+      "price": "4299.99",
+      "category": 3,
+      "rating": 5,
+      "image": "products/electric_bikes/electric_bike_4.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano Ultegra Di2"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 105,
+    "fields": {
+      "name": "Folding E-Compact",
+      "description": "Compact folding electric bike ideal for urban storage and transport. Features quick-fold mechanism and powerful motor in a space-saving design.",
+      "price": "1599.99",
+      "category": 3,
+      "rating": 4,
+      "image": "products/electric_bikes/electric_bike_5.jpg",
+      "has_sizes": false,
+      "wheel_size": "20\"",
+      "gear_system": "Single speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 106,
+    "fields": {
+      "name": "Cargo E-Hauler",
+      "description": "Heavy-duty electric cargo bike for family transport and deliveries. Extra-long frame with cargo capacity and stable handling for practical use.",
+      "price": "2799.99",
+      "category": 3,
+      "rating": 5,
+      "image": "products/electric_bikes/electric_bike_6.jpg",
+      "has_sizes": true,
+      "wheel_size": "24\"/20\"",
+      "gear_system": "Shimano Alfine 8-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 107,
+    "fields": {
+      "name": "Fat Tire E-Adventure",
+      "description": "All-terrain electric fat bike for sand, snow, and rough terrain. Wide tires and powerful motor provide excellent traction and stability.",
+      "price": "2599.99",
+      "category": 3,
+      "rating": 4,
+      "image": "products/electric_bikes/electric_bike_7.jpg",
+      "has_sizes": true,
+      "wheel_size": "26\" x 4\"",
+      "gear_system": "Shimano 9-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 108,
+    "fields": {
+      "name": "Vintage E-Classic",
+      "description": "Retro-styled electric bike combining classic aesthetics with modern technology. Elegant design with integrated battery and vintage appeal.",
+      "price": "2099.99",
+      "category": 3,
+      "rating": 4,
+      "image": "products/electric_bikes/electric_bike_8.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano 7-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 201,
+    "fields": {
+      "name": "Trail Master Pro",
+      "description": "Professional mountain bike designed for serious trail riding. Full suspension with premium components for maximum performance on challenging terrain.",
+      "price": "2899.99",
+      "category": 4,
+      "rating": 5,
+      "image": "products/mountain_bikes/mountain_bike_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "29\"",
+      "gear_system": "Shimano XT 12-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 202,
+    "fields": {
+      "name": "Enduro Beast",
+      "description": "Heavy-duty enduro mountain bike built for aggressive downhill riding. Robust frame and advanced suspension system for extreme trail conditions.",
+      "price": "3499.99",
+      "category": 4,
+      "rating": 5,
+      "image": "products/mountain_bikes/mountain_bike_2.jpg",
+      "has_sizes": true,
+      "wheel_size": "27.5\"",
+      "gear_system": "SRAM GX Eagle 12-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 203,
+    "fields": {
+      "name": "Cross Country Racer",
+      "description": "Lightweight cross-country mountain bike optimized for racing and long-distance rides. Efficient pedaling and responsive handling for competitive performance.",
+      "price": "2199.99",
+      "category": 4,
+      "rating": 4,
+      "image": "products/mountain_bikes/mountain_bike_3.jpg",
+      "has_sizes": true,
+      "wheel_size": "29\"",
+      "gear_system": "Shimano SLX 11-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 204,
+    "fields": {
+      "name": "All-Mountain Explorer",
+      "description": "Versatile all-mountain bike suitable for various trail conditions. Balanced geometry and reliable components for adventurous mountain biking.",
+      "price": "1899.99",
+      "category": 4,
+      "rating": 4,
+      "image": "products/mountain_bikes/mountain_bike_4.jpg",
+      "has_sizes": true,
+      "wheel_size": "27.5\"",
+      "gear_system": "Shimano Deore 10-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 205,
+    "fields": {
+      "name": "Hardtail Climber",
+      "description": "Efficient hardtail mountain bike designed for climbing and technical trails. Lightweight frame with precise handling for skilled riders.",
+      "price": "1599.99",
+      "category": 4,
+      "rating": 4,
+      "image": "products/mountain_bikes/mountain_bike_5.jpg",
+      "has_sizes": true,
+      "wheel_size": "29\"",
+      "gear_system": "Shimano Deore 11-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 206,
+    "fields": {
+      "name": "Downhill Destroyer",
+      "description": "Specialized downhill mountain bike for extreme descents and bike park riding. Heavy-duty construction with maximum suspension travel.",
+      "price": "4199.99",
+      "category": 4,
+      "rating": 5,
+      "image": "products/mountain_bikes/mountain_bike_6.jpg",
+      "has_sizes": true,
+      "wheel_size": "27.5\"",
+      "gear_system": "SRAM X01 Eagle 12-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 207,
+    "fields": {
+      "name": "Trail Starter",
+      "description": "Entry-level mountain bike perfect for beginners exploring trail riding. Reliable components and comfortable geometry for learning mountain biking skills.",
+      "price": "899.99",
+      "category": 4,
+      "rating": 3,
+      "image": "products/mountain_bikes/mountain_bike_7.jpg",
+      "has_sizes": true,
+      "wheel_size": "27.5\"",
+      "gear_system": "Shimano Altus 9-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 208,
+    "fields": {
+      "name": "Plus Size Adventurer",
+      "description": "Mountain bike with plus-size tires for enhanced traction and comfort. Ideal for riders seeking extra stability and cushioning on trails.",
+      "price": "1799.99",
+      "category": 4,
+      "rating": 4,
+      "image": "products/mountain_bikes/mountain_bike_8.jpg",
+      "has_sizes": true,
+      "wheel_size": "27.5\" x 2.8\"",
+      "gear_system": "Shimano SLX 12-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 301,
+    "fields": {
+      "name": "Aero Speed Demon",
+      "description": "Aerodynamic road bike designed for maximum speed and efficiency. Carbon fiber frame with wind-cutting geometry for competitive racing.",
+      "price": "3899.99",
+      "category": 5,
+      "rating": 5,
+      "image": "products/road_bikes/road_bike_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano Ultegra Di2"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 302,
+    "fields": {
+      "name": "Endurance Cruiser",
+      "description": "Comfortable endurance road bike for long-distance touring and sportive events. Relaxed geometry with premium comfort features.",
+      "price": "2599.99",
+      "category": 5,
+      "rating": 4,
+      "image": "products/road_bikes/road_bike_2.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano 105 11-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 303,
+    "fields": {
+      "name": "Gravel Adventure",
+      "description": "Versatile gravel road bike for mixed-terrain adventures. Wider tire clearance and stable handling for exploring beyond paved roads.",
+      "price": "2199.99",
+      "category": 5,
+      "rating": 4,
+      "image": "products/road_bikes/road_bike_3.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano GRX 11-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 304,
+    "fields": {
+      "name": "Classic Steel Tourer",
+      "description": "Traditional steel frame touring bike built for reliability and comfort. Classic design with modern components for long-distance travel.",
+      "price": "1799.99",
+      "category": 5,
+      "rating": 4,
+      "image": "products/road_bikes/road_bike_4.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano Tiagra 10-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 305,
+    "fields": {
+      "name": "Time Trial Rocket",
+      "description": "Specialized time trial bike for individual racing events. Extreme aerodynamic design with aggressive positioning for maximum speed.",
+      "price": "4599.99",
+      "category": 5,
+      "rating": 5,
+      "image": "products/road_bikes/road_bike_5.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano Dura-Ace Di2"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 306,
+    "fields": {
+      "name": "Urban Commuter",
+      "description": "Practical road bike designed for daily city commuting. Durable construction with features for urban riding and weather protection.",
+      "price": "1299.99",
+      "category": 5,
+      "rating": 4,
+      "image": "products/road_bikes/road_bike_6.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano Sora 9-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 307,
+    "fields": {
+      "name": "Cyclocross Racer",
+      "description": "Competitive cyclocross bike for off-road racing and training. Lightweight frame with features for carrying and obstacle navigation.",
+      "price": "2899.99",
+      "category": 5,
+      "rating": 5,
+      "image": "products/road_bikes/road_bike_7.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "SRAM Force 1x11"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 308,
+    "fields": {
+      "name": "Entry Level Roadie",
+      "description": "Affordable entry-level road bike perfect for beginners. Quality components and comfortable geometry for learning road cycling fundamentals.",
+      "price": "899.99",
+      "category": 5,
+      "rating": 3,
+      "image": "products/road_bikes/road_bike_8.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano Claris 8-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 401,
+    "fields": {
+      "name": "Pro Racing Helmet",
+      "description": "Lightweight aerodynamic helmet with advanced ventilation system. MIPS technology for enhanced protection during high-speed cycling.",
+      "price": "159.99",
+      "category": 1,
+      "rating": 5,
+      "image": "products/accessories/helmet_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 402,
+    "fields": {
+      "name": "Cycling Jersey Pro",
+      "description": "Professional cycling jersey with moisture-wicking fabric and aerodynamic fit. Three rear pockets and reflective elements for safety.",
+      "price": "89.99",
+      "category": 1,
+      "rating": 4,
+      "image": "products/accessories/jersey_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 403,
+    "fields": {
+      "name": "Padded Cycling Shorts",
+      "description": "High-quality cycling shorts with premium chamois padding. Compression fit and seamless construction for maximum comfort on long rides.",
+      "price": "79.99",
+      "category": 1,
+      "rating": 4,
+      "image": "products/accessories/shorts_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 404,
+    "fields": {
+      "name": "LED Light Set",
+      "description": "Powerful LED front and rear light set for safe night riding. USB rechargeable with multiple brightness modes and long battery life.",
+      "price": "49.99",
+      "category": 1,
+      "rating": 4,
+      "image": "products/accessories/lights_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 405,
+    "fields": {
+      "name": "Cycling Gloves",
+      "description": "Padded cycling gloves with gel inserts for comfort and grip. Breathable fabric with easy-pull tabs for convenient removal.",
+      "price": "29.99",
+      "category": 1,
+      "rating": 4,
+      "image": "products/accessories/gloves_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 406,
+    "fields": {
+      "name": "Frame Bag",
+      "description": "Aerodynamic frame bag for storing essentials during rides. Water-resistant construction with easy access zipper and secure mounting system.",
+      "price": "39.99",
+      "category": 1,
+      "rating": 4,
+      "image": "products/accessories/bag_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 407,
+    "fields": {
+      "name": "Water Bottle Set",
+      "description": "Insulated water bottles with matching cage set. BPA-free construction with easy-squeeze design and leak-proof cap system.",
+      "price": "24.99",
+      "category": 1,
+      "rating": 4,
+      "image": "products/accessories/bottle_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 408,
+    "fields": {
+      "name": "Bike Computer GPS",
+      "description": "Advanced GPS bike computer with navigation and performance tracking. Color display with smartphone connectivity and long battery life.",
+      "price": "299.99",
+      "category": 1,
+      "rating": 5,
+      "image": "products/accessories/computer_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 409,
+    "fields": {
+      "name": "Cycling Shoes",
+      "description": "Professional cycling shoes with carbon sole and BOA closure system. Lightweight design with excellent power transfer and comfort.",
+      "price": "199.99",
+      "category": 1,
+      "rating": 5,
+      "image": "products/accessories/shoes_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 410,
+    "fields": {
+      "name": "Multi-Tool Kit",
+      "description": "Comprehensive multi-tool kit with 16 functions including hex keys, screwdrivers, and chain tool. Compact design for emergency repairs.",
+      "price": "34.99",
+      "category": 1,
+      "rating": 4,
+      "image": "products/accessories/tools_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 411,
+    "fields": {
+      "name": "Bike Lock Security",
+      "description": "Heavy-duty U-lock with cable extension for maximum security. Hardened steel construction with pick-resistant cylinder mechanism.",
+      "price": "69.99",
+      "category": 1,
+      "rating": 5,
+      "image": "products/accessories/lock_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 412,
+    "fields": {
+      "name": "Cycling Sunglasses",
+      "description": "Sport sunglasses with interchangeable lenses and UV protection. Lightweight frame with anti-slip nose pads and temple grips.",
+      "price": "89.99",
+      "category": 1,
+      "rating": 4,
+      "image": "products/accessories/sunglasses_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 501,
+    "fields": {
+      "name": "Carbon Wheelset",
+      "description": "Lightweight carbon fiber wheelset for road bikes. Aerodynamic profile with ceramic bearings for reduced rolling resistance and enhanced performance.",
+      "price": "1299.99",
+      "category": 2,
+      "rating": 5,
+      "image": "products/components/wheels_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "700c",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 502,
+    "fields": {
+      "name": "Hydraulic Disc Brakes",
+      "description": "High-performance hydraulic disc brake set with excellent stopping power. Consistent performance in all weather conditions with easy maintenance.",
+      "price": "349.99",
+      "category": 2,
+      "rating": 5,
+      "image": "products/components/brakes_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 503,
+    "fields": {
+      "name": "Electronic Shifting System",
+      "description": "Precision electronic shifting system with wireless connectivity. Instant gear changes with customizable settings via smartphone app.",
+      "price": "1899.99",
+      "category": 2,
+      "rating": 5,
+      "image": "products/components/shifting_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": "Electronic 12-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 504,
+    "fields": {
+      "name": "Suspension Fork",
+      "description": "Advanced suspension fork with adjustable compression and rebound damping. Lightweight construction with lockout feature for climbing efficiency.",
+      "price": "799.99",
+      "category": 2,
+      "rating": 4,
+      "image": "products/components/fork_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 505,
+    "fields": {
+      "name": "Carbon Handlebars",
+      "description": "Lightweight carbon fiber handlebars with ergonomic shape. Vibration damping properties for improved comfort on long rides.",
+      "price": "199.99",
+      "category": 2,
+      "rating": 4,
+      "image": "products/components/handlebars_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 506,
+    "fields": {
+      "name": "Power Meter Crankset",
+      "description": "Precision power meter crankset for training and performance analysis. Dual-sided measurement with accurate power and cadence data.",
+      "price": "899.99",
+      "category": 2,
+      "rating": 5,
+      "image": "products/components/crankset_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 507,
+    "fields": {
+      "name": "Tubeless Tire Set",
+      "description": "High-performance tubeless tires with puncture protection. Lower rolling resistance and improved grip for enhanced riding experience.",
+      "price": "129.99",
+      "category": 2,
+      "rating": 4,
+      "image": "products/components/tires_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "700c x 25mm",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 508,
+    "fields": {
+      "name": "Chain and Cassette Kit",
+      "description": "Premium chain and cassette combination for smooth shifting performance. Durable construction with extended wear life and precise engagement.",
+      "price": "179.99",
+      "category": 2,
+      "rating": 4,
+      "image": "products/components/drivetrain_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": "11-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 509,
+    "fields": {
+      "name": "Pedal System Clipless",
+      "description": "Professional clipless pedal system with adjustable release tension. Lightweight design with excellent power transfer and easy entry/exit.",
+      "price": "149.99",
+      "category": 2,
+      "rating": 4,
+      "image": "products/components/pedals_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 510,
+    "fields": {
+      "name": "Saddle Performance",
+      "description": "Ergonomic performance saddle with pressure relief channel. Carbon rails and lightweight construction for competitive cycling comfort.",
+      "price": "249.99",
+      "category": 2,
+      "rating": 4,
+      "image": "products/components/saddle_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 601,
+    "fields": {
+      "name": "Trail Master Pro - SALE",
+      "description": "Professional mountain bike designed for serious trail riding. Full suspension with premium components for maximum performance on challenging terrain. SPECIAL DISCOUNT!",
+      "price": "2299.99",
+      "category": 6,
+      "rating": 5,
+      "image": "products/mountain_bikes/mountain_bike_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "29\"",
+      "gear_system": "Shimano XT 12-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 602,
+    "fields": {
+      "name": "Urban E-Commuter - CLEARANCE",
+      "description": "Modern electric bike perfect for city commuting with 50km range and integrated lights. End of season clearance pricing on this popular model!",
+      "price": "1899.99",
+      "category": 6,
+      "rating": 5,
+      "image": "products/electric_bikes/electric_bike_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "700c",
+      "gear_system": "Shimano 8-speed"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 603,
+    "fields": {
+      "name": "Pro Racing Helmet - DISCOUNT",
+      "description": "Lightweight aerodynamic helmet with advanced ventilation system. MIPS technology for enhanced protection. Limited time discount offer!",
+      "price": "119.99",
+      "category": 6,
+      "rating": 5,
+      "image": "products/accessories/helmet_1.jpg",
+      "has_sizes": true,
+      "wheel_size": "",
+      "gear_system": ""
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 604,
+    "fields": {
+      "name": "Carbon Wheelset - SPECIAL OFFER",
+      "description": "Lightweight carbon fiber wheelset for road bikes. Aerodynamic profile with ceramic bearings. Special promotional pricing available now!",
+      "price": "999.99",
+      "category": 6,
+      "rating": 5,
+      "image": "products/components/wheels_1.jpg",
+      "has_sizes": false,
+      "wheel_size": "700c",
+      "gear_system": ""
+    }
+  }
+]
