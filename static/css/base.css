@@ -21,6 +21,24 @@ body {
     letter-spacing: 1px;
 }
 
+/* Bicycle Icon Gradient - vibrant cyan to magenta gradient */
+.fa-bicycle.gradient-icon {
+    background: linear-gradient(135deg, #00D4FF 0%, #FF00FF 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    color: transparent !important;
+    display: inline-block !important;
+}
+
+/* Fallback for browsers that don't support background-clip: text */
+@supports not (-webkit-background-clip: text) {
+    .fa-bicycle.gradient-icon {
+        color: #00D4FF !important;
+        background: none !important;
+    }
+}
+
 .text-primary {
     color: var(--primary-color) !important;
 }

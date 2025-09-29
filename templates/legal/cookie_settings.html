@@ -5,18 +5,18 @@
 
 {% block extra_css %}
 <style>
-/* Cookie Settings Button Styling */
+/* Cookie Settings Button Styling - Consistent with site standards */
 .cookie-settings-form .btn {
     white-space: nowrap;
     min-width: 160px;
 }
 
-/* Mobile responsive button layout */
+/* Mobile responsive button layout - DO NOT override btn-lg padding */
 @media (max-width: 767px) {
     .cookie-settings-form .d-flex.flex-column.flex-md-row .btn {
         width: 100%;
         margin-bottom: 0.5rem;
-        padding: 0.75rem 1.5rem;
+        /* Removed custom padding to maintain Bootstrap btn-lg consistency */
     }
     
     .cookie-settings-form .d-flex.flex-column.flex-md-row .btn:last-child {
