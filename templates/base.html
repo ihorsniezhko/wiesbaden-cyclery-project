@@ -589,19 +589,40 @@
         justify-content: center !important;
     }
     
-    /* Responsive adjustments */
+    /* Responsive adjustments for medium screens */
+    @media (max-width: 768px) {
+        #mc_embed_signup {
+            max-width: 100% !important;
+        }
+        #mc_embed_signup .input-group .form-control {
+            min-width: 0 !important;
+            flex: 1 !important;
+        }
+    }
+    
+    /* Responsive adjustments for small screens */
     @media (max-width: 576px) {
         #mc_embed_signup .input-group {
             flex-direction: column !important;
         }
+        #mc_embed_signup .input-group .form-control {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 10px !important;
+            min-width: 0 !important;
+        }
         #mc_embed_signup .input-group-append {
-            margin-top: 10px !important;
+            margin-top: 0 !important;
+            width: 100% !important;
         }
         #mc_embed_signup .btn-primary {
             width: 100% !important;
         }
         #mc_embed_signup .form-check-label {
             font-size: 11px !important;
+        }
+        #mc_embed_signup {
+            max-width: 100% !important;
         }
     }
     </style>
