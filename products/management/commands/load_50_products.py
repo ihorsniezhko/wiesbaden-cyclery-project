@@ -43,12 +43,14 @@ class Command(BaseCommand):
                 'pk': 101, 'name': 'Urban E-Commuter Pro', 'category': electric_bikes,
                 'description': 'Modern electric bike perfect for city commuting with 50km range and integrated lights.',
                 'price': '2299.99', 'rating': 5, 'has_sizes': True, 'wheel_size': '700c', 'gear_system': 'Shimano 8-speed',
+                'image_url': 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=400&h=300&fit=crop',
                 'sizes': [size_m, size_l]
             },
             {
                 'pk': 102, 'name': 'Mountain E-Explorer', 'category': electric_bikes,
                 'description': 'Powerful electric mountain bike with robust motor assistance for challenging trails.',
                 'price': '3199.99', 'rating': 5, 'has_sizes': True, 'wheel_size': '29"', 'gear_system': 'Shimano Deore XT',
+                'image_url': 'https://images.unsplash.com/photo-1544191696-15693072e0b5?w=400&h=300&fit=crop',
                 'sizes': [size_m, size_l]
             },
             {
@@ -143,6 +145,7 @@ class Command(BaseCommand):
                 'pk': 301, 'name': 'Aero Speed Demon', 'category': road_bikes,
                 'description': 'Aerodynamic road bike designed for maximum speed and efficiency.',
                 'price': '3899.99', 'rating': 5, 'has_sizes': True, 'wheel_size': '700c', 'gear_system': 'Shimano Ultegra Di2',
+                'image_url': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
                 'sizes': [size_m, size_l]
             },
             {
@@ -193,6 +196,7 @@ class Command(BaseCommand):
                 'pk': 401, 'name': 'Pro Racing Helmet', 'category': accessories,
                 'description': 'Lightweight aerodynamic helmet with advanced ventilation system.',
                 'price': '159.99', 'rating': 5, 'has_sizes': True, 'wheel_size': '', 'gear_system': '',
+                'image_url': 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop',
                 'sizes': [size_s, size_m, size_l, size_xl]
             },
             {

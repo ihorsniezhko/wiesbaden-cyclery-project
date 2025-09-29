@@ -221,6 +221,8 @@
                 <div class="card-body text-center">
                     {% if product.image %}
                         <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 400px;">
+                    {% elif product.image_url %}
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 400px;">
                     {% else %}
                         <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
                             <i class="fa fa-bicycle fa-5x text-muted"></i>
@@ -507,6 +509,8 @@
                         <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
                             {% if related_product.image %}
                                 <img src="{{ related_product.image.url }}" alt="{{ related_product.name }}" class="img-fluid" style="max-height: 130px;">
+                            {% elif related_product.image_url %}
+                                <img src="{{ related_product.image_url }}" alt="{{ related_product.name }}" class="img-fluid" style="max-height: 130px;">
                             {% else %}
                                 <i class="fa fa-bicycle fa-3x text-muted"></i>
                             {% endif %}

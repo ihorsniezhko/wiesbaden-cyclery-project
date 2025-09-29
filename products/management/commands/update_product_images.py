@@ -1,54 +1,97 @@
 """
-Management command to update products with local images
+Management command to update product image URLs to point to AWS S3 images
 """
 from django.core.management.base import BaseCommand
-from django.core.files import File
 from products.models import Product
-import os
 
 
 class Command(BaseCommand):
-    help = 'Update products with local images'
+    help = 'Update product image URLs to point to AWS S3 uploaded images'
 
     def handle(self, *args, **options):
-        self.stdout.write('Updating product images...')
+        self.stdout.write('Updating product image URLs...')
         
-        # Image mappings: product SKU -> image filename
+        # S3 bucket base URL - adjust if needed
+        s3_base_url = "https://wiesbaden-cyclery-project.s3.amazonaws.com/media/product_images/"
+        
+        # Define image mappings for products
         image_mappings = {
-            'RB001': 'road_bikes/trek_domane.jpg',
-            'RB002': 'road_bikes/specialized_allez.jpg',
-            'MB001': 'mountain_bikes/giant_talon.jpg',
-            'MB002': 'mountain_bikes/trek_fuel_ex.jpg',
-            'EB001': 'electric_bikes/bosch_ebike.jpg',
-            'AC001': 'accessories/bike_helmet.jpg',
-            'AC002': 'accessories/cycling_gloves.jpg',
-            'AC003': 'accessories/bike_lock.jpg',
-            'AC004': 'accessories/water_bottle.jpg',
-            'AC005': 'accessories/bike_lights.jpg',
-            'AC006': 'accessories/bike_pump.jpg',
+            # Electric Bikes
+            101: "urban-e-commuter-pro.jpg",
+            102: "mountain-e-explorer.jpg", 
+            103: "city-e-cruiser.jpg",
+            104: "performance-e-road.jpg",
+            105: "folding-e-compact.jpg",
+            106: "cargo-e-hauler.jpg",
+            107: "fat-tire-e-adventure.jpg",
+            108: "vintage-e-classic.jpg",
+            
+            # Mountain Bikes
+            201: "trail-master-pro.jpg",
+            202: "enduro-beast.jpg",
+            203: "cross-country-racer.jpg", 
+            204: "all-mountain-explorer.jpg",
+            205: "hardtail-climber.jpg",
+            206: "downhill-destroyer.jpg",
+            207: "trail-starter.jpg",
+            208: "plus-size-adventurer.jpg",
+            
+            # Road Bikes
+            301: "aero-speed-demon.jpg",
+            302: "endurance-cruiser.jpg",
+            303: "gravel-adventure.jpg",
+            304: "classic-steel-tourer.jpg", 
+            305: "time-trial-rocket.jpg",
+            306: "urban-commuter.jpg",
+            307: "cyclocross-racer.jpg",
+            308: "entry-level-roadie.jpg",
+            
+            # Accessories
+            401: "pro-racing-helmet.jpg",
+            402: "cycling-jersey-pro.jpg",
+            403: "padded-cycling-shorts.jpg",
+            404: "led-light-set.jpg",
+            405: "cycling-gloves.jpg",
+            406: "frame-bag.jpg",
+            407: "water-bottle-set.jpg",
+            408: "bike-computer-gps.jpg",
+            409: "cycling-shoes.jpg",
+            410: "multi-tool-kit.jpg",
+            411: "bike-lock-security.jpg",
+            412: "cycling-sunglasses.jpg",
+            
+            # Components
+            501: "carbon-wheelset.jpg",
+            502: "hydraulic-disc-brakes.jpg",
+            503: "electronic-shifting-system.jpg",
+            504: "suspension-fork.jpg",
+            505: "carbon-handlebars.jpg",
+            506: "power-meter-crankset.jpg",
+            507: "tubeless-tire-set.jpg",
+            508: "chain-and-cassette-kit.jpg",
+            509: "pedal-system-clipless.jpg",
+            510: "saddle-performance.jpg",
+            
+            # Sale Items (use same images as original products)
+            601: "trail-master-pro.jpg",  # Trail Master Pro - SALE
+            602: "urban-e-commuter-pro.jpg",  # Urban E-Commuter - CLEARANCE
+            603: "pro-racing-helmet.jpg",  # Pro Racing Helmet - DISCOUNT
+            604: "carbon-wheelset.jpg",  # Carbon Wheelset - SPECIAL OFFER
         }
         
-        media_root = 'media/products/'
+        updated_count = 0
         
-        for sku, image_path in image_mappings.items():
+        for product_id, image_filename in image_mappings.items():
             try:
-                product = Product.objects.get(sku=sku)
-                full_image_path = os.path.join(media_root, image_path)
-                
-                if os.path.exists(full_image_path):
-                    with open(full_image_path, 'rb') as img_file:
-                        product.image.save(
-                            os.path.basename(image_path),
-                            File(img_file),
-                            save=True
-                        )
-                    self.stdout.write(f'Updated image for {product.name}: {image_path}')
-                else:
-                    self.stdout.write(f'Image not found: {full_image_path}')
-                    
+                product = Product.objects.get(pk=product_id)
+                image_url = f"{s3_base_url}{image_filename}"
+                product.image_url = image_url
+                product.save()
+                updated_count += 1
+                self.stdout.write(f'Updated {product.name}: {image_url}')
             except Product.DoesNotExist:
-                self.stdout.write(f'Product with SKU {sku} not found')
-            except Exception as e:
-                self.stdout.write(f'Error updating {sku}: {str(e)}')
+                self.stdout.write(self.style.WARNING(f'Product {product_id} not found'))
         
-        self.stdout.write(self.style.SUCCESS('Successfully updated product images'))
+        self.stdout.write(
+            self.style.SUCCESS(f'Successfully updated {updated_count} product image URLs!')
+        )
