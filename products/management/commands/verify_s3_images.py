@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = 'Verify which product images exist in S3 bucket'
 
     def handle(self, *args, **options):
-        s3_base_url = "https://wiesbaden-cyclery-project.s3.amazonaws.com/product_images/"
+        s3_base_url = "https://wiesbaden-cyclery-project.s3.amazonaws.com/media/"
         
         # All unique image filenames needed
         required_images = [
