@@ -134,7 +134,7 @@ class Command(BaseCommand):
             {
                 'pk': 208, 'name': 'Plus Size Adventurer', 'category': mountain_bikes,
                 'description': 'Mountain bike with plus-size tires for enhanced traction and comfort.',
-                'price': '1799.99', 'rating': 4, 'has_sizes': True, 'wheel_size': '27.5" x 2.8"', 'gear_system': 'Shimano SLX 12-speed',
+                'price': '1799.99', 'rating': 4, 'has_sizes': True, 'wheel_size': '27.5+', 'gear_system': 'Shimano SLX 12-speed',
                 'sizes': [size_m, size_l]
             },
             
@@ -302,7 +302,7 @@ class Command(BaseCommand):
             {
                 'pk': 507, 'name': 'Tubeless Tire Set', 'category': components,
                 'description': 'High-performance tubeless tires with puncture protection.',
-                'price': '129.99', 'rating': 4, 'has_sizes': False, 'wheel_size': '700c x 25mm', 'gear_system': '',
+                'price': '129.99', 'rating': 4, 'has_sizes': False, 'wheel_size': '700c', 'gear_system': '',
                 'sizes': []
             },
             {
