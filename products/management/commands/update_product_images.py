@@ -11,12 +11,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write('Updating product image URLs...')
         
-        # S3 bucket base URL - adjust if needed
-        s3_base_url = "https://wiesbaden-cyclery-project.s3.amazonaws.com/media/product_images/"
+        # S3 bucket base URL - single product_images folder
+        s3_base_url = "https://wiesbaden-cyclery-project.s3.amazonaws.com/product_images/"
         
         # Define image mappings for products
         image_mappings = {
-            # Electric Bikes
+            # Electric Bikes - try common image file names
             101: "urban-e-commuter-pro.jpg",
             102: "mountain-e-explorer.jpg", 
             103: "city-e-cruiser.jpg",
