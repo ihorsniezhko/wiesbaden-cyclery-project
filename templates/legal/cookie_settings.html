@@ -3,6 +3,52 @@
 
 {% block title %}Cookie Settings - Wiesbaden Cyclery{% endblock %}
 
+{% block extra_css %}
+<style>
+/* Cookie Settings Button Styling */
+.cookie-settings-form .btn {
+    white-space: nowrap;
+    min-width: 160px;
+}
+
+/* Mobile responsive button layout */
+@media (max-width: 767px) {
+    .cookie-settings-form .d-flex.flex-column.flex-md-row .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .cookie-settings-form .d-flex.flex-column.flex-md-row .btn:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* Ensure proper gap spacing */
+.gap-3 > * + * {
+    margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+    .gap-3 > * + * {
+        margin-top: 0;
+        margin-left: 1rem;
+    }
+}
+
+.gap-2 > * + * {
+    margin-top: 0.5rem;
+}
+
+@media (min-width: 576px) {
+    .gap-2 > * + * {
+        margin-top: 0;
+        margin-left: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container my-5">
     <div class="row justify-content-center">
@@ -81,15 +127,17 @@
                         </div>
 
                         <div class="text-center mt-4">
-                            <button type="button" class="btn btn-primary btn-lg me-3" onclick="saveCookiePreferences()">
-                                <i class="fa fa-save"></i> Save Preferences
-                            </button>
-                            <button type="button" class="btn btn-success btn-lg me-3" onclick="acceptAllCookies()">
-                                <i class="fa fa-check"></i> Accept All
-                            </button>
-                            <button type="button" class="btn btn-secondary btn-lg" onclick="rejectNonEssential()">
-                                <i class="fa fa-times"></i> Reject Non-Essential
-                            </button>
+                            <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+                                <button type="button" class="btn btn-primary btn-lg" onclick="saveCookiePreferences()">
+                                    <i class="fa fa-save"></i> Save Preferences
+                                </button>
+                                <button type="button" class="btn btn-success btn-lg" onclick="acceptAllCookies()">
+                                    <i class="fa fa-check"></i> Accept All
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-lg" onclick="rejectNonEssential()">
+                                    <i class="fa fa-times"></i> Reject Non-Essential
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -122,12 +170,14 @@
                     </div>
 
                     <div class="mt-4">
-                        <a href="{% url 'home' %}" class="btn btn-primary">
-                            <i class="fa fa-home"></i> Back to Home
-                        </a>
-                        <a href="{% url 'privacy_policy' %}" class="btn btn-outline-primary ms-2">
-                            <i class="fa fa-shield"></i> Privacy Policy
-                        </a>
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+                            <a href="{% url 'home' %}" class="btn btn-primary">
+                                <i class="fa fa-home"></i> Back to Home
+                            </a>
+                            <a href="{% url 'privacy_policy' %}" class="btn btn-secondary">
+                                <i class="fa fa-shield"></i> Privacy Policy
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
