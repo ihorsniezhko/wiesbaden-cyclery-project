@@ -1,18 +1,16 @@
 """
-Custom storage classes for AWS S3
+Custom storage classes for AWS S3 - MEDIA FILES ONLY
+Static files are now served locally via Whitenoise
 """
 from django.conf import settings
 from storages.backends.s3boto3 import S3Boto3Storage
 
 
-class StaticStorage(S3Boto3Storage):
-    """Custom storage for static files"""
-    location = 'static'
-    default_acl = None
+# StaticStorage class removed - static files now served locally via Whitenoise
 
 
 class MediaStorage(S3Boto3Storage):
-    """Custom storage for media files"""
+    """Custom storage for media files ONLY"""
     location = 'media'
     default_acl = None
     file_overwrite = False

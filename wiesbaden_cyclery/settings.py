@@ -67,6 +67,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -178,7 +179,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# AWS S3 Configuration
+# Static files configuration - LOCAL ONLY (no AWS)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# AWS S3 Configuration - MEDIA FILES ONLY
 USE_AWS = config('USE_AWS', default=False, cast=bool)
 
 if USE_AWS:
@@ -193,11 +197,7 @@ if USE_AWS:
         'CacheControl': 'max-age=86400',
     }
     
-    # S3 static settings
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
-    
-    # S3 media settings
+    # S3 media settings ONLY - NO static files
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
