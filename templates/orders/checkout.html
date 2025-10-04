@@ -231,6 +231,16 @@
                     setTimeout(waitForStripe, 100);
                 } else {
                     console.error('Stripe library failed to load');
+                    const errorElement = document.getElementById('card-errors');
+                    if (errorElement) {
+                        errorElement.textContent = 'Payment system failed to load. Please refresh the page or contact support.';
+                        errorElement.style.display = 'block';
+                    }
+                    const loadingElement = document.getElementById('card-element-loading');
+                    if (loadingElement) {
+                        loadingElement.textContent = 'Error: Payment system failed to load';
+                        loadingElement.style.color = '#dc3545';
+                    }
                 }
             }
             
@@ -298,12 +308,16 @@
                     if (form) {
                         form.addEventListener('submit', function(event) {
                             event.preventDefault();
+                            console.log('Form submit intercepted');
                             
                             const submitButton = document.getElementById('submit-button');
                             if (submitButton) {
                                 submitButton.disabled = true;
                                 submitButton.textContent = 'Processing...';
                             }
+                            
+                            console.log('Confirming payment with Stripe...');
+                            console.log('Client secret:', clientSecret ? 'present' : 'MISSING');
                             
                             stripe.confirmCardPayment(clientSecret, {
                                 payment_method: {
@@ -314,7 +328,10 @@
                                     }
                                 }
                             }).then(function(result) {
+                                console.log('Payment confirmation result:', result);
+                                
                                 if (result.error) {
+                                    console.error('Payment error:', result.error);
                                     const errorElement = document.getElementById('card-errors');
                                     if (errorElement) {
                                         errorElement.textContent = result.error.message;
@@ -325,7 +342,30 @@
                                         submitButton.textContent = 'Complete Order';
                                     }
                                 } else {
+                                    console.log('Payment succeeded!');
+                                    console.log('Payment Intent ID:', result.paymentIntent.id);
+                                    console.log('Payment Intent Status:', result.paymentIntent.status);
+                                    
+                                    // Payment succeeded - show loading overlay
+                                    const loadingOverlay = document.getElementById('loading-overlay');
+                                    if (loadingOverlay) {
+                                        loadingOverlay.style.display = 'flex';
+                                    }
+                                    
+                                    // Submit the form
+                                    console.log('Submitting form to server...');
                                     form.submit();
+                                }
+                            }).catch(function(error) {
+                                console.error('Payment confirmation error:', error);
+                                const errorElement = document.getElementById('card-errors');
+                                if (errorElement) {
+                                    errorElement.textContent = 'Payment processing error: ' + error.message;
+                                    errorElement.style.display = 'block';
+                                }
+                                if (submitButton) {
+                                    submitButton.disabled = false;
+                                    submitButton.textContent = 'Complete Order';
                                 }
                             });
                         });

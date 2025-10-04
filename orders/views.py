@@ -35,9 +35,17 @@ def checkout(request):
         # Get client secret from POST data
         client_secret = request.POST.get('client_secret', '').strip()
         
+        # Debug logging
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"DEBUG: POST data keys: {list(request.POST.keys())}")
+        logger.error(f"DEBUG: client_secret present: {bool(client_secret)}")
+        logger.error(f"DEBUG: client_secret value: {client_secret[:20] if client_secret else 'NONE'}...")
+        
         # Verify Stripe payment was successful
         if not client_secret:
             messages.error(request, 'Payment information is missing. Please try again.')
+            logger.error("DEBUG: Redirecting due to missing client_secret")
             return redirect('orders:checkout')
         
         # Verify payment intent with Stripe
