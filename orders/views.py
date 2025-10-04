@@ -88,8 +88,10 @@ def checkout(request):
             logger.error("DEBUG: Validation passed, creating order")
             try:
                 # Create order from cart
+                logger.error("DEBUG: Calling create_order_from_cart...")
                 order = create_order_from_cart(request, form)
-                logger.error(f"DEBUG: Order created: {order.order_number}")
+                logger.error(f"DEBUG: Order created successfully: {order.order_number}")
+                logger.error(f"DEBUG: Order ID: {order.id}")
                 
                 # Update product stock
                 update_product_stock(order)
@@ -118,9 +120,13 @@ def checkout(request):
                     )
                 
                 # Redirect to order confirmation
+                logger.error(f"DEBUG: About to redirect to confirmation page")
                 return redirect('orders:order_confirmation', order_number=order.order_number)
                 
             except Exception as e:
+                logger.error(f"DEBUG: Exception during order creation: {type(e).__name__}: {str(e)}")
+                import traceback
+                logger.error(f"DEBUG: Traceback: {traceback.format_exc()}")
                 messages.error(request, f'There was an error processing your order: {str(e)}')
     else:
         # Pre-populate form with user profile data if available
