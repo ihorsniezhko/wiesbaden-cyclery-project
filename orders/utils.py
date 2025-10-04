@@ -151,6 +151,11 @@ def update_product_stock(order):
         product = line_item.product
         if product.stock_quantity >= line_item.quantity:
             product.stock_quantity -= line_item.quantity
+            
+            # Mark product as out of stock if quantity reaches 0
+            if product.stock_quantity == 0:
+                product.in_stock = False
+            
             product.save()
         else:
             # This shouldn't happen if validation is working correctly
