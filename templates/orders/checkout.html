@@ -38,8 +38,12 @@
                         <a href="{% url 'product_detail' item.product.id %}">
                             {% if item.product.image %}
                                 <img class="w-100" src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            {% elif item.product.image_url %}
+                                <img class="w-100" src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
                             {% else %}
-                                <img class="w-100" src="{% static 'images/noimage.png' %}" alt="{{ item.product.name }}">
+                                <div class="w-100 bg-light d-flex align-items-center justify-content-center" style="min-height: 80px;">
+                                    <i class="fa fa-image fa-2x text-muted"></i>
+                                </div>
                             {% endif %}
                         </a>
                     </div>
