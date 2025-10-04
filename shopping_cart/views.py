@@ -48,7 +48,7 @@ def cart_view(request):
         'free_delivery_delta': free_delivery_delta,
     }
     
-    return render(request, 'shopping_cart/cart_simple.html', context)
+    return render(request, 'shopping_cart/cart.html', context)
 
 
 @require_POST
