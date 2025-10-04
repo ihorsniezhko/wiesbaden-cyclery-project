@@ -45,7 +45,8 @@ urlpatterns = [
     path('seo-test/', views.seo_test, name='seo_test'),
     # Categories page
     path('categories/', views.categories, name='categories'),
-    # Test URLs removed for Stage 7 development
+    # Test URLs for error pages (development only)
+    path('test-500/', views.custom_500, name='test_500'),
     path('', views.index, name='home'),
 ]
 
