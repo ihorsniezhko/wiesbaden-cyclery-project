@@ -12,22 +12,31 @@ def get_or_create_cart(request):
         cart, created = Cart.objects.get_or_create(user=request.user)
         
         # If user was anonymous and now logged in, merge session cart
-        session_key = request.session.session_key
-        if session_key:
-            session_cart = Cart.objects.filter(session_key=session_key).first()
-            if session_cart and session_cart != cart:
-                merge_carts(session_cart, cart)
-                session_cart.delete()
+        try:
+            session_key = getattr(request.session, 'session_key', None)
+            if session_key:
+                session_cart = Cart.objects.filter(session_key=session_key).first()
+                if session_cart and session_cart != cart:
+                    merge_carts(session_cart, cart)
+                    session_cart.delete()
+        except (AttributeError, TypeError):
+            # Handle cases where session is not properly initialized
+            pass
         
         return cart
     else:
         # For anonymous users, use session key
-        if not request.session.session_key:
-            request.session.create()
-        
-        session_key = request.session.session_key
-        cart, created = Cart.objects.get_or_create(session_key=session_key)
-        return cart
+        try:
+            if not getattr(request.session, 'session_key', None):
+                request.session.create()
+            
+            session_key = request.session.session_key
+            cart, created = Cart.objects.get_or_create(session_key=session_key)
+            return cart
+        except (AttributeError, TypeError):
+            # Fallback: create a temporary cart without session
+            # This should rarely happen in production
+            return Cart.objects.create()
 
 
 def merge_carts(source_cart, target_cart):
