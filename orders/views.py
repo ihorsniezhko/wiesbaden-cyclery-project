@@ -52,32 +52,44 @@ def checkout(request):
         try:
             import stripe
             stripe.api_key = settings.STRIPE_SECRET_KEY
+            logger.error("DEBUG: About to verify payment with Stripe")
             
             # Extract payment intent ID from client secret
             payment_intent_id = client_secret.split('_secret')[0]
+            logger.error(f"DEBUG: Payment Intent ID: {payment_intent_id}")
+            
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+            logger.error(f"DEBUG: Payment Intent retrieved, status: {payment_intent.status}")
             
             # Check if payment was successful
             if payment_intent.status != 'succeeded':
+                logger.error(f"DEBUG: Payment not succeeded, status: {payment_intent.status}")
                 messages.error(
                     request, 
                     f'Payment was not completed. Status: {payment_intent.status}. Please try again.'
                 )
                 return redirect('orders:checkout')
+            
+            logger.error("DEBUG: Payment verification passed!")
                 
         except Exception as e:
+            logger.error(f"DEBUG: Payment verification exception: {str(e)}")
             messages.error(request, f'Payment verification failed: {str(e)}')
             return redirect('orders:checkout')
         
         # Validate order data
+        logger.error("DEBUG: About to validate order data")
         validation_errors = validate_order_data(form, cart)
         if validation_errors:
+            logger.error(f"DEBUG: Validation errors found: {validation_errors}")
             for error in validation_errors:
                 messages.error(request, error)
         else:
+            logger.error("DEBUG: Validation passed, creating order")
             try:
                 # Create order from cart
                 order = create_order_from_cart(request, form)
+                logger.error(f"DEBUG: Order created: {order.order_number}")
                 
                 # Update product stock
                 update_product_stock(order)
