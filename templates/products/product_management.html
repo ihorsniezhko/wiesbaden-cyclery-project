@@ -5,8 +5,60 @@
 
 {% block extra_css %}
 <style>
+    /* Universal Button Styles - Match Products Page */
     .btn {
+        font-size: 1rem !important;
+        font-weight: 400 !important;
+        line-height: 1.5 !important;
         white-space: nowrap !important;
+        font-family: inherit !important;
+        text-transform: none !important;
+        letter-spacing: normal !important;
+        min-height: 38px;
+    }
+    
+    .btn-lg {
+        font-size: 1rem !important;
+        font-weight: 400 !important;
+        padding: 0.5rem 1rem !important;
+        min-height: 48px;
+    }
+    
+    /* Pagination Button Spacing - Match Products Page */
+    .pagination {
+        gap: 0.5rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .pagination .page-item {
+        margin: 0 0.25rem;
+    }
+    
+    .pagination .page-link {
+        font-size: 1rem !important;
+        font-weight: 400 !important;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        border: 1px solid #dee2e6;
+        color: #199CF4;
+        background-color: #fff;
+        transition: all 0.2s ease;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: #199CF4;
+        border-color: #199CF4;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #199CF4;
+        border-color: #199CF4;
+        color: #fff;
+        font-weight: 500;
     }
     
     /* Modal styling */
@@ -168,33 +220,37 @@
             
             <!-- Pagination -->
             {% if page_obj.has_other_pages %}
-                <nav aria-label="Product pagination">
-                    <ul class="pagination justify-content-center">
-                        {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">First</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
-                            </li>
-                        {% endif %}
-                        
-                        <li class="page-item active">
-                            <span class="page-link">
-                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                            </span>
-                        </li>
-                        
-                        {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <nav aria-label="Product pagination">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">First</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+                                    </li>
+                                {% endif %}
+                                
+                                <li class="page-item active">
+                                    <span class="page-link">
+                                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                                    </span>
+                                </li>
+                                
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             {% endif %}
         </div>
     </div>
