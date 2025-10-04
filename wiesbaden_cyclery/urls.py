@@ -45,8 +45,6 @@ urlpatterns = [
     path('seo-test/', views.seo_test, name='seo_test'),
     # Categories page
     path('categories/', views.categories, name='categories'),
-    # Debug cart view
-    path('debug-cart/', views.debug_cart, name='debug_cart'),
     # Test URLs removed for Stage 7 development
     path('', views.index, name='home'),
 ]
