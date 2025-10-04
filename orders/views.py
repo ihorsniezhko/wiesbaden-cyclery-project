@@ -35,63 +35,41 @@ def checkout(request):
         # Get client secret from POST data
         client_secret = request.POST.get('client_secret', '').strip()
         
-        # Debug logging
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.error(f"DEBUG: POST data keys: {list(request.POST.keys())}")
-        logger.error(f"DEBUG: client_secret present: {bool(client_secret)}")
-        logger.error(f"DEBUG: client_secret value: {client_secret[:20] if client_secret else 'NONE'}...")
-        
         # Verify Stripe payment was successful
         if not client_secret:
             messages.error(request, 'Payment information is missing. Please try again.')
-            logger.error("DEBUG: Redirecting due to missing client_secret")
             return redirect('orders:checkout')
         
         # Verify payment intent with Stripe
         try:
             import stripe
             stripe.api_key = settings.STRIPE_SECRET_KEY
-            logger.error("DEBUG: About to verify payment with Stripe")
             
             # Extract payment intent ID from client secret
             payment_intent_id = client_secret.split('_secret')[0]
-            logger.error(f"DEBUG: Payment Intent ID: {payment_intent_id}")
-            
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-            logger.error(f"DEBUG: Payment Intent retrieved, status: {payment_intent.status}")
             
             # Check if payment was successful
             if payment_intent.status != 'succeeded':
-                logger.error(f"DEBUG: Payment not succeeded, status: {payment_intent.status}")
                 messages.error(
                     request, 
                     f'Payment was not completed. Status: {payment_intent.status}. Please try again.'
                 )
                 return redirect('orders:checkout')
-            
-            logger.error("DEBUG: Payment verification passed!")
                 
         except Exception as e:
-            logger.error(f"DEBUG: Payment verification exception: {str(e)}")
             messages.error(request, f'Payment verification failed: {str(e)}')
             return redirect('orders:checkout')
         
         # Validate order data
-        logger.error("DEBUG: About to validate order data")
         validation_errors = validate_order_data(form, cart)
         if validation_errors:
-            logger.error(f"DEBUG: Validation errors found: {validation_errors}")
             for error in validation_errors:
                 messages.error(request, error)
         else:
-            logger.error("DEBUG: Validation passed, creating order")
             try:
                 # Create order from cart
-                logger.error("DEBUG: Calling create_order_from_cart...")
                 order = create_order_from_cart(request, form)
-                logger.error(f"DEBUG: Order created successfully: {order.order_number}")
-                logger.error(f"DEBUG: Order ID: {order.id}")
                 
                 # Update product stock
                 update_product_stock(order)
@@ -120,13 +98,9 @@ def checkout(request):
                     )
                 
                 # Redirect to order confirmation
-                logger.error(f"DEBUG: About to redirect to confirmation page")
                 return redirect('orders:order_confirmation', order_number=order.order_number)
                 
             except Exception as e:
-                logger.error(f"DEBUG: Exception during order creation: {type(e).__name__}: {str(e)}")
-                import traceback
-                logger.error(f"DEBUG: Traceback: {traceback.format_exc()}")
                 messages.error(request, f'There was an error processing your order: {str(e)}')
     else:
         # Pre-populate form with user profile data if available
