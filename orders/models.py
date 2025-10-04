@@ -185,7 +185,7 @@ class OrderLineItem(models.Model):
         validators=[MinValueValidator(1)]
     )
     lineitem_total = models.DecimalField(
-        max_digits=6, 
+        max_digits=10, 
         decimal_places=2, 
         null=False, 
         blank=False, 
