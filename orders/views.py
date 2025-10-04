@@ -32,6 +32,35 @@ def checkout(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         
+        # Get client secret from POST data
+        client_secret = request.POST.get('client_secret', '').strip()
+        
+        # Verify Stripe payment was successful
+        if not client_secret:
+            messages.error(request, 'Payment information is missing. Please try again.')
+            return redirect('orders:checkout')
+        
+        # Verify payment intent with Stripe
+        try:
+            import stripe
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            
+            # Extract payment intent ID from client secret
+            payment_intent_id = client_secret.split('_secret')[0]
+            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+            
+            # Check if payment was successful
+            if payment_intent.status != 'succeeded':
+                messages.error(
+                    request, 
+                    f'Payment was not completed. Status: {payment_intent.status}. Please try again.'
+                )
+                return redirect('orders:checkout')
+                
+        except Exception as e:
+            messages.error(request, f'Payment verification failed: {str(e)}')
+            return redirect('orders:checkout')
+        
         # Validate order data
         validation_errors = validate_order_data(form, cart)
         if validation_errors:

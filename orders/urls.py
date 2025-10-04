@@ -26,6 +26,7 @@ urlpatterns = [
     path('payment-error/', views.payment_error_page, name='payment_error'),
     
     # Stripe webhook
-    path('webhook/stripe/', stripe_webhook, name='stripe_webhook'),
+    path('webhook/', stripe_webhook, name='stripe_webhook'),  # Main webhook endpoint
+    path('webhook/stripe/', stripe_webhook, name='stripe_webhook_alt'),
     path('wh/', stripe_webhook, name='stripe_webhook_short'),  # For Stripe CLI
 ]
