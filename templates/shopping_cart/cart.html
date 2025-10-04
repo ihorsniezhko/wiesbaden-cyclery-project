@@ -59,10 +59,10 @@
                                                  alt="{{ item.product.name }}"
                                                  style="max-width: 100px; max-height: 100px; object-fit: cover;">
                                         {% else %}
-                                            <img class="img-fluid rounded cart-product-image" 
-                                                 src="{% static 'images/noimage.png' %}" 
-                                                 alt="{{ item.product.name }}"
-                                                 style="max-width: 100px; max-height: 100px; object-fit: cover;">
+                                            <div class="img-fluid rounded cart-product-image d-flex align-items-center justify-content-center bg-light" 
+                                                 style="max-width: 100px; max-height: 100px; min-height: 100px;">
+                                                <i class="fa fa-image fa-3x text-muted"></i>
+                                            </div>
                                         {% endif %}
                                     </a>
                                 </td>
