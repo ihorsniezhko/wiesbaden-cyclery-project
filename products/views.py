@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q, Avg
+from django.db.models.functions import Lower
 from django.core.paginator import Paginator
 
 from .models import Product, Category, Size, Review
@@ -27,15 +28,20 @@ def all_products(request):
             sortkey = request.GET['sort']
             sort = sortkey
             if sortkey == 'name':
-                sortkey = 'lower_name'
-                products = products.extra(select={'lower_name': 'lower(name)'})
-            if sortkey == 'category':
-                sortkey = 'category__name'
-            if 'direction' in request.GET:
-                direction = request.GET['direction']
+                # Use Django's Lower function for case-insensitive sorting
+                direction = request.GET.get('direction', 'asc')
                 if direction == 'desc':
-                    sortkey = f'-{sortkey}'
-            products = products.order_by(sortkey)
+                    products = products.order_by(Lower('name').desc())
+                else:
+                    products = products.order_by(Lower('name'))
+            else:
+                if sortkey == 'category':
+                    sortkey = 'category__name'
+                if 'direction' in request.GET:
+                    direction = request.GET['direction']
+                    if direction == 'desc':
+                        sortkey = f'-{sortkey}'
+                products = products.order_by(sortkey)
 
         if 'category' in request.GET:
             category_name = request.GET['category']
