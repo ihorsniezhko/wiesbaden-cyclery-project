@@ -48,7 +48,9 @@ def cart_view(request):
         'free_delivery_delta': free_delivery_delta,
     }
     
-    return render(request, 'shopping_cart/cart.html', context)
+    # TODO: Full cart.html template causes 500 error on Heroku - needs investigation
+    # Using simplified template for now until issue is resolved
+    return render(request, 'shopping_cart/cart_simple.html', context)
 
 
 @require_POST
