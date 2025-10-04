@@ -116,66 +116,39 @@ footer {
     margin-bottom: 1.5rem;
 }
 
-/* Newsletter Form Responsive Styling - Force inline layout */
-#mc_embed_signup .input-group {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    width: 100%;
+/* Newsletter Form Responsive Styling - Stacked layout */
+#mc_embed_signup .form-control {
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
 }
 
-#mc_embed_signup .input-group .form-control {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    width: auto !important;
+#mc_embed_signup .btn-block {
+    width: 100% !important;
+    display: block !important;
 }
 
-#mc_embed_signup .input-group-append {
-    flex-shrink: 0 !important;
-    display: flex !important;
-}
-
-#mc_embed_signup .input-group-append .btn {
-    white-space: nowrap !important;
-    border-radius: 0 0.25rem 0.25rem 0 !important;
-    flex-shrink: 0 !important;
-}
-
-/* Specific styling for narrow screens */
-@media (max-width: 580px) {
-    #mc_embed_signup .input-group {
-        display: flex !important;
-        flex-wrap: nowrap !important;
-        align-items: stretch !important;
-    }
-    
+/* Newsletter form responsive styling for all screens */
+@media (max-width: 767px) {
     #mc_embed_signup .form-control {
         font-size: 14px !important;
         padding: 0.5rem 0.75rem !important;
-        flex: 1 1 auto !important;
-        min-width: 120px !important;
     }
     
-    #mc_embed_signup .input-group-append .btn {
+    #mc_embed_signup .btn {
         font-size: 14px !important;
         padding: 0.5rem 0.75rem !important;
-        min-width: 90px !important;
-        flex-shrink: 0 !important;
-        white-space: nowrap !important;
     }
 }
 
-/* Extra narrow screens */
 @media (max-width: 400px) {
     #mc_embed_signup .form-control {
-        min-width: 100px !important;
         font-size: 13px !important;
         padding: 0.4rem 0.6rem !important;
     }
     
-    #mc_embed_signup .input-group-append .btn {
+    #mc_embed_signup .btn {
         font-size: 13px !important;
         padding: 0.4rem 0.6rem !important;
-        min-width: 80px !important;
     }
 }
 
@@ -568,5 +541,109 @@ Toolbar with Compact Spacing */
     .btn-lg {
         width: 100%;
         text-align: center;
+    }
+}
+/* CR
+ITICAL: Enhanced Email Subscription Form Fixes for Narrow Screens */
+@media (max-width: 375px) {
+    /* Force proper inline layout on very narrow screens */
+    #mc_embed_signup .input-group {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+        width: 100% !important;
+    }
+    
+    #mc_embed_signup .form-control {
+        font-size: 12px !important;
+        padding: 0.4rem 0.5rem !important;
+        flex: 1 1 auto !important;
+        min-width: 80px !important;
+        border-radius: 0.25rem 0 0 0.25rem !important;
+    }
+    
+    #mc_embed_signup .input-group-append {
+        flex-shrink: 0 !important;
+        display: flex !important;
+    }
+    
+    #mc_embed_signup .input-group-append .btn {
+        font-size: 12px !important;
+        padding: 0.4rem 0.5rem !important;
+        min-width: 70px !important;
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+        border-radius: 0 0.25rem 0.25rem 0 !important;
+    }
+    
+    /* Ensure checkbox text wraps properly */
+    .form-check-label.text-muted.small {
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+    }
+}
+
+/* CRITICAL: Keep Shopping Button Responsive Fixes */
+@media (max-width: 480px) {
+    /* Product detail page button fixes */
+    .product-detail .btn-lg {
+        width: 100% !important;
+        margin-bottom: 0.5rem !important;
+        min-width: auto !important;
+        max-width: none !important;
+        white-space: nowrap !important;
+        font-size: 0.9rem !important;
+        padding: 0.5rem 1rem !important;
+    }
+    
+    /* Ensure buttons stack properly */
+    .product-detail .mb-3 {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    
+    .product-detail .mb-3 .btn {
+        margin-right: 0 !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+@media (max-width: 375px) {
+    /* Extra narrow screen fixes for Keep Shopping button */
+    .product-detail .btn-lg {
+        font-size: 0.85rem !important;
+        padding: 0.45rem 0.8rem !important;
+    }
+    
+    /* Ensure icon and text fit properly */
+    .btn .fa {
+        margin-right: 0.4rem !important;
+    }
+}
+
+/* CRITICAL: Newsletter Form Container Fixes */
+.col-md-3 #mc_embed_signup {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+#mc_embed_signup form {
+    width: 100% !important;
+}
+
+#mc_embed_signup_scroll {
+    width: 100% !important;
+}
+
+/* Ensure proper spacing in footer newsletter section */
+@media (max-width: 767px) {
+    .col-md-3.mb-4 {
+        margin-bottom: 2rem !important;
+    }
+    
+    /* Newsletter section specific spacing */
+    .col-md-3.mb-4:last-child {
+        margin-bottom: 1rem !important;
     }
 }

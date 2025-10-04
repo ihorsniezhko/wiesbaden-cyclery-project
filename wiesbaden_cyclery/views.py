@@ -17,7 +17,15 @@ def categories(request):
     """
     Categories page view
     """
-    return render(request, 'categories/categories.html')
+    from products.models import Category
+    
+    all_categories = Category.objects.all()
+    
+    context = {
+        'all_categories': all_categories,
+    }
+    
+    return render(request, 'categories/categories.html', context)
 
 
 def privacy_policy(request):
