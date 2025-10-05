@@ -21,6 +21,21 @@ body {
     letter-spacing: 1px;
 }
 
+/* Responsive navbar brand for mobile */
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+    }
+}
+
+@media (max-width: 375px) {
+    .navbar-brand {
+        font-size: 0.85rem;
+        letter-spacing: 0.3px;
+    }
+}
+
 /* Bicycle Icon Gradient - vibrant cyan to magenta gradient */
 .fa-bicycle.gradient-icon {
     background: linear-gradient(135deg, #00D4FF 0%, #FF00FF 100%) !important;
@@ -155,11 +170,62 @@ footer {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .hero-section h1 {
-        font-size: 2.5rem;
+        font-size: 2rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1rem;
+    }
+    
+    .hero-section .hero-text-box {
+        padding: 30px !important;
     }
     
     .feature-box {
         padding: 1rem;
+    }
+}
+
+/* Extra small screens - mobile phones */
+@media (max-width: 576px) {
+    .hero-section {
+        min-height: 400px !important;
+    }
+    
+    .hero-section h1 {
+        font-size: 1.75rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 0.95rem;
+    }
+    
+    .hero-section .hero-text-box {
+        padding: 25px !important;
+    }
+}
+
+/* Very small screens - 320px mobile */
+@media (max-width: 375px) {
+    .hero-section {
+        min-height: 350px !important;
+    }
+    
+    .hero-section h1 {
+        font-size: 1.5rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 0.875rem;
+    }
+    
+    .hero-section .hero-text-box {
+        padding: 20px !important;
+    }
+    
+    .hero-section .btn-lg {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
     }
 }
 /* Fi
