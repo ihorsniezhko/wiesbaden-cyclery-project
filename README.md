@@ -1,10 +1,13 @@
-# 🚴‍♂️ Wiesbaden Cyclery - E-commerce Platform
+# 🚴‍♂️ Wiesbaden Cyclery - Professional E-commerce Platform
 
 [![Django](https://img.shields.io/badge/Django-3.2.25-green.svg)](https://www.djangoproject.com/)
 [![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-4.6.2-purple.svg)](https://getbootstrap.com/)
+[![Stripe](https://img.shields.io/badge/Stripe-Payment-blue.svg)](https://stripe.com/)
+[![AWS S3](https://img.shields.io/badge/AWS-S3-orange.svg)](https://aws.amazon.com/s3/)
+[![Tests](https://img.shields.io/badge/Tests-66%20Passing-brightgreen.svg)](#testing)
 
-A comprehensive Django-based e-commerce platform for a bicycle shop, featuring modern payment processing, user authentication, product management, and responsive design.
+A **production-ready Django e-commerce platform** for bicycle retail, featuring secure payment processing, comprehensive user management, advanced product catalog, and professional deployment architecture. Built following industry best practices with extensive testing coverage.
 
 ## 🎯 Project Overview
 

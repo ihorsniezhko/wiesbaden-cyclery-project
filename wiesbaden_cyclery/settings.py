@@ -30,6 +30,11 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com', 'testserver']
 
+# X-Frame-Options: Allow site to be displayed in iframes for responsive design testing
+# SAMEORIGIN allows the site to be framed by pages on the same domain
+# This enables tools like ui.dev/amiresponsive to display the site
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 
 # Application definition
 

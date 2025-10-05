@@ -186,9 +186,9 @@
         <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
             <span class="sr-only">Processing...</span>
         </div>
-        <div class="spinner-text">
-            <div id="loading-message">Processing your secure payment...</div>
-            <small class="mt-2 d-block">Please do not refresh or close this page</small>
+        <div class="spinner-text" style="text-align: center !important;">
+            <div id="loading-message" style="text-align: center !important; width: 100%;">Processing your secure payment...</div>
+            <small class="mt-2 d-block" style="text-align: center !important; width: 100%;">Please do not refresh or close this page</small>
         </div>
     </div>
 </div>
@@ -484,15 +484,27 @@
         align-items: center;
         justify-content: center;
         margin: 0;
+        width: 100%;
         height: 100%;
         color: white;
+        text-align: center;
     }
 
     .loading-spinner .spinner-text {
         margin-top: 20px;
         font-size: 1.2rem;
         font-weight: 300;
-        text-align: center;
+        text-align: center !important;
+        width: 80%;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .loading-spinner .spinner-text #loading-message,
+    .loading-spinner .spinner-text small {
+        text-align: center !important;
+        display: block;
         width: 100%;
     }
 
@@ -561,7 +573,12 @@
         
         .loading-spinner .spinner-text {
             font-size: 1rem;
-            text-align: center;
+            text-align: center !important;
+        }
+
+        .loading-spinner .spinner-text #loading-message,
+        .loading-spinner .spinner-text small {
+            text-align: center !important;
         }
     }
 
