@@ -77,6 +77,19 @@ body {
     background: linear-gradient(135deg, var(--primary-color) 0%, #0d8ce8 100%);
 }
 
+/* Hero section button - limit width on tablet and larger screens */
+.hero-section .btn-lg {
+    max-width: 200px;
+}
+
+/* On mobile, allow full width */
+@media (max-width: 576px) {
+    .hero-section .btn-lg {
+        max-width: none;
+        width: 100%;
+    }
+}
+
 /* Feature Boxes */
 .feature-box {
     padding: 2rem 1rem;
