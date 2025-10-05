@@ -53,6 +53,20 @@ def create_order_from_cart(request, order_form):
             from accounts.models import UserProfile
             user_profile = UserProfile.objects.get(user=request.user)
             order.user_profile = user_profile
+            
+            # Save delivery information to profile if requested
+            save_info = request.POST.get('save-info')
+            if save_info:
+                user_profile.default_phone_number = order_form.cleaned_data['phone_number']
+                user_profile.default_street_address1 = order_form.cleaned_data['street_address1']
+                user_profile.default_street_address2 = order_form.cleaned_data['street_address2']
+                user_profile.default_town_or_city = order_form.cleaned_data['town_or_city']
+                user_profile.default_county = order_form.cleaned_data['county']
+                user_profile.default_postcode = order_form.cleaned_data['postcode']
+                user_profile.default_country = order_form.cleaned_data['country']
+                user_profile.save()
+                logger.info(f"Saved delivery information to profile for user {request.user.username}")
+                
         except UserProfile.DoesNotExist:
             pass
     

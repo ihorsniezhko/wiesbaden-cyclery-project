@@ -112,12 +112,11 @@ def send_order_status_update_email(order, old_status=None):
         # Render email content
         subject = f"{settings.EMAIL_SUBJECT_PREFIX}{status_info['subject_suffix']} - {order.order_number}"
         
-        # Create simple HTML email
+        # Create simple HTML email with white background and black text
         html_message = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background-color: #2c3e50; color: white; padding: 20px; text-align: center;">
-                <h1>Wiesbaden Cyclery</h1>
-                <p>Order Status Update</p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+            <div style="background-color: #ffffff; padding: 20px; text-align: center;">
+                <h1 style="margin: 0; font-size: 24px; font-weight: bold; color: #000000;">Wiesbaden Cyclery</h1>
             </div>
             
             <div style="padding: 30px 20px;">
@@ -127,7 +126,7 @@ def send_order_status_update_email(order, old_status=None):
                 
                 <p>{status_info['message']}</p>
                 
-                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                <div style="padding: 15px; margin: 15px 0;">
                     <h3>Order Details</h3>
                     <p><strong>Order Number:</strong> {order.order_number}</p>
                     <p><strong>Status:</strong> {order.get_status_display()}</p>
@@ -142,7 +141,7 @@ def send_order_status_update_email(order, old_status=None):
                 <div style="text-align: center; margin: 30px 0;">
                     <a href="{site_url}/orders/tracking/" 
                        style="display: inline-block; padding: 12px 24px; background-color: #3498db; 
-                              color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                              color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">
                         Track Your Order
                     </a>
                 </div>
@@ -153,7 +152,7 @@ def send_order_status_update_email(order, old_status=None):
                 <strong>The Wiesbaden Cyclery Team</strong></p>
             </div>
             
-            <div style="background-color: #ecf0f1; padding: 20px; text-align: center; font-size: 14px; color: #7f8c8d;">
+            <div style="padding: 20px; text-align: center; font-size: 14px;">
                 <p><strong>Wiesbaden Cyclery</strong></p>
                 <p>Email: info@wiesbaden-cyclery.de | Phone: +49 (0) 611 123456</p>
             </div>
