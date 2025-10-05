@@ -30,10 +30,10 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com', 'testserver']
 
-# X-Frame-Options: Allow site to be displayed in iframes for responsive design testing
-# SAMEORIGIN allows the site to be framed by pages on the same domain
-# This enables tools like ui.dev/amiresponsive to display the site
-X_FRAME_OPTIONS = 'SAMEORIGIN'
+# X-Frame-Options: Disabled to allow responsive design testing tools
+# The XFrameOptionsMiddleware is commented out in MIDDLEWARE to allow cross-origin framing
+# This enables tools like ui.dev/amiresponsive to display the site in iframes
+# Note: For e-commerce sites that need to be embedded or tested, this is acceptable
 
 
 # Application definition
@@ -78,7 +78,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # XFrameOptionsMiddleware commented out to allow responsive design testing tools
+    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'wiesbaden_cyclery.urls'
