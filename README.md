@@ -38,7 +38,7 @@ Comprehensive wireframes covering all pages and user flows: [docs/project_wirefr
 - **� Email*t*: Order confirmations via Gmail SMTP
 - **� Nedwsletter**: Mailchimp with GDPR compliance
 - **� Order *Tracking**: Self-service status tracking
-- **🔒 Legal**: Privacy Policy, Terms, GDPR cookie consent
+- **🔒 Legal Compliance**: Privacy Policy, Terms of Service, GDPR cookie consent
 - **⭐ Reviews**: Customer ratings and reviews
 - **� SEO*o*: Meta tags, sitemaps, structured data
 - **📱 Responsive**: Bootstrap 4 mobile-first
@@ -175,6 +175,12 @@ Real-time inventory with overselling prevention and cart-aware validation
 - Automatic stock status: When stock reaches 0, product automatically marked as unavailable
 - Stock validation: Non-negative stock quantities enforced
 - Rating validation: Integer ratings (1-5) only
+
+### GDPR Compliance
+- Privacy Policy page with data handling transparency
+- Terms of Service with clear user agreements
+- Cookie consent banner with user preferences
+- Mailchimp newsletter with GDPR-compliant signup
 
 ### SEO Optimization
 Dynamic meta tags, XML sitemaps, structured data, social media integration
