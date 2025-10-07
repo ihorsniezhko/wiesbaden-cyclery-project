@@ -7,27 +7,44 @@
 [![AWS S3](https://img.shields.io/badge/AWS-S3-orange.svg)](https://aws.amazon.com/s3/)
 [![Tests](https://img.shields.io/badge/Tests-66%20Passing-brightgreen.svg)](#testing)
 
-A **production-ready Django e-commerce platform** for bicycle retail, featuring secure payment processing, comprehensive user management, advanced product catalog, and professional deployment architecture. Built following industry best practices with extensive testing coverage.
+A production-ready Django e-commerce platform for bicycle retail with secure payments, user management, and professional deployment architecture.
 
 ## 🎯 Project Overview
 
-Wiesbaden Cyclery is a **full-featured e-commerce platform** built with Django 3.2.25, designed specifically for bicycle shops. The platform provides a complete online shopping experience with secure payment processing, user account management, product catalog, and comprehensive administrative tools.
+Wiesbaden Cyclery is a full-featured e-commerce platform built with Django 3.2.25 for bicycle shops, providing complete online shopping with secure checkout, user accounts, and administrative tools.
+
+### 📱 Responsive Design
+
+Fully responsive across all devices using Bootstrap 4 mobile-first approach:
+
+![Responsive Design](docs/responsive_design.jpg)
+
+### 📐 Design Planning
+
+Comprehensive wireframes covering all pages and user flows: [docs/project_wireframes.pdf](docs/project_wireframes.pdf)
+
+### 🌐 Social Media Presence
+
+**Facebook Business Page**: [Wiesbaden Cyclery](https://www.facebook.com/people/Wiesbaden-Cyclery/61580595100397/)
+
+![Facebook Page](docs/facebook_page.jpg)
 
 ### 🌟 Key Features
 
-- **🛍️ E-commerce Core**: Product catalog ✅, shopping cart ✅, secure checkout ✅, stock tracking ✅
-- **👤 User Management**: Registration, authentication, user profiles ✅
-- **💳 Payment Processing**: Stripe integration with EUR currency support ✅
-- **📧 Email System**: Order confirmations and status updates with Gmail SMTP ✅
-- **📬 Newsletter**: Mailchimp integration with GDPR-compliant signup ✅
-- **🔍 Order Tracking**: Customer self-service order status tracking ✅
-- **🔒 Legal Compliance**: Privacy Policy, Terms of Service, GDPR cookie consent ✅
-- **⭐ Product Reviews**: Customer review system with ratings ✅
-- **🔍 SEO Optimization**: Meta tags, XML sitemaps, structured data, social sharing ✅
-- **📱 Responsive Design**: Bootstrap 4 with mobile-first approach ✅
-- **🌐 Social Media**: Facebook Business page integration ✅
-- **📊 Analytics**: Facebook Pixel and Google Analytics 4 integration ✅
-- **☁️ Cloud Ready**: Prepared for AWS S3 and production deployment
+- **🛍️ E-commerce**: Product catalog, shopping cart, secure checkout, stock tracking
+- **👤 User Management**: Registration, authentication, profiles, staff permissions
+- **� Promduct Management**: Dual interface (staff portal + Django admin)
+- **�  Payments**: Stripe integration (EUR currency)
+- **� Email*t*: Order confirmations via Gmail SMTP
+- **� Nedwsletter**: Mailchimp with GDPR compliance
+- **� Order *Tracking**: Self-service status tracking
+- **🔒 Legal**: Privacy Policy, Terms, GDPR cookie consent
+- **⭐ Reviews**: Customer ratings and reviews
+- **� SEO*o*: Meta tags, sitemaps, structured data
+- **📱 Responsive**: Bootstrap 4 mobile-first
+- **🎨 Error Pages**: Custom 404 and 500 pages matching project design
+- **🌐 Social**: Facebook Business page
+- **📊 Analytics**: Facebook Pixel & Google Analytics 4
 
 ## 🛠️ Technology Stack
 
@@ -95,177 +112,138 @@ Visit `http://127.0.0.1:8000` to access the application.
 
 ## 🛒 Product Catalog
 
-### Current Inventory (18 Products)
-- **🚴 Road Bikes** (2): Trek Domane AL 2, Specialized Allez Elite
-- **🏔️ Mountain Bikes** (2): Giant Talon 1, Trek Fuel EX 5
-- **⚡ Electric Bikes** (1): Bosch Performance E-Bike
-- **🧰 Accessories** (6): Helmet, Gloves, Lock, Water Bottle, Lights, Pump
-- **🔧 Components** (4): Shimano Chain, Professional Wheel, Premium Tire, Handlebar Grips
-- **🏷️ Sale Items** (3): Discounted Helmet, Clearance Gloves, Special Offer Chain
+56 products across 6 categories: Road Bikes, Mountain Bikes, Electric Bikes, Accessories, Components, Sale Items. Professional Unsplash photography for all products.
 
-### Size Standardization
-- **Bicycles & Accessories**: S, M, L, XL sizes only
-- **Components**: No size variations (universal fit)
-- **Professional Images**: High-quality Unsplash photography for all products
+### Product Management
 
-## 📊 Development Progress
+Products can be managed through two interfaces:
 
-This project is being developed in stages to demonstrate realistic e-commerce development:
+1. **Staff Product Management** (`/products/management/`)
+   - User-friendly interface for staff users
+   - Add, edit, and delete products
+   - Upload product images
+   - Manage sizes and stock levels
+   - Accessible to users with staff permissions
 
-- ✅ **Stage 1**: Project Foundation - Basic Django setup and homepage
-- ✅ **Stage 2**: User Authentication - Registration and login system
-- ✅ **Stage 3**: Product Catalog - Product management and display
-- ✅ **Stage 4**: Shopping Cart - Cart functionality and calculations
-- ✅ **Stage 5**: Order Processing - Checkout and order management
-- ✅ **Stage 6**: Payment Integration - Stripe payment processing
-- ✅ **Stage 7**: Email System - Gmail SMTP integration and Mailchimp newsletter
-- ✅ **Stage 8**: Legal Compliance - Privacy Policy, Terms of Service, GDPR cookie consent
-- ✅ **Stage 9**: Enhanced Features - Product reviews, context-aware logic, performance optimizations
-- ⏳ **Stage 10**: Testing Suite - Comprehensive testing (66+ automated tests)
-- ✅ **Stage 11**: SEO Optimization - Meta tags, sitemaps, structured data, social media integration
-- ✅ **Stage 12**: Stock Tracking System - Comprehensive inventory management with overselling prevention
+2. **Django Admin Interface** (`/admin/products/product/`)
+   - Full administrative control
+   - Bulk operations and advanced filtering
+   - Direct database access
+   - Complete product and category management
+   - Accessible to superuser accounts
 
-## 📝 Development Notes
+## 📊 Development Stages
 
-### Naming Convention Evolution
-
-**Note**: During early development, some commit messages and documentation used "Task X" instead of "Stage X" naming convention. This inconsistency exists in the Git history for the following:
-
-- **Commit Messages**: Some commits for Stage 6 (Stripe Payment Integration) use "Task 6" in commit messages
-- **GitHub Issues**: All issues have been standardized to use "Stage X" naming
-- **Documentation**: All current documentation uses "Stage X" naming
-
-**Going Forward**: All future commits, issues, and documentation will consistently use the "Stage X" naming convention. This demonstrates a real-world scenario where naming conventions evolve during project development, and Git history preservation takes precedence over perfect consistency.
-
-## 🧪 Testing
-
-```bash
-# Run Django tests
-python manage.py test
-
-# Check for issues
-python manage.py check
-```
+Developed incrementally across 12 stages: Foundation → Authentication → Catalog → Cart → Orders → Payments → Email → Legal → Reviews → Testing → SEO → Stock Tracking
 
 ## 📚 Documentation
 
-- **Setup Guide**: See installation instructions above
-- **Development**: Follow the staged development approach
-- **Contributing**: Follow Django best practices and PEP 8
+### Quick Start
+- **[Setup Guide](docs/SETUP.md)** - Local development setup (5 minutes)
+- **[Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment to Heroku
 
-## 🎨 Image Attribution & Copyright
+### Technical Documentation
+- **[Database Schema](docs/DATABASE_SCHEMA.md)** - Database structure with ER diagram
+- **[Testing Guide](docs/TESTING.md)** - Automated and manual testing (27/45 tests passing)
+- **[Payment System](docs/PAYMENTS.md)** - Stripe integration and testing
+- **[Email System](docs/EMAILS.md)** - Gmail SMTP configuration
+- **[Analytics Setup](docs/facebook-pixel-setup.md)** - Facebook Pixel & Google Analytics
 
-### Product Images
-All product images are sourced from **Unsplash** under the Unsplash License (free for commercial use):
+### Design Resources
+- **[Wireframes](docs/project_wireframes.pdf)** - Complete design specifications
+- **[Responsive Design](docs/responsive_design.jpg)** - Mobile-first showcase
+- **[Facebook Page](docs/facebook_page.jpg)** - Social media presence ([live page](https://www.facebook.com/people/Wiesbaden-Cyclery/61580595100397/))
 
-#### Professional Photography Credits:
-- **Road Bikes**: Photos by Sies Kranen, Tasha Kostyuk
-- **Mountain Bikes**: Photos by Dick Honing, Michał Robak  
-- **Electric Bikes**: Photo by Mukkpetebike
-- **Accessories**: Photos by Kaffeebart, MESTO Sprayers, Daiki Sato, Suraj Tomer, Egor Komarov, Sidral Mundet
-- **Components**: Photos by Wayne Bishop, Yomex Owo, yasara hansani, Kelly Common
-- **Hero Background**: Photo by Meg Jenson
+## 🎨 Image Attribution
 
-**Complete Attribution**: See `media/UNSPLASH_ATTRIBUTIONS.md` for detailed photographer credits.
+All product images sourced from **[Unsplash](https://unsplash.com/)** under the Unsplash License (free for commercial use).
 
-### License Information
-- **Unsplash License**: All images are free to use for any purpose, including commercial use
-- **Attribution**: Provided as courtesy to photographers
-- **Quality**: Professional photography optimized for web display (800x600px)
+**Photographers**: Sies Kranen, Tasha Kostyuk, Dick Honing, Michał Robak, Mukkpetebike, Kaffeebart, MESTO Sprayers, Daiki Sato, Suraj Tomer, Egor Komarov, Sidral Mundet, Wayne Bishop, Yomex Owo, yasara hansani, Kelly Common, Meg Jenson.
 
-## 🚀 Advanced Features (Stage 9 & 11)
+Complete credits: `media/UNSPLASH_ATTRIBUTIONS.md`
 
-### Stage 9: Enhanced Features ✅
-- **Product Review System**: Customer ratings and reviews with moderation
-- **Context-Aware Logic**: Intelligent product management with size-aware behavior
-- **Performance Optimizations**: Database query optimization, template caching
-- **Enhanced Admin Interface**: Improved product management with bulk operations
+## 🚀 Advanced Features
 
-### Stage 11: SEO Optimization ✅
-- **Dynamic Meta Tags**: Page-specific titles, descriptions, and keywords
-- **XML Sitemaps**: Automated sitemaps for products, categories, and static pages
-- **Structured Data**: JSON-LD schema markup for business and product information
-- **Social Media Integration**: Open Graph and Twitter Card tags for rich previews
-- **Search Engine Tools**: Robots.txt, canonical URLs, SEO testing page
+### Product Reviews
+Customer ratings and reviews with moderation
 
-### Stage 12: Stock Tracking System ✅
-- **Smart Stock Validation**: Prevents overselling with real-time stock checking
-- **Cart-Aware Inventory**: Considers items already in user's cart when calculating availability
-- **Dynamic Stock Display**: Shows available quantities and cart status on product pages
-- **Frontend Validation**: JavaScript controls respect stock limits with visual feedback
-- **Backend Protection**: Server-side validation prevents overselling even if frontend is bypassed
-- **Order Integration**: Stock automatically decremented on successful purchases
-- **User-Friendly Messaging**: Clear stock warnings and availability information
+### Stock Tracking
+Real-time inventory with overselling prevention and cart-aware validation
 
-### Analytics & Tracking Integration ✅
-- **Facebook Pixel Support**: Complete e-commerce tracking for Facebook advertising campaigns
-- **Google Analytics 4**: Modern web analytics with enhanced e-commerce tracking
-- **Privacy Compliant**: Conditional loading based on configuration, respects GDPR
-- **E-commerce Events**: ViewContent, AddToCart, Purchase, Lead, and Search tracking
-- **Template Integration**: Easy custom event implementation via template blocks
+### Data Integrity
+- Size consistency: Products with assigned sizes cannot have size option disabled
+- Automatic stock status: When stock reaches 0, product automatically marked as unavailable
+- Stock validation: Non-negative stock quantities enforced
+- Rating validation: Integer ratings (1-5) only
 
-## 📊 Analytics & Tracking
+### SEO Optimization
+Dynamic meta tags, XML sitemaps, structured data, social media integration
 
-### Facebook Pixel Integration
-Complete Facebook Pixel support for e-commerce tracking and advertising campaigns:
+### Analytics
+Facebook Pixel and Google Analytics 4 with e-commerce event tracking
 
+## 📊 Analytics Setup
+
+Configure in `.env`:
 ```env
-# Add to your .env file
 FB_PIXEL_ID=123456789012345
-```
-
-**Features:**
-- ✅ **Automatic Page View Tracking** - Works immediately when Pixel ID is configured
-- ✅ **E-commerce Event Support** - ViewContent, AddToCart, Purchase tracking ready
-- ✅ **Custom Event Template Block** - Easy integration in any template
-- ✅ **Privacy Compliant** - Only loads when configured, respects cookie consent
-- ✅ **Testing Ready** - Compatible with Facebook Pixel Helper and Events Manager
-
-**Common Events:**
-```html
-<!-- Product View Tracking -->
-{% block facebook_pixel_events %}
-<script>
-fbq('track', 'ViewContent', {
-    content_type: 'product',
-    content_ids: ['{{ product.id }}'],
-    content_name: '{{ product.name }}',
-    value: {{ product.price }},
-    currency: 'EUR'
-});
-</script>
-{% endblock %}
-```
-
-### Google Analytics 4
-Modern web analytics with enhanced e-commerce tracking:
-
-```env
-# Add to your .env file
 GA_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
 
-**Setup Documentation:**
-- 📖 **Complete Guide**: `docs/facebook-pixel-setup.md`
-- 🧪 **Testing Instructions**: Facebook Pixel Helper and Events Manager integration
-- 🔒 **Privacy Compliance**: GDPR considerations and cookie consent integration
-- 📈 **Best Practices**: Standard events, value tracking, and performance monitoring
+See `docs/facebook-pixel-setup.md` for complete setup guide.
 
-## 🔧 Development
+## 🔧 Development Standards
 
-This project follows professional Django development practices:
+PEP 8 compliant, comprehensive testing, CSRF/XSS protection, optimized queries, SEO and social media ready.
 
-- **Clean Code**: PEP 8 compliant with comprehensive documentation
-- **Testing**: Comprehensive test coverage for all functionality
-- **Security**: CSRF protection, XSS prevention, secure authentication
-- **Performance**: Optimized database queries and static file handling
-- **SEO Ready**: Search engine optimized with structured data
-- **Social Ready**: Optimized for social media sharing
+## 🚀 Future Development
 
-## 📝 License
+### Platform Upgrades
+- Django 4.x/5.x and Python 3.12+ migration
+- Bootstrap 5.x and Font Awesome 6.x upgrade
+- Dependency updates and database optimization
 
-This project is developed for educational and demonstration purposes.
+### E-commerce Enhancements
+- Featured products on homepage
+- Product comparison tool, wishlist, bundles
+- Gift cards and loyalty program
+
+### Advanced Filtering
+- Detailed specs: wheel size, gears, battery capacity, weight, frame material, brake type, suspension
+- AI-powered recommendations and price range filters
+
+### Delivery Integration
+- Real-time shipping rates (DHL, DPD, Hermes)
+- Live order tracking and delivery slots
+- Click & collect and international shipping
+
+### Bike Service Section
+- Online appointment booking system
+- Service packages and maintenance reminders
+- Repair estimates and parts ordering
+
+### Enhanced User Experience
+- Live chat, video consultations, custom bike builder
+- Interactive size guide, 360° product views
+- Blog, cycling routes, events calendar, video tutorials
+- Progressive Web App (PWA), mobile apps
+- Strava integration, social sharing
+- Multiple payment options (PayPal, Klarna, Apple Pay, Google Pay)
 
 ---
 
-**Note**: This is an active development project. Features are being added incrementally following professional development practices.
+## 🙏 Credits & Acknowledgements
+
+This project was developed as part of the Full Stack Software Development program at **[Code Institute](https://codeinstitute.net/)**.
+
+Special thanks to:
+- **Code Institute Teachers & Mentors** - For their guidance and expertise throughout the development process
+- **Student Care Team** - For their continuous support and assistance
+- **Code Institute Community** - For providing a collaborative learning environment
+- **Boutique Ado Project** - The [Boutique Ado](https://github.com/Code-Institute-Solutions/boutique_ado_v1_sourcecode.git) educational project by Anna Greaves, Kasia Bogucka, and Chris Thomason was instrumental in developing various e-commerce elements
+
+The project demonstrates professional e-commerce development practices and serves as a portfolio piece for educational purposes.
+
+---
+
+**Live Site**: [wiesbaden-cyclery-project-818faeff3e83.herokuapp.com](https://wiesbaden-cyclery-project-818faeff3e83.herokuapp.com)

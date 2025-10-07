@@ -1,8 +1,8 @@
-# 🗄️ Database Schema Documentation
+# 🗄️ Database Schema
 
 ## Overview
 
-The Wiesbaden Cyclery platform uses a normalized PostgreSQL database design optimized for e-commerce operations. The schema supports user management, product catalog, shopping cart functionality, order processing, and comprehensive audit trails.
+Normalized PostgreSQL database for e-commerce operations supporting user management, product catalog, shopping cart, order processing, and audit trails.
 
 ## 📊 Entity Relationship Diagram
 
@@ -13,24 +13,16 @@ erDiagram
         string username UK
         string email UK
         string password
-        string first_name
-        string last_name
         boolean is_staff
-        boolean is_active
         datetime date_joined
-        datetime last_login
     }
     
     UserProfile {
         int id PK
-        int user_id FK "OneToOne"
-        string first_name
-        string last_name
+        int user_id FK
         string default_phone_number
         string default_street_address1
-        string default_street_address2
         string default_town_or_city
-        string default_county
         string default_postcode
         string default_country
     }
@@ -51,34 +43,21 @@ erDiagram
     Product {
         int id PK
         int category_id FK
-        string sku
         string name
         text description
         decimal price
         boolean has_sizes
         int rating
-        string image_url
-        string image
         boolean in_stock
         int stock_quantity
-        string wheel_size
-        string gear_system
-        text bicycle_features
         datetime created_at
         datetime updated_at
-    }
-    
-    ProductSize {
-        int id PK
-        int product_id FK
-        int size_id FK
     }
     
     Review {
         int id PK
         int product_id FK
         int user_id FK
-        string title
         int rating
         text comment
         datetime created_at
@@ -86,52 +65,37 @@ erDiagram
     
     Cart {
         int id PK
-        int user_id FK "Optional"
-        string session_key "Optional"
+        int user_id FK
+        string session_key
         datetime created_at
-        datetime updated_at
     }
     
     CartItem {
         int id PK
         int cart_id FK
         int product_id FK
-        int size_id FK "Optional"
+        int size_id FK
         int quantity
-        datetime added_at
     }
     
     Order {
         int id PK
         string order_number UK
-        int user_profile_id FK "Optional"
+        int user_profile_id FK
         string full_name
         string email
-        string phone_number
-        string street_address1
-        string street_address2
-        string town_or_city
-        string county
-        string postcode
-        string country
         decimal order_total
         decimal delivery_cost
         decimal grand_total
         string status
         datetime date
-        datetime updated
-        text original_cart
-        string stripe_pid
-        string payment_intent_id
-        string payment_status
-        text order_notes
     }
     
     OrderLineItem {
         int id PK
         int order_id FK
         int product_id FK
-        int size_id FK "Optional"
+        int size_id FK
         int quantity
         decimal lineitem_total
     }
@@ -140,337 +104,167 @@ erDiagram
         int id PK
         int order_id FK
         string status
-        int changed_by_id FK "Optional"
+        int changed_by_id FK
         datetime changed_date
-        text notes
     }
     
-    %% Relationships
-    User ||--|| UserProfile : "has profile"
-    UserProfile ||--o{ Order : "places orders"
-    User ||--o{ Review : "writes reviews"
-    User ||--o| Cart : "has cart (authenticated)"
-    
-    Category ||--o{ Product : "contains products"
-    Product ||--o{ Review : "receives reviews"
-    Product ||--o{ CartItem : "added to cart"
-    Product ||--o{ OrderLineItem : "ordered as"
-    Product }o--o{ Size : "available in sizes"
-    
-    Cart ||--o{ CartItem : "contains items"
-    CartItem }o--|| Size : "has size (optional)"
-    
-    Order ||--o{ OrderLineItem : "contains line items"
-    Order ||--o{ OrderStatusHistory : "has status history"
-    OrderLineItem }o--|| Size : "has size (optional)"
-    
-    User ||--o{ OrderStatusHistory : "changes status"
+    User ||--|| UserProfile : "has"
+    UserProfile ||--o{ Order : "places"
+    User ||--o{ Review : "writes"
+    Category ||--o{ Product : "contains"
+    Product ||--o{ Review : "has"
+    Product }o--o{ Size : "available in"
+    Cart ||--o{ CartItem : "contains"
+    Order ||--o{ OrderLineItem : "contains"
+    Order ||--o{ OrderStatusHistory : "tracks"
 ```
 
-## 🏗️ Database Design Principles
+## 🏗️ Design Principles
 
-### **Normalization**
-- **3rd Normal Form (3NF)** compliance to eliminate data redundancy
-- **Foreign Key Constraints** ensure referential integrity
-- **Unique Constraints** prevent duplicate data
-- **Proper Indexing** on frequently queried fields
+### Normalization
+- 3rd Normal Form (3NF) compliance
+- Foreign key constraints for referential integrity
+- Unique constraints prevent duplicates
+- Indexed fields for performance
 
-### **Data Integrity**
-- **Cascade Deletes** where appropriate (CartItem → Cart)
-- **SET NULL** for optional relationships (Order → UserProfile)
-- **Validation Rules** at model level with Django validators
-- **Audit Trails** with created/updated timestamps
+### Data Integrity
+- **Size Consistency**: Cannot disable `has_sizes` when sizes assigned
+- **Auto Stock Status**: `in_stock` set to False when `stock_quantity` reaches 0
+- **Stock Validation**: Non-negative quantities enforced
+- **Rating Validation**: Integer ratings 1-5 only
+- **Cascade Deletes**: CartItem → Cart
+- **SET NULL**: Order → UserProfile (preserves orders)
 
-### **Performance Optimization**
-- **Database Indexes** on foreign keys and search fields
-- **Select Related** and **Prefetch Related** for query optimization
-- **Decimal Fields** for precise financial calculations
-- **Efficient Queries** with Django ORM best practices
+### Timestamp Handling
+- **`created_at`**: `DateTimeField(auto_now_add=True, null=True, blank=True)` - Auto-set on creation, nullable for fixtures
+- **`updated_at`**: `DateTimeField(auto_now=True, null=True, blank=True)` - Auto-updated on save, nullable for fixtures
 
-## 📋 Model Descriptions
+## 📋 Core Models
 
-### **User Management Models**
+### User Management
+- **User**: Django built-in (username, email, password, is_staff)
+- **UserProfile**: Extended info, delivery defaults (auto-created via signal)
 
-#### **User (Django Built-in)**
+### Product Catalog
+- **Category**: Product categorization (6 categories: Road Bikes, Mountain Bikes, Electric Bikes, Accessories, Components, Sale Items)
+- **Size**: Reusable sizes (S, M, L, XL)
+- **Product**: Main product model with pricing, stock, ratings, bicycle-specific fields
+- **Review**: Customer reviews (one per user per product)
+
+### Shopping
+- **Cart**: User or session-based shopping cart
+- **CartItem**: Products in cart with quantity and optional size
+
+### Orders
+- **Order**: Customer orders with UUID order_number, delivery info, payment details, status
+- **OrderLineItem**: Products in order (auto-updates order total via signals)
+- **OrderStatusHistory**: Audit trail for status changes
+
+## 🔒 Business Logic
+
+### Product Size Management
+**Rule**: Cannot disable `has_sizes` if sizes are assigned
+
+**Why**: Prevents orphaned size data in orders/cart
+
+**Implementation**:
 ```python
-# Django's built-in User model
-- id: Primary key
-- username: Unique username for login
-- email: User's email address (unique)
-- password: Hashed password
-- first_name, last_name: User's name
-- is_staff: Admin access flag
-- is_active: Account status
-- date_joined: Registration timestamp
+if not self.has_sizes and self.sizes.exists():
+    raise ValidationError("Remove all sizes first")
 ```
 
-#### **UserProfile**
-```python
-# Extended user information
-- user: OneToOne relationship with User
-- first_name, last_name: Profile name (can differ from User model)
-- default_*: Saved delivery information for quick checkout
-- Automatically created when User is created (Django signal)
-```
+### Stock Management
+**Rule**: When `stock_quantity` = 0, `in_stock` automatically set to False
 
-### **Product Catalog Models**
+**Why**: Ensures accurate availability, prevents integrity errors
 
-#### **Category**
-```python
-# Product categorization
-- name: Internal category name (e.g., 'road_bikes')
-- friendly_name: Display name (e.g., 'Road Bikes')
-- Used for navigation and filtering
-```
+**Features**:
+- Auto-decrement on order placement
+- Overselling prevention
+- Cart/checkout validation
 
-#### **Size**
-```python
-# Product size options
-- name: Internal size code (e.g., 'M', 'L')
-- display_name: User-friendly size (e.g., 'Medium', 'Large')
-- sort_order: Display ordering
-- Many-to-many with Product through ProductSize
-```
-
-#### **Product**
-```python
-# Main product model
-- category: Foreign key to Category
-- sku: Stock keeping unit (optional)
-- name: Product name
-- description: Detailed product description
-- has_sizes: Boolean flag for size availability
-- price: Decimal field for precise pricing
-- rating: Integer rating (1-5 stars)
-- image_url, image: Product images (URL or uploaded file)
-- in_stock, stock_quantity: Inventory management
-- wheel_size, gear_system, bicycle_features: Bicycle-specific fields
-- created_at, updated_at: Audit timestamps
-- sizes: Many-to-many relationship with Size
-```
-
-#### **Review**
-```python
-# Customer product reviews
-- product: Foreign key to Product
-- user: Foreign key to User
-- title: Review headline
-- rating: Star rating (1-5)
-- comment: Review text
-- created_at: Review timestamp
-- Unique constraint: One review per user per product
-```
-
-### **Shopping Cart Models**
-
-#### **Cart**
-```python
-# Shopping cart for users and sessions
-- user: Optional foreign key for authenticated users
-- session_key: Optional session key for anonymous users
-- created_at, updated_at: Cart timestamps
-- Supports both authenticated and anonymous shopping
-```
-
-#### **CartItem**
-```python
-# Individual items in shopping cart
-- cart: Foreign key to Cart
-- product: Foreign key to Product
-- size: Optional foreign key to Size
-- quantity: Number of items
-- added_at: When item was added
-- Unique constraint: (cart, product, size)
-```
-
-### **Order Processing Models**
-
-#### **Order**
-```python
-# Customer orders
-- order_number: Unique UUID-based order identifier
-- user_profile: Optional link to UserProfile
-- Customer information: name, email, phone
-- Delivery address: Complete address fields with country
-- Financial totals: order_total, delivery_cost, grand_total
-- status: Order status (pending, processing, shipped, delivered, cancelled)
-- Payment information: Stripe payment intent details
-- Audit fields: date, updated, order_notes
-```
-
-#### **OrderLineItem**
-```python
-# Individual products in an order
-- order: Foreign key to Order
-- product: Foreign key to Product
-- size: Optional foreign key to Size
-- quantity: Number of items ordered
-- lineitem_total: Calculated total (price × quantity)
-- Automatically updates order total via Django signals
-```
-
-#### **OrderStatusHistory**
-```python
-# Audit trail for order status changes
-- order: Foreign key to Order
-- status: New status value
-- changed_by: Optional foreign key to User (admin who made change)
-- changed_date: When status was changed
-- notes: Optional notes about the change
-```
+### Rating Validation
+- Integer values 1-5 only
+- Model and form level enforcement
+- No decimal ratings
 
 ## 🔍 Key Relationships
 
-### **User → UserProfile (1:1)**
-- Every User automatically gets a UserProfile
-- Created via Django post_save signal
-- Stores extended user information and delivery defaults
+| Relationship | Type | Notes |
+|--------------|------|-------|
+| User → UserProfile | 1:1 | Auto-created via signal |
+| Product → Size | M:M | Cannot disable if assigned |
+| Product → Category | M:1 | SET_NULL on category delete |
+| Cart → CartItem | 1:M | Unique (cart, product, size) |
+| Order → OrderLineItem | 1:M | Auto-updates order total |
+| User → Review | 1:M | One review per product |
 
-### **Product → Size (M:M)**
-- Products can have multiple sizes (S, M, L, XL)
-- Sizes are reusable across products
-- `has_sizes` boolean controls size requirement
+## 💾 Constraints
 
-### **Cart → CartItem (1:M)**
-- Each cart can contain multiple items
-- Supports both user-based and session-based carts
-- Unique constraint prevents duplicate items
+### Unique
+- User: username, email
+- Category: name
+- Size: name
+- Order: order_number
+- Review: (product_id, user_id)
+- CartItem: (cart_id, product_id, size_id)
 
-### **Order → OrderLineItem (1:M)**
-- Orders contain multiple line items
-- Line items automatically update order totals
-- Preserves product information at time of order
+### Validation
+- Product rating: 1-5 (MinValueValidator, MaxValueValidator)
+- Stock quantity: ≥ 0 (PositiveIntegerField)
+- Order total: ≥ 0
+- Line item quantity: ≥ 1
 
-### **Product Reviews (M:M through Review)**
-- Users can review products they've purchased
-- One review per user per product
-- Ratings contribute to product rating calculation
+## 📈 Performance
 
-## 💾 Database Constraints
+### Indexes
+- Auto: Primary keys, foreign keys, unique fields
+- Custom: Product name (search), category+in_stock (filtering), order date (sorting)
 
-### **Unique Constraints**
-```sql
--- Prevent duplicate data
-User.username UNIQUE
-User.email UNIQUE
-Category.name UNIQUE
-Size.name UNIQUE
-Order.order_number UNIQUE
-(Review.product_id, Review.user_id) UNIQUE
-(CartItem.cart_id, CartItem.product_id, CartItem.size_id) UNIQUE
-```
-
-### **Foreign Key Constraints**
-```sql
--- Maintain referential integrity
-UserProfile.user_id → User.id (CASCADE)
-Product.category_id → Category.id (SET_NULL)
-Review.product_id → Product.id (CASCADE)
-Review.user_id → User.id (CASCADE)
-Order.user_profile_id → UserProfile.id (SET_NULL)
-OrderLineItem.order_id → Order.id (CASCADE)
-```
-
-### **Check Constraints**
+### Query Optimization
 ```python
-# Model-level validation
-Product.rating: MinValueValidator(1), MaxValueValidator(5)
-Product.stock_quantity: PositiveIntegerField
-Order.order_total: MinValueValidator(0)
-OrderLineItem.quantity: MinValueValidator(1)
+# Use select_related and prefetch_related
+products = Product.objects.select_related('category').prefetch_related('sizes')
+orders = Order.objects.select_related('user_profile').prefetch_related('lineitems__product')
 ```
 
-## 📈 Performance Considerations
+## 🔒 Security
 
-### **Database Indexes**
-```python
-# Automatic indexes on:
-- Primary keys (id fields)
-- Foreign keys (all *_id fields)
-- Unique fields (username, email, order_number)
-
-# Custom indexes for:
-- Product.name (search functionality)
-- Product.category_id + Product.in_stock (filtering)
-- Order.date (order history sorting)
-- Review.created_at (review display ordering)
-```
-
-### **Query Optimization**
-```python
-# Efficient QuerySets
-products = Product.objects.select_related('category').prefetch_related('sizes', 'reviews')
-orders = Order.objects.select_related('user_profile__user').prefetch_related('lineitems__product')
-cart_items = CartItem.objects.select_related('product', 'size')
-```
-
-### **Caching Strategy**
-```python
-# Template fragment caching
-{% cache 300 product_list category.name %}
-# View-level caching for product listings
-# Database query result caching for expensive operations
-```
-
-## 🔒 Security Considerations
-
-### **Data Protection**
-- **Password Hashing**: Django's built-in PBKDF2 algorithm
-- **SQL Injection Prevention**: Django ORM parameterized queries
-- **XSS Protection**: Template auto-escaping enabled
+- **Password Hashing**: Django PBKDF2
+- **SQL Injection**: ORM parameterized queries
+- **XSS Protection**: Template auto-escaping
 - **CSRF Protection**: Enabled for all forms
+- **Access Control**: Users access only their own orders/reviews
+- **Audit Trails**: Timestamps and status history
 
-### **Access Control**
-- **User Authentication**: Django's session-based authentication
-- **Admin Access**: `is_staff` flag controls admin interface access
-- **Order Access**: Users can only view their own orders
-- **Review Permissions**: Users can only edit their own reviews
+## 🧪 Testing
 
-### **Audit Trails**
-- **Order History**: Complete status change tracking
-- **Timestamps**: All models have created/updated timestamps
-- **User Actions**: Admin actions logged with user attribution
-- **Payment Tracking**: Stripe payment intent IDs preserved
-
-## 🧪 Testing Database Operations
-
-### **Model Tests**
 ```python
-# Test model validation
+# Model validation
 def test_product_rating_validation(self):
-    product = Product(rating=6)  # Invalid rating
+    product = Product(rating=6)
     with self.assertRaises(ValidationError):
         product.full_clean()
 
-# Test relationships
-def test_user_profile_creation(self):
-    user = User.objects.create_user('testuser')
+# Relationships
+def test_user_profile_auto_creation(self):
+    user = User.objects.create_user('test')
     self.assertTrue(hasattr(user, 'userprofile'))
-```
 
-### **Database Integrity Tests**
-```python
-# Test foreign key constraints
-def test_order_user_profile_deletion(self):
-    # Order should remain when UserProfile is deleted
+# Foreign key behavior
+def test_order_preserves_on_profile_delete(self):
     order.user_profile.delete()
     order.refresh_from_db()
     self.assertIsNone(order.user_profile)
 ```
 
-## 📊 Database Migrations
+## 📊 Migrations
 
-### **Migration Strategy**
-- **Incremental Migrations**: Small, focused changes
-- **Data Migrations**: Separate data transformation migrations
-- **Rollback Safety**: All migrations designed to be reversible
-- **Production Safety**: Tested migrations with data preservation
+- **Incremental**: Small, focused changes
+- **Reversible**: All migrations can be rolled back
+- **Data Safe**: Tested with production data preservation
+- **Key Migrations**: Initial structure, size system, stock tracking, order status, payment integration
 
-### **Key Migrations**
-1. **Initial Migration**: Basic model structure
-2. **Size System**: Added many-to-many size relationships
-3. **Stock Tracking**: Added inventory management fields
-4. **Order Status**: Added status history tracking
-5. **Payment Integration**: Added Stripe payment fields
+---
 
-This database schema provides a solid foundation for a production e-commerce platform with proper normalization, performance optimization, and security considerations.
+**Database provides solid foundation for production e-commerce with proper normalization, performance optimization, and security.**

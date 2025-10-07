@@ -7,8 +7,8 @@
 
 {% block meta_keywords %}{{ product.name }}, {{ product.category.get_friendly_name|default:"bicycle" }}, cycling, bike shop, Wiesbaden, €{{ product.price }}{% endblock %}
 
-{% block og_title %}{{ product.name }} - €{{ product.price }} - Wiesbaden Cyclery{% endblock %}
-{% block og_description %}{{ product.description|truncatewords:15 }} Available for €{{ product.price }} at Wiesbaden Cyclery.{% endblock %}
+{% block og_title %}{{ product.name }} - €{{ product.price }}{% endblock %}
+{% block og_description %}{{ product.description|truncatewords:15 }} Available for €{{ product.price }}.{% endblock %}
 {% block og_type %}product{% endblock %}
 {% block og_image %}{% if product.image %}{{ product.image.url }}{% else %}{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
 
