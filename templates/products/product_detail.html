@@ -10,11 +10,11 @@
 {% block og_title %}{{ product.name }}{% endblock %}
 {% block og_description %}{{ product.description|truncatewords:15 }} Available for €{{ product.price }}.{% endblock %}
 {% block og_type %}product{% endblock %}
-{% block og_image %}{% if product.image %}{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
+{% block og_image %}{% if product.image %}{{ product.image.url }}{% elif product.image_url %}{{ product.image_url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
 
 {% block twitter_title %}{{ product.name }}{% endblock %}
 {% block twitter_description %}{{ product.description|truncatewords:15 }} Available for €{{ product.price }}.{% endblock %}
-{% block twitter_image %}{% if product.image %}{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
+{% block twitter_image %}{% if product.image %}{{ product.image.url }}{% elif product.image_url %}{{ product.image_url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
 
 {% block extra_meta %}
 <!-- Additional OG tags for product -->
