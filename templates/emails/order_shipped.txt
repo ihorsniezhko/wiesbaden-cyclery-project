@@ -1,0 +1,45 @@
+WIESBADEN CYCLERY
+================================================================================
+
+Your Order Has Been Shipped!
+
+Dear {{ order.full_name }},
+
+Exciting news! Your order has been shipped and is on its way to you.
+
+ORDER DETAILS
+--------------------------------------------------------------------------------
+Order Number: {{ order.order_number }}
+Order Date: {{ order.date|date:"F d, Y" }}
+Status: Shipped
+Total: €{{ order.grand_total|floatformat:2 }}
+
+DELIVERY INFORMATION
+--------------------------------------------------------------------------------
+Shipping Address:
+{{ order.street_address1 }}
+{% if order.street_address2 %}{{ order.street_address2 }}
+{% endif %}{{ order.town_or_city }}, {{ order.postcode }}
+{{ order.country.name }}
+
+WHAT'S NEXT?
+--------------------------------------------------------------------------------
+- Your package is on its way to the delivery address
+- Estimated delivery: 3-5 business days
+- You'll receive a delivery confirmation email once it arrives
+- Track your shipment using the link below
+
+Track Your Shipment: {{ site_url }}{% url 'orders:order_tracking' %}
+
+We hope you enjoy your purchase!
+
+Best regards,
+The Wiesbaden Cyclery Team
+
+================================================================================
+Wiesbaden Cyclery
+Your Premier Destination for Quality Bicycles
+Email: info@wiesbaden-cyclery.de | Phone: +49 (0) 611 123456
+
+© {% now "Y" %} Wiesbaden Cyclery. All rights reserved.
+This email was sent regarding your order. If you have questions, please contact us.

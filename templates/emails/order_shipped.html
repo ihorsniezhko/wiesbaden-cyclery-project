@@ -1,0 +1,45 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Order Shipped - {{ order.order_number }}{% endblock %}
+
+{% block content %}
+<h2>Your Order Has Been Shipped! 🚚</h2>
+
+<p>Dear {{ order.full_name }},</p>
+
+<p>Exciting news! Your order has been shipped and is on its way to you.</p>
+
+<div class="order-details">
+    <h3>Order Details</h3>
+    <p><strong>Order Number:</strong> {{ order.order_number }}</p>
+    <p><strong>Order Date:</strong> {{ order.date|date:"F d, Y" }}</p>
+    <p><strong>Status:</strong> Shipped</p>
+    <p><strong>Total:</strong> €{{ order.grand_total|floatformat:2 }}</p>
+</div>
+
+<h3>Delivery Information</h3>
+<p><strong>Shipping Address:</strong><br>
+{{ order.street_address1 }}<br>
+{% if order.street_address2 %}{{ order.street_address2 }}<br>{% endif %}
+{{ order.town_or_city }}, {{ order.postcode }}<br>
+{{ order.country.name }}</p>
+
+<h3>What's Next?</h3>
+<ul>
+    <li>Your package is on its way to the delivery address</li>
+    <li>Estimated delivery: 3-5 business days</li>
+    <li>You'll receive a delivery confirmation email once it arrives</li>
+    <li>Track your shipment using the link below</li>
+</ul>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{% url 'orders:order_tracking' %}" class="button">
+        Track Your Shipment
+    </a>
+</div>
+
+<p>We hope you enjoy your purchase!</p>
+
+<p>Best regards,<br>
+<strong>The Wiesbaden Cyclery Team</strong></p>
+{% endblock %}

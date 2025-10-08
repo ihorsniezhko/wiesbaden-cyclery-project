@@ -1,0 +1,38 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Order Cancelled - {{ order.order_number }}{% endblock %}
+
+{% block content %}
+<h2>Order Cancelled</h2>
+
+<p>Dear {{ order.full_name }},</p>
+
+<p>We're writing to confirm that your order has been cancelled as requested.</p>
+
+<div class="order-details">
+    <h3>Order Details</h3>
+    <p><strong>Order Number:</strong> {{ order.order_number }}</p>
+    <p><strong>Order Date:</strong> {{ order.date|date:"F d, Y" }}</p>
+    <p><strong>Status:</strong> Cancelled</p>
+    <p><strong>Total:</strong> €{{ order.grand_total|floatformat:2 }}</p>
+</div>
+
+<h3>What's Next?</h3>
+<ul>
+    <li>If you paid for this order, your refund will be processed within 5-7 business days</li>
+    <li>The refund will be credited to your original payment method</li>
+    <li>You'll receive a confirmation email once the refund is processed</li>
+    <li>If you have any questions, please contact us at info@wiesbaden-cyclery.de</li>
+</ul>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{% url 'products' %}" class="button">
+        Continue Shopping
+    </a>
+</div>
+
+<p>We're sorry to see this order cancelled. We hope to serve you again in the future!</p>
+
+<p>Best regards,<br>
+<strong>The Wiesbaden Cyclery Team</strong></p>
+{% endblock %}

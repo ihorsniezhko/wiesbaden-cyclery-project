@@ -23,14 +23,24 @@ DEFAULT_FROM_EMAIL=info@wiesbaden-cyclery.de
 ## Email Types
 
 ### Order Confirmation
-- Sent when order is created
-- Contains order details, items, totals
-- Includes order tracking link
+- Sent on order creation
+- Order details, items, totals, tracking link
 
-### Status Updates
-- Sent when order status changes
-- Processing, Shipped, Delivered
-- Status-specific messaging
+### Order Processing
+- Sent on status → 'processing'
+- Preparation confirmation, processing time
+
+### Order Shipped
+- Sent on status → 'shipped'
+- Shipping confirmation, delivery address, tracking
+
+### Order Delivered
+- Sent on status → 'delivered'
+- Delivery confirmation, satisfaction message
+
+### Order Cancellation
+- Sent on status → 'cancelled'
+- Refund information, restores product stock
 
 ## Templates
 
@@ -38,8 +48,16 @@ DEFAULT_FROM_EMAIL=info@wiesbaden-cyclery.de
 templates/emails/
 ├── base_email.html          # HTML base
 ├── base_email.txt           # Text base
-├── order_confirmation.html  # Order HTML
-└── order_confirmation.txt   # Order text
+├── order_confirmation.html  # Order confirmation HTML
+├── order_confirmation.txt   # Order confirmation text
+├── order_processing.html    # Processing HTML
+├── order_processing.txt     # Processing text
+├── order_shipped.html       # Shipped HTML
+├── order_shipped.txt        # Shipped text
+├── order_delivered.html     # Delivered HTML
+├── order_delivered.txt      # Delivered text
+├── order_cancelled.html     # Cancellation HTML
+└── order_cancelled.txt      # Cancellation text
 ```
 
 ## Testing
@@ -53,12 +71,36 @@ templates/emails/
 python manage.py runserver
 ```
 
+## Automatic Status Change Emails
+
+All status change emails are sent automatically via Django signals when an order status is updated in:
+- Django Admin panel
+- Order management views
+- API endpoints
+- Any code that changes order status
+
+**Status Flow:**
+```
+Pending → Processing → Shipped → Delivered
+         ↓
+      Cancelled (restores stock)
+```
+
+**Email Triggers:**
+- `pending` → No email (initial state)
+- `processing` → Processing email sent
+- `shipped` → Shipped email sent
+- `delivered` → Delivered email sent
+- `cancelled` → Cancellation email sent + stock restored
+
 ## Features
 - Mobile-optimized templates
 - Unicode characters (no images)
 - Plain text fallback
-- Automatic sending via signals
+- Automatic sending via Django signals
 - Professional branding
+- Status-specific messaging
+- Automatic stock restoration on cancellation
 
 ## Troubleshooting
 

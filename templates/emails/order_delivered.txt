@@ -1,0 +1,40 @@
+WIESBADEN CYCLERY
+================================================================================
+
+Your Order Has Been Delivered!
+
+Dear {{ order.full_name }},
+
+Great news! Your order has been successfully delivered.
+
+ORDER DETAILS
+--------------------------------------------------------------------------------
+Order Number: {{ order.order_number }}
+Order Date: {{ order.date|date:"F d, Y" }}
+Status: Delivered
+Total: €{{ order.grand_total|floatformat:2 }}
+
+WE HOPE YOU LOVE YOUR PURCHASE!
+--------------------------------------------------------------------------------
+Thank you for choosing Wiesbaden Cyclery. We hope you're thrilled with your new cycling gear!
+
+NEED HELP?
+--------------------------------------------------------------------------------
+- If you have any questions about your order, please contact us
+- For product support or warranty information, visit our help center
+- We'd love to hear your feedback about your purchase
+
+Shop More Products: {{ site_url }}{% url 'products' %}
+
+Thank you for being a valued customer!
+
+Best regards,
+The Wiesbaden Cyclery Team
+
+================================================================================
+Wiesbaden Cyclery
+Your Premier Destination for Quality Bicycles
+Email: info@wiesbaden-cyclery.de | Phone: +49 (0) 611 123456
+
+© {% now "Y" %} Wiesbaden Cyclery. All rights reserved.
+This email was sent regarding your order. If you have questions, please contact us.

@@ -1,0 +1,36 @@
+WIESBADEN CYCLERY
+================================================================================
+
+Your Order is Being Processed
+
+Dear {{ order.full_name }},
+
+Great news! We've started processing your order and it will be shipped soon.
+
+ORDER DETAILS
+--------------------------------------------------------------------------------
+Order Number: {{ order.order_number }}
+Order Date: {{ order.date|date:"F d, Y" }}
+Status: Processing
+Total: €{{ order.grand_total|floatformat:2 }}
+
+WHAT'S NEXT?
+--------------------------------------------------------------------------------
+- We're carefully preparing your items for shipment
+- You'll receive a shipping confirmation email with tracking information
+- Estimated processing time: 1-2 business days
+
+Track Your Order: {{ site_url }}{% url 'orders:order_tracking' %}
+
+Thank you for your patience!
+
+Best regards,
+The Wiesbaden Cyclery Team
+
+================================================================================
+Wiesbaden Cyclery
+Your Premier Destination for Quality Bicycles
+Email: info@wiesbaden-cyclery.de | Phone: +49 (0) 611 123456
+
+© {% now "Y" %} Wiesbaden Cyclery. All rights reserved.
+This email was sent regarding your order. If you have questions, please contact us.

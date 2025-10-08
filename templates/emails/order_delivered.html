@@ -1,0 +1,40 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Order Delivered - {{ order.order_number }}{% endblock %}
+
+{% block content %}
+<h2>Your Order Has Been Delivered! 🎉</h2>
+
+<p>Dear {{ order.full_name }},</p>
+
+<p>Great news! Your order has been successfully delivered.</p>
+
+<div class="order-details">
+    <h3>Order Details</h3>
+    <p><strong>Order Number:</strong> {{ order.order_number }}</p>
+    <p><strong>Order Date:</strong> {{ order.date|date:"F d, Y" }}</p>
+    <p><strong>Status:</strong> Delivered</p>
+    <p><strong>Total:</strong> €{{ order.grand_total|floatformat:2 }}</p>
+</div>
+
+<h3>We Hope You Love Your Purchase!</h3>
+<p>Thank you for choosing Wiesbaden Cyclery. We hope you're thrilled with your new cycling gear!</p>
+
+<h3>Need Help?</h3>
+<ul>
+    <li>If you have any questions about your order, please contact us</li>
+    <li>For product support or warranty information, visit our help center</li>
+    <li>We'd love to hear your feedback about your purchase</li>
+</ul>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{% url 'products' %}" class="button">
+        Shop More Products
+    </a>
+</div>
+
+<p>Thank you for being a valued customer!</p>
+
+<p>Best regards,<br>
+<strong>The Wiesbaden Cyclery Team</strong></p>
+{% endblock %}

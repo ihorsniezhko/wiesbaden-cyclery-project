@@ -301,3 +301,171 @@ Please process this order in the admin panel.
     except Exception as e:
         logger.error(f"Error sending order notification email for order {order.order_number}: {str(e)}")
         return False
+
+
+def send_order_cancelled_email(order):
+    """
+    Send order cancellation email to customer
+    """
+    try:
+        from django.contrib.sites.models import Site
+        
+        # Get current site for URLs
+        current_site = Site.objects.get_current()
+        site_url = f"https://{current_site.domain}" if not settings.DEBUG else f"http://{current_site.domain}:8000"
+        
+        subject = f'Order Cancelled - #{order.order_number}'
+        
+        # Render HTML email
+        html_message = render_to_string('emails/order_cancelled.html', {
+            'order': order,
+            'site_url': site_url,
+        })
+        
+        # Render plain text email
+        text_message = render_to_string('emails/order_cancelled.txt', {
+            'order': order,
+            'site_url': site_url,
+        })
+        
+        send_mail(
+            subject=subject,
+            message=text_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[order.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+        
+        logger.info(f"Order cancellation email sent for order {order.order_number}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error sending order cancellation email for order {order.order_number}: {str(e)}")
+        return False
+
+
+def send_order_processing_email(order):
+    """
+    Send order processing email to customer
+    """
+    try:
+        from django.contrib.sites.models import Site
+        
+        # Get current site for URLs
+        current_site = Site.objects.get_current()
+        site_url = f"https://{current_site.domain}" if not settings.DEBUG else f"http://{current_site.domain}:8000"
+        
+        subject = f'Order Processing - #{order.order_number}'
+        
+        # Render HTML email
+        html_message = render_to_string('emails/order_processing.html', {
+            'order': order,
+            'site_url': site_url,
+        })
+        
+        # Render plain text email
+        text_message = render_to_string('emails/order_processing.txt', {
+            'order': order,
+            'site_url': site_url,
+        })
+        
+        send_mail(
+            subject=subject,
+            message=text_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[order.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+        
+        logger.info(f"Order processing email sent for order {order.order_number}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error sending order processing email for order {order.order_number}: {str(e)}")
+        return False
+
+
+def send_order_shipped_email(order):
+    """
+    Send order shipped email to customer
+    """
+    try:
+        from django.contrib.sites.models import Site
+        
+        # Get current site for URLs
+        current_site = Site.objects.get_current()
+        site_url = f"https://{current_site.domain}" if not settings.DEBUG else f"http://{current_site.domain}:8000"
+        
+        subject = f'Order Shipped - #{order.order_number}'
+        
+        # Render HTML email
+        html_message = render_to_string('emails/order_shipped.html', {
+            'order': order,
+            'site_url': site_url,
+        })
+        
+        # Render plain text email
+        text_message = render_to_string('emails/order_shipped.txt', {
+            'order': order,
+            'site_url': site_url,
+        })
+        
+        send_mail(
+            subject=subject,
+            message=text_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[order.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+        
+        logger.info(f"Order shipped email sent for order {order.order_number}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error sending order shipped email for order {order.order_number}: {str(e)}")
+        return False
+
+
+def send_order_delivered_email(order):
+    """
+    Send order delivered email to customer
+    """
+    try:
+        from django.contrib.sites.models import Site
+        
+        # Get current site for URLs
+        current_site = Site.objects.get_current()
+        site_url = f"https://{current_site.domain}" if not settings.DEBUG else f"http://{current_site.domain}:8000"
+        
+        subject = f'Order Delivered - #{order.order_number}'
+        
+        # Render HTML email
+        html_message = render_to_string('emails/order_delivered.html', {
+            'order': order,
+            'site_url': site_url,
+        })
+        
+        # Render plain text email
+        text_message = render_to_string('emails/order_delivered.txt', {
+            'order': order,
+            'site_url': site_url,
+        })
+        
+        send_mail(
+            subject=subject,
+            message=text_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[order.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+        
+        logger.info(f"Order delivered email sent for order {order.order_number}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error sending order delivered email for order {order.order_number}: {str(e)}")
+        return False

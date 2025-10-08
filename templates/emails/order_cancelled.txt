@@ -1,0 +1,37 @@
+WIESBADEN CYCLERY
+================================================================================
+
+Order Cancelled
+
+Dear {{ order.full_name }},
+
+We're writing to confirm that your order has been cancelled as requested.
+
+ORDER DETAILS
+--------------------------------------------------------------------------------
+Order Number: {{ order.order_number }}
+Order Date: {{ order.date|date:"F d, Y" }}
+Status: Cancelled
+Total: €{{ order.grand_total|floatformat:2 }}
+
+WHAT'S NEXT?
+--------------------------------------------------------------------------------
+- If you paid for this order, your refund will be processed within 5-7 business days
+- The refund will be credited to your original payment method
+- You'll receive a confirmation email once the refund is processed
+- If you have any questions, please contact us at info@wiesbaden-cyclery.de
+
+Continue Shopping: {{ site_url }}{% url 'products' %}
+
+We're sorry to see this order cancelled. We hope to serve you again in the future!
+
+Best regards,
+The Wiesbaden Cyclery Team
+
+================================================================================
+Wiesbaden Cyclery
+Your Premier Destination for Quality Bicycles
+Email: info@wiesbaden-cyclery.de | Phone: +49 (0) 611 123456
+
+© {% now "Y" %} Wiesbaden Cyclery. All rights reserved.
+This email was sent regarding your order. If you have questions, please contact us.
