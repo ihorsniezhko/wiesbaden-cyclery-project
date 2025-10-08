@@ -132,9 +132,20 @@ Products can be managed through two interfaces:
    - Complete product and category management
    - Accessible to superuser accounts
 
-## 📊 Development Stages
+## 📊 Development Methodology
 
-Developed incrementally across 12 stages: Foundation → Authentication → Catalog → Cart → Orders → Payments → Email → Legal → Reviews → Testing → SEO → Stock Tracking
+### Agile Development Process
+
+This project was developed using **Agile practices** with iterative development across 12 stages:
+
+**Foundation → Authentication → Catalog → Cart → Orders → Payments → Email → Legal → Reviews → Testing → SEO → Stock Tracking**
+
+### Project Management
+
+- **GitHub Projects Kanban Board**: [View Project Board](https://github.com/users/ihorsniezhko/projects/7)
+- **Iterative Development**: Features developed and tested incrementally
+- **User Stories**: Each stage includes clear user stories and acceptance criteria
+- **Continuous Integration**: Regular commits and testing throughout development
 
 ## 📚 Documentation
 
