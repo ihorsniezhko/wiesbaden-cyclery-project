@@ -147,6 +147,7 @@ Developed incrementally across 12 stages: Foundation → Authentication → Cata
 - **[Testing Guide](docs/TESTING.md)** - Automated and manual testing (27/45 tests passing)
 - **[Payment System](docs/PAYMENTS.md)** - Stripe integration and testing
 - **[Email System](docs/EMAILS.md)** - Gmail SMTP configuration
+- **[Social Media Sharing](docs/SOCIAL_MEDIA_SHARING.md)** - Open Graph tags and social previews
 - **[Analytics Setup](docs/facebook-pixel-setup.md)** - Facebook Pixel & Google Analytics
 
 ### Design Resources
