@@ -7,10 +7,22 @@
 
 {% block meta_keywords %}{{ product.name }}, {{ product.category.get_friendly_name|default:"bicycle" }}, cycling, bike shop, Wiesbaden, €{{ product.price }}{% endblock %}
 
-{% block og_title %}{{ product.name }} - €{{ product.price }}{% endblock %}
+{% block og_title %}{{ product.name }}{% endblock %}
 {% block og_description %}{{ product.description|truncatewords:15 }} Available for €{{ product.price }}.{% endblock %}
 {% block og_type %}product{% endblock %}
-{% block og_image %}{% if product.image %}{{ product.image.url }}{% else %}{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
+{% block og_image %}{% if product.image %}{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
+
+{% block twitter_title %}{{ product.name }}{% endblock %}
+{% block twitter_description %}{{ product.description|truncatewords:15 }} Available for €{{ product.price }}.{% endblock %}
+{% block twitter_image %}{% if product.image %}{{ request.scheme }}://{{ request.get_host }}{{ product.image.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-default.jpg' %}{% endif %}{% endblock %}
+
+{% block extra_meta %}
+<!-- Additional OG tags for product -->
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="product:price:amount" content="{{ product.price }}">
+<meta property="product:price:currency" content="EUR">
+{% endblock %}
 
 {% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}
 

@@ -30,6 +30,9 @@
     <meta name="twitter:description" content="{% block twitter_description %}{% firstof page_description 'Wiesbaden Cyclery - Your premier destination for quality bicycles, cycling accessories, and expert service in Wiesbaden, Germany.' %}{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/og-default.jpg' %}{% endblock %}">
     
+    <!-- Extra Meta Tags Block -->
+    {% block extra_meta %}{% endblock %}
+    
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'icons/favicon.ico' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icons/favicon-16x16.png' %}">
