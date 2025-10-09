@@ -219,7 +219,7 @@
                     {% endif %}
                 </button>
                 <div class="dropdown-menu">
-                    <h6 class="dropdown-header">Frame Size</h6>
+                    <div class="dropdown-header">Frame Size</div>
                     <a class="dropdown-item {% if not request.GET.size %}active{% endif %}" 
                        href="{% url 'products' %}{% if request.GET.category %}?category={{ request.GET.category }}{% endif %}">
                         All Sizes

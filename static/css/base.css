@@ -138,8 +138,8 @@ body {
     margin-bottom: 0.75rem;
 }
 
-/* Footer headings (h4) - maintain h5 visual size */
-footer h4 {
+/* Footer headings (h3) - maintain consistent visual size */
+footer h3 {
     font-size: 1.25rem;
     font-weight: 500;
     margin-bottom: 0.75rem;
