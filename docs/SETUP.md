@@ -1,4 +1,4 @@
-# 🚀 Local Development Setup
+# Local Development Setup
 
 ## Prerequisites
 - Python 3.11+

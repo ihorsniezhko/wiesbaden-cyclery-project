@@ -249,10 +249,10 @@
                     Sort By
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{% url 'products' %}?sort=price&direction=asc">Price (Low to High)</a>
-                    <a class="dropdown-item" href="{% url 'products' %}?sort=price&direction=desc">Price (High to Low)</a>
-                    <a class="dropdown-item" href="{% url 'products' %}?sort=name&direction=asc">Name (A-Z)</a>
-                    <a class="dropdown-item" href="{% url 'products' %}?sort=rating&direction=desc">Rating</a>
+                    <a class="dropdown-item" href="{% url 'products' %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}sort=price&direction=asc">Price (Low to High)</a>
+                    <a class="dropdown-item" href="{% url 'products' %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}sort=price&direction=desc">Price (High to Low)</a>
+                    <a class="dropdown-item" href="{% url 'products' %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}sort=name&direction=asc">Name (A-Z)</a>
+                    <a class="dropdown-item" href="{% url 'products' %}?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}sort=rating&direction=desc">Rating</a>
                 </div>
             </div>
         </div>
@@ -328,10 +328,10 @@
                     <ul class="pagination justify-content-center">
                         {% if page_obj.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="?page=1">First</a>
+                                <a class="page-link" href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}&direction={{ request.GET.direction }}&{% endif %}page=1">First</a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                                <a class="page-link" href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}&direction={{ request.GET.direction }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
                             </li>
                         {% endif %}
                         
@@ -343,10 +343,10 @@
                         
                         {% if page_obj.has_next %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                                <a class="page-link" href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}&direction={{ request.GET.direction }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                                <a class="page-link" href="?{% if request.GET.category %}category={{ request.GET.category }}&{% endif %}{% if request.GET.sort %}sort={{ request.GET.sort }}&direction={{ request.GET.direction }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Last</a>
                             </li>
                         {% endif %}
                     </ul>

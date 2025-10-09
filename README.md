@@ -1,4 +1,4 @@
-# 🚴‍♂️ Wiesbaden Cyclery - Professional E-commerce Platform
+# Wiesbaden Cyclery - Professional E-commerce Platform
 
 [![Django](https://img.shields.io/badge/Django-3.2.25-green.svg)](https://www.djangoproject.com/)
 [![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/)
@@ -9,44 +9,44 @@
 
 A production-ready Django e-commerce platform for bicycle retail with secure payments, user management, and professional deployment architecture.
 
-## 🎯 Project Overview
+## Project Overview
 
 Wiesbaden Cyclery is a full-featured e-commerce platform built with Django 3.2.25 for bicycle shops, providing complete online shopping with secure checkout, user accounts, and administrative tools.
 
-### 📱 Responsive Design
+### Responsive Design
 
 Fully responsive across all devices using Bootstrap 4 mobile-first approach:
 
 ![Responsive Design](docs/responsive_design.jpg)
 
-### 📐 Design Planning
+### Design Planning
 
 Comprehensive wireframes covering all pages and user flows: [docs/project_wireframes.pdf](docs/project_wireframes.pdf)
 
-### 🌐 Social Media Presence
+### Social Media Presence
 
 **Facebook Business Page**: [Wiesbaden Cyclery](https://www.facebook.com/people/Wiesbaden-Cyclery/61580595100397/)
 
 ![Facebook Page](docs/facebook_page.jpg)
 
-### 🌟 Key Features
+### Key Features
 
-- **🛍️ E-commerce**: Product catalog, shopping cart, secure checkout, stock tracking
-- **👤 User Management**: Registration, authentication, profiles, staff permissions
-- **� Promduct Management**: Dual interface (staff portal + Django admin)
-- **�  Payments**: Stripe integration (EUR currency)
-- **� Email*t*: Order confirmations via Gmail SMTP
-- **� Nedwsletter**: Mailchimp with GDPR compliance
-- **� Order *Tracking**: Self-service status tracking
-- **🔒 Legal Compliance**: Privacy Policy, Terms of Service, GDPR cookie consent
-- **⭐ Reviews**: Customer ratings and reviews
-- **� SEO*o*: Meta tags, sitemaps, structured data
-- **📱 Responsive**: Bootstrap 4 mobile-first
-- **🎨 Error Pages**: Custom 404 and 500 pages matching project design
-- **🌐 Social**: Facebook Business page
-- **📊 Analytics**: Facebook Pixel & Google Analytics 4
+- **E-commerce**: Product catalog, shopping cart, secure checkout, stock tracking
+- **User Management**: Registration, authentication, profiles, staff permissions
+- **Product Management**: Dual interface (staff portal + Django admin)
+- **Payments**: Stripe integration (EUR currency)
+- **Email**: Order confirmations via Gmail SMTP
+- **Newsletter**: Mailchimp with GDPR compliance
+- **Order Tracking**: Self-service status tracking
+- **Legal Compliance**: Privacy Policy, Terms of Service, GDPR cookie consent
+- **Reviews**: Customer ratings and reviews
+- **SEO**: Meta tags, sitemaps, structured data
+- **Responsive**: Bootstrap 4 mobile-first
+- **Error Pages**: Custom 404 and 500 pages matching project design
+- **Social**: Facebook Business page
+- **Analytics**: Facebook Pixel & Google Analytics 4
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Backend
 - **Django 3.2.25** (LTS) - Web framework
@@ -60,7 +60,7 @@ Comprehensive wireframes covering all pages and user flows: [docs/project_wirefr
 - **jQuery 3.5.1** - JavaScript library
 - **Google Fonts (Roboto Serif)** - Typography
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 - Python 3.11 or higher
@@ -110,7 +110,7 @@ python manage.py runserver
 
 Visit `http://127.0.0.1:8000` to access the application.
 
-## 🛒 Product Catalog
+## Product Catalog
 
 56 products across 6 categories: Road Bikes, Mountain Bikes, Electric Bikes, Accessories, Components, Sale Items. Professional Unsplash photography for all products.
 
@@ -132,7 +132,7 @@ Products can be managed through two interfaces:
    - Complete product and category management
    - Accessible to superuser accounts
 
-## 📊 Development Methodology
+## Development Methodology
 
 ### Agile Development Process
 
@@ -147,7 +147,7 @@ This project was developed using **Agile practices** with iterative development 
 - **User Stories**: Each stage includes clear user stories and acceptance criteria
 - **Continuous Integration**: Regular commits and testing throughout development
 
-## 📚 Documentation
+## Documentation
 
 ### Quick Start
 - **[Setup Guide](docs/SETUP.md)** - Local development setup (5 minutes)
@@ -166,7 +166,7 @@ This project was developed using **Agile practices** with iterative development 
 - **[Responsive Design](docs/responsive_design.jpg)** - Mobile-first showcase
 - **[Facebook Page](docs/facebook_page.jpg)** - Social media presence ([live page](https://www.facebook.com/people/Wiesbaden-Cyclery/61580595100397/))
 
-## 🎨 Image Attribution
+## Image Attribution
 
 All product images sourced from **[Unsplash](https://unsplash.com/)** under the Unsplash License (free for commercial use).
 
@@ -174,7 +174,7 @@ All product images sourced from **[Unsplash](https://unsplash.com/)** under the 
 
 Complete credits: `media/UNSPLASH_ATTRIBUTIONS.md`
 
-## 🚀 Advanced Features
+## Advanced Features
 
 ### Product Reviews
 Customer ratings and reviews with moderation
@@ -200,7 +200,7 @@ Dynamic meta tags, XML sitemaps, structured data, social media integration
 ### Analytics
 Facebook Pixel and Google Analytics 4 with e-commerce event tracking
 
-## 📊 Analytics Setup
+## Analytics Setup
 
 Configure in `.env`:
 ```env
@@ -210,11 +210,11 @@ GA_MEASUREMENT_ID=G-XXXXXXXXXX
 
 See `docs/facebook-pixel-setup.md` for complete setup guide.
 
-## 🔧 Development Standards
+## Development Standards
 
 PEP 8 compliant, comprehensive testing, CSRF/XSS protection, optimized queries, SEO and social media ready.
 
-## 🚀 Future Development
+## Future Development
 
 ### Platform Upgrades
 - Django 4.x/5.x and Python 3.12+ migration
@@ -250,7 +250,7 @@ PEP 8 compliant, comprehensive testing, CSRF/XSS protection, optimized queries, 
 
 ---
 
-## 🙏 Credits & Acknowledgements
+## Credits & Acknowledgements
 
 This project was developed as part of the Full Stack Software Development program at **[Code Institute](https://codeinstitute.net/)**.
 

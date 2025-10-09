@@ -1,4 +1,4 @@
-# 📧 Email System
+# Email System
 
 ## Overview
 Gmail SMTP integration for order confirmations and status updates.

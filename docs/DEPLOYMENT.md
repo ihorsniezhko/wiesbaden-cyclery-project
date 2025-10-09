@@ -1,4 +1,4 @@
-# 🚀 Production Deployment
+# Production Deployment
 
 ## Prerequisites
 - Heroku account

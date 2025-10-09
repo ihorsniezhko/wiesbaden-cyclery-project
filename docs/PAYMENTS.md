@@ -1,4 +1,4 @@
-# 💳 Payment System
+# Payment System
 
 ## Overview
 Stripe integration with EUR currency support, secure checkout, and webhook processing.
