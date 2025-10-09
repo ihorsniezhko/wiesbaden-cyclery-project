@@ -199,9 +199,9 @@
         <div class="toolbar-search">
             <form method="GET" action="{% url 'products' %}">
                 <div class="input-group">
-                    <input type="text" class="form-control" name="q" placeholder="What are you looking for?" value="{{ search_term|default:'' }}">
+                    <input type="text" class="form-control" name="q" placeholder="What are you looking for?" value="{{ search_term|default:'' }}" aria-label="Search products">
                     <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit">
+                        <button class="btn btn-primary" type="submit" aria-label="Search products">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -212,7 +212,7 @@
         {% if show_size_filter %}
         <div class="toolbar-filter">
             <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle filter-sort-btn" type="button" id="filterDropdown" data-toggle="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle filter-sort-btn" type="button" id="filterDropdown" data-toggle="dropdown" aria-label="Filter products by size" aria-haspopup="true" aria-expanded="false">
                     Filter by
                     {% if request.GET.size %}
                         <span class="badge badge-primary ml-1">{{ request.GET.size }}</span>
@@ -254,7 +254,7 @@
         
         <div class="toolbar-sort">
             <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle filter-sort-btn" type="button" id="sortDropdown" data-toggle="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle filter-sort-btn" type="button" id="sortDropdown" data-toggle="dropdown" aria-label="Sort products" aria-haspopup="true" aria-expanded="false">
                     Sort By
                 </button>
                 <div class="dropdown-menu">

@@ -48,14 +48,14 @@
                     
                     <div class="mt-4">
                         {% if recovery_info.action == 'retry_payment' or recovery_info.action == 'wait_retry' %}
-                        <button id="retry-payment-btn" class="btn btn-primary btn-lg">
-                            <i class="fa fa-redo"></i> Try Payment Again
+                        <button id="retry-payment-btn" class="btn btn-primary btn-lg" aria-label="Retry payment">
+                            <i class="fa fa-redo" aria-hidden="true"></i> Try Payment Again
                         </button>
                         {% endif %}
                         
                         {% if recovery_info.action == 'try_different_card' %}
-                        <a href="{% url 'orders:checkout' %}" class="btn btn-primary btn-lg">
-                            <i class="fa fa-credit-card"></i> Use Different Card
+                        <a href="{% url 'orders:checkout' %}" class="btn btn-primary btn-lg" aria-label="Use different payment card">
+                            <i class="fa fa-credit-card" aria-hidden="true"></i> Use Different Card
                         </a>
                         {% endif %}
                         
@@ -102,8 +102,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Retry Payment</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close modal">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -120,8 +120,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" id="proceed-retry-btn" class="btn btn-primary d-none">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Cancel payment retry">Cancel</button>
+                <button type="button" id="proceed-retry-btn" class="btn btn-primary d-none" aria-label="Proceed to payment">
                     Proceed to Payment
                 </button>
             </div>

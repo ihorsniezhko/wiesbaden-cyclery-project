@@ -121,8 +121,8 @@
                     <input type="text" class="form-control" name="search" 
                            placeholder="Search products by name, SKU, or category..." 
                            value="{{ search_query }}" aria-label="Search products">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fa fa-search"></i> Search
+                    <button class="btn btn-primary" type="submit" aria-label="Search products">
+                        <i class="fa fa-search" aria-hidden="true"></i> Search
                     </button>
                 </div>
             </form>
@@ -212,6 +212,7 @@
                                         </a>
                                         <button type="button" class="btn btn-sm btn-danger" 
                                                 title="Delete Product" 
+                                                aria-label="Delete {{ product.name }}"
                                                 data-toggle="modal" 
                                                 data-target="#deleteModal"
                                                 data-product-id="{{ product.id }}"
@@ -294,13 +295,13 @@
                 </ul>
             </div>
             <div class="modal-footer border-0 pt-0">
-                <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">
-                    <i class="fa fa-times"></i> Cancel
+                <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" aria-label="Cancel deletion">
+                    <i class="fa fa-times" aria-hidden="true"></i> Cancel
                 </button>
                 <form id="deleteForm" method="post" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-lg">
-                        <i class="fa fa-trash"></i> Delete Product
+                    <button type="submit" class="btn btn-danger btn-lg" aria-label="Confirm delete product">
+                        <i class="fa fa-trash" aria-hidden="true"></i> Delete Product
                     </button>
                 </form>
             </div>

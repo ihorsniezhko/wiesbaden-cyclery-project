@@ -292,9 +292,9 @@
             {% if product.wheel_size or product.gear_system %}
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h5 class="mb-0">
+                        <h2 class="mb-0" style="font-size: 1.25rem;">
                             <i class="fa fa-cog"></i> Specifications
-                        </h5>
+                        </h2>
                     </div>
                     <div class="card-body">
                         {% if product.wheel_size %}
@@ -341,9 +341,9 @@
                     <!-- Size Selection (if applicable) -->
                     {% if product.sizes.all %}
                         <div class="mb-3">
-                            <label class="form-label"><strong>Size:</strong></label>
+                            <label class="form-label" for="id_product_size"><strong>Size:</strong></label>
                             <div style="max-width: 200px;">
-                                <select class="form-control" name="size" id="id_product_size" required>
+                                <select class="form-control" name="size" id="id_product_size" required aria-label="Select product size">
                                     <option value="">Select Size</option>
                                     {% for size in product.sizes.all %}
                                         <option value="{{ size.id }}">{{ size.display_name }}</option>
@@ -355,28 +355,32 @@
                     
                     <!-- Quantity Selection -->
                     <div class="mb-3">
-                        <label class="form-label"><strong>Quantity:</strong></label>
+                        <label class="form-label" for="qty_input_{{ product.id }}"><strong>Quantity:</strong></label>
                         <div class="input-group input-group-sm" style="width: 120px;">
                             <div class="input-group-prepend">
                                 <button class="btn btn-primary decrement-qty" 
                                         type="button" 
                                         data-item_id="{{ product.id }}"
+                                        aria-label="Decrease quantity"
                                         style="height: 32px; min-height: 32px; padding: 0.25rem 0.5rem; line-height: 1;">
-                                    <i class="fa fa-minus"></i>
+                                    <i class="fa fa-minus" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <input class="form-control text-center qty_input" type="text"
+                                   id="qty_input_{{ product.id }}"
                                    name="quantity" value="1" min="1" max="{{ available_stock }}"
                                    data-item_id="{{ product.id }}"
                                    data-max-stock="{{ available_stock }}"
+                                   aria-label="Product quantity"
                                    style="max-width: 50px; height: 32px; -webkit-appearance: none; -moz-appearance: textfield;"
                                    readonly>
                             <div class="input-group-append">
                                 <button class="btn btn-primary increment-qty"
                                         type="button" 
                                         data-item_id="{{ product.id }}"
+                                        aria-label="Increase quantity"
                                         style="height: 32px; min-height: 32px; padding: 0.25rem 0.5rem; line-height: 1;">
-                                    <i class="fa fa-plus"></i>
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
@@ -385,23 +389,23 @@
                     <!-- Submit Buttons -->
                     <div class="mb-3">
                         <input type="hidden" name="redirect_to" value="product_detail">
-                        <button type="submit" class="btn btn-primary btn-lg mr-2 mb-2">
-                            <i class="fa fa-shopping-cart mr-2"></i>Add to Cart
+                        <button type="submit" class="btn btn-primary btn-lg mr-2 mb-2" aria-label="Add product to cart">
+                            <i class="fa fa-shopping-cart mr-2" aria-hidden="true"></i>Add to Cart
                         </button>
-                        <a href="{% url 'products' %}" class="btn btn-secondary btn-lg mb-2">
-                            <i class="fa fa-chevron-left mr-2"></i>Keep Shopping
+                        <a href="{% url 'products' %}" class="btn btn-secondary btn-lg mb-2" aria-label="Continue shopping">
+                            <i class="fa fa-chevron-left mr-2" aria-hidden="true"></i>Keep Shopping
                         </a>
                     </div>
                 </form>
             {% else %}
                 <div class="mb-3">
                     {% if not product.in_stock %}
-                        <button class="btn btn-secondary btn-lg" disabled>
-                            <i class="fa fa-times mr-2"></i>Out of Stock
+                        <button class="btn btn-secondary btn-lg" disabled aria-label="Product out of stock">
+                            <i class="fa fa-times mr-2" aria-hidden="true"></i>Out of Stock
                         </button>
                     {% else %}
-                        <button class="btn btn-secondary btn-lg" disabled>
-                            <i class="fa fa-shopping-cart mr-2"></i>Maximum Quantity in Cart
+                        <button class="btn btn-secondary btn-lg" disabled aria-label="Maximum quantity already in cart">
+                            <i class="fa fa-shopping-cart mr-2" aria-hidden="true"></i>Maximum Quantity in Cart
                         </button>
                     {% endif %}
                 </div>
@@ -501,8 +505,8 @@
                                     {{ review_form.comment.label_tag }}
                                     {{ review_form.comment }}
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fa fa-star mr-2"></i>Submit Review
+                                <button type="submit" class="btn btn-primary btn-lg" aria-label="Submit product review">
+                                    <i class="fa fa-star mr-2" aria-hidden="true"></i>Submit Review
                                 </button>
                             </form>
                         </div>

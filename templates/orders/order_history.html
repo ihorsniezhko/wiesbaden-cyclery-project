@@ -46,8 +46,8 @@
                             <label for="{{ search_form.date_to.id_for_label }}" class="sr-only">To Date</label>
                             {{ search_form.date_to }}
                         </div>
-                        <button type="submit" class="btn btn-primary mb-2 mr-2">Search</button>
-                        <a href="{% url 'orders:order_history' %}" class="btn btn-outline-secondary mb-2">Clear</a>
+                        <button type="submit" class="btn btn-primary mb-2 mr-2" aria-label="Search order history">Search</button>
+                        <a href="{% url 'orders:order_history' %}" class="btn btn-outline-secondary mb-2" aria-label="Clear search filters">Clear</a>
                     </form>
                 </div>
             </div>

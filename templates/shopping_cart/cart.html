@@ -124,22 +124,25 @@
                                                     <div class="input-group-prepend">
                                                         <button class="decrement-qty btn btn-sm btn-black rounded-0" 
                                                                 type="button" 
-                                                                data-item_id="{{ item.product.id }}_{{ item.size.id|default:'none' }}">
+                                                                data-item_id="{{ item.product.id }}_{{ item.size.id|default:'none' }}"
+                                                                aria-label="Decrease quantity">
                                                             <span>
-                                                                <i class="fa fa-minus fa-sm"></i>
+                                                                <i class="fa fa-minus fa-sm" aria-hidden="true"></i>
                                                             </span>
                                                         </button>
                                                     </div>
                                                     <input class="form-control form-control-sm qty_input" type="number"
                                                            name="quantity" value="{{ item.quantity }}" min="1" max="99"
                                                            data-item_id="{{ item.product.id }}_{{ item.size.id|default:'none' }}"
+                                                           aria-label="Product quantity"
                                                            style="width: 60px; text-align: center;">
                                                     <div class="input-group-append">
                                                         <button class="increment-qty btn btn-sm btn-black rounded-0"
                                                                 type="button" 
-                                                                data-item_id="{{ item.product.id }}_{{ item.size.id|default:'none' }}">
+                                                                data-item_id="{{ item.product.id }}_{{ item.size.id|default:'none' }}"
+                                                                aria-label="Increase quantity">
                                                             <span>
-                                                                <i class="fa fa-plus fa-sm"></i>
+                                                                <i class="fa fa-plus fa-sm" aria-hidden="true"></i>
                                                             </span>
                                                         </button>
                                                     </div>
