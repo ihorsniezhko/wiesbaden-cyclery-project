@@ -284,7 +284,7 @@
                 </div>
             {% endif %}
             
-            <h3 class="text-primary mb-3" style="color: #199CF4 !important;">€{{ product.price }}</h3>
+            <div class="text-primary mb-3 font-weight-bold" style="color: #199CF4 !important; font-size: 1.75rem;">€{{ product.price }}</div>
             
             <p class="lead">{{ product.description }}</p>
             
@@ -543,7 +543,7 @@
                             {% endif %}
                         </div>
                         <div class="card-body d-flex flex-column">
-                            <h6 class="card-title">{{ related_product.name }}</h6>
+                            <h4 class="card-title">{{ related_product.name }}</h4>
                             <p class="text-primary" style="color: #199CF4 !important;">€{{ related_product.price }}</p>
                             <div class="mt-auto">
                                 <a href="{% url 'product_detail' related_product.id %}" class="btn btn-primary w-100 d-flex align-items-center justify-content-center">

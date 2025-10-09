@@ -49,28 +49,28 @@
             <div class="col-md-3 mb-4">
                 <div class="feature-box">
                     <i class="fa fa-wrench fa-3x text-primary mb-3"></i>
-                    <h5>Expert Service</h5>
+                    <h3>Expert Service</h3>
                     <p>Professional repairs and maintenance by certified technicians.</p>
                 </div>
             </div>
             <div class="col-md-3 mb-4">
                 <div class="feature-box">
                     <i class="fa fa-truck fa-3x text-primary mb-3"></i>
-                    <h5>Fast Delivery</h5>
+                    <h3>Fast Delivery</h3>
                     <p>Free delivery on orders over €50 throughout the region.</p>
                 </div>
             </div>
             <div class="col-md-3 mb-4">
                 <div class="feature-box">
                     <i class="fa fa-check-circle fa-3x text-primary mb-3"></i>
-                    <h5>Quality Guarantee</h5>
+                    <h3>Quality Guarantee</h3>
                     <p>All bikes come with manufacturer warranties and our quality promise.</p>
                 </div>
             </div>
             <div class="col-md-3 mb-4">
                 <div class="feature-box">
                     <i class="fa fa-lightbulb-o fa-3x text-primary mb-3"></i>
-                    <h5>Expert Advice</h5>
+                    <h3>Expert Advice</h3>
                     <p>Get personalized recommendations from our cycling specialists.</p>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                     <div class="card h-100">
                         <div class="card-body text-center d-flex flex-column">
                             <i class="fa fa-{% if 'road' in category.name %}road{% elif 'mountain' in category.name %}tree{% elif 'electric' in category.name %}bolt{% elif 'accessories' in category.name %}wrench{% elif 'components' in category.name %}cogs{% elif 'sale' in category.name %}tag{% else %}bicycle{% endif %} fa-3x text-primary mb-3"></i>
-                            <h5 class="card-title">{{ category.get_friendly_name }}</h5>
+                            <h3 class="card-title">{{ category.get_friendly_name }}</h3>
                             <p class="card-text flex-grow-1">
                                 {% if 'road' in category.name %}High-performance bikes for speed and endurance on paved roads.
                                 {% elif 'mountain' in category.name %}Rugged bikes built for off-road adventures and trail riding.

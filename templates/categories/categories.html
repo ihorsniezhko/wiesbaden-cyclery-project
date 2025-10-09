@@ -25,7 +25,8 @@
         </ol>
     </nav>
 
-
+    <!-- Page Title -->
+    <h1 class="text-center mb-4">Shop by Category</h1>
 
     <!-- Categories Section -->
     <div class="row">
@@ -34,7 +35,7 @@
                 <div class="card h-100">
                     <div class="card-body text-center d-flex flex-column">
                         <i class="fa fa-{% if 'road' in category.name %}road{% elif 'mountain' in category.name %}tree{% elif 'electric' in category.name %}bolt{% elif 'accessories' in category.name %}wrench{% elif 'components' in category.name %}cogs{% elif 'sale' in category.name %}tag{% else %}bicycle{% endif %} fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">{{ category.get_friendly_name }}</h5>
+                        <h2 class="card-title">{{ category.get_friendly_name }}</h2>
                         <p class="card-text flex-grow-1">
                             {% if 'road' in category.name %}High-performance bikes for speed and endurance on paved roads.
                             {% elif 'mountain' in category.name %}Rugged bikes built for off-road adventures and trail riding.

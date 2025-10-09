@@ -102,6 +102,42 @@ body {
     transform: translateY(-5px);
 }
 
+/* Feature box and category card headings - maintain h5 visual size */
+.feature-box h3,
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+/* Category page card titles (h2) - maintain consistent size */
+.card-body h2.card-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+/* Product card titles (h2) - maintain h6 visual size */
+.card h2.card-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+/* No products found heading - maintain reasonable size */
+.alert h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+/* Related product titles (h4) - maintain h6 visual size */
+.card h4.card-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
 /* Cards */
 .card {
     border: none;
