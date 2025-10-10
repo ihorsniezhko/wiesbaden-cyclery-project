@@ -145,6 +145,13 @@ footer h3 {
     margin-bottom: 0.75rem;
 }
 
+/* Product detail page section headings (h2) - style like h3 for visual consistency */
+.product-detail h2 {
+    font-size: 1.75rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
 /* Cards */
 .card {
     border: none;
