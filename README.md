@@ -41,6 +41,7 @@ Comprehensive wireframes covering all pages and user flows: [docs/project_wirefr
 - **Legal Compliance**: Privacy Policy, Terms of Service, GDPR cookie consent
 - **Reviews**: Customer ratings and reviews
 - **SEO**: Meta tags, sitemaps, structured data
+- **Security**: External links with `rel="noopener noreferrer"` attributes
 - **Responsive**: Bootstrap 4 mobile-first
 - **Error Pages**: Custom 404 and 500 pages matching project design
 - **Social**: Facebook Business page
@@ -152,6 +153,9 @@ This project was developed using **Agile practices** with iterative development 
 ### Quick Start
 - **[Setup Guide](docs/setup.md)** - Local development setup (5 minutes)
 - **[Deployment Guide](docs/deployment.md)** - Production deployment to Heroku
+
+### Business Documentation
+- **[Business Model](docs/business_model.md)** - E-commerce model and marketing strategies
 
 ### Technical Documentation
 - **[Database Schema](docs/database_schema.md)** - Database structure with ER diagram
