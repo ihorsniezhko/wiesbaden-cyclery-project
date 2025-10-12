@@ -1,4 +1,4 @@
-# 📊 Facebook Pixel & Analytics
+# Facebook Pixel & Analytics
 
 ## Configuration
 

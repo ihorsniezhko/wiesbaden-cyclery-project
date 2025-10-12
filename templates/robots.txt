@@ -5,15 +5,16 @@ Allow: /
 Disallow: /admin/
 Disallow: /accounts/
 Disallow: /cart/
-Disallow: /orders/checkout/
+Disallow: /orders/
 Disallow: /profile/
 
 # Allow important pages
 Allow: /products/
 Allow: /static/
+Allow: /media/
 
 # Sitemap location
-Sitemap: {{ request.build_absolute_uri }}sitemap.xml
+Sitemap: {{ request.scheme }}://{{ request.get_host }}/sitemap.xml
 
-# Crawl delay (optional)
+# Crawl delay (optional, helps prevent server overload)
 Crawl-delay: 1

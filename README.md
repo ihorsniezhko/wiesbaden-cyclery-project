@@ -150,15 +150,16 @@ This project was developed using **Agile practices** with iterative development 
 ## Documentation
 
 ### Quick Start
-- **[Setup Guide](docs/SETUP.md)** - Local development setup (5 minutes)
-- **[Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment to Heroku
+- **[Setup Guide](docs/setup.md)** - Local development setup (5 minutes)
+- **[Deployment Guide](docs/deployment.md)** - Production deployment to Heroku
 
 ### Technical Documentation
-- **[Database Schema](docs/DATABASE_SCHEMA.md)** - Database structure with ER diagram
-- **[Testing Guide](docs/TESTING.md)** - Automated and manual testing (27/45 tests passing)
-- **[Payment System](docs/PAYMENTS.md)** - Stripe integration and testing
-- **[Email System](docs/EMAILS.md)** - Gmail SMTP configuration
-- **[Social Media Sharing](docs/SOCIAL_MEDIA_SHARING.md)** - Open Graph tags and social previews
+- **[Database Schema](docs/database_schema.md)** - Database structure with ER diagram
+- **[Testing Guide](docs/testing.md)** - Automated and manual testing (27/45 tests passing)
+- **[Payment System](docs/payments.md)** - Stripe integration and testing
+- **[Email System](docs/emails.md)** - Gmail SMTP configuration
+- **[SEO Implementation](docs/seo.md)** - Search engine optimization with robots.txt and sitemaps
+- **[Social Media Sharing](docs/social_media_sharing.md)** - Open Graph tags and social previews
 - **[Analytics Setup](docs/facebook-pixel-setup.md)** - Facebook Pixel & Google Analytics
 
 ### Design Resources

@@ -2,6 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block extra_meta %}
+<!-- Checkout page should not be indexed by search engines -->
+<meta name="robots" content="noindex, follow">
+{% endblock %}
+
 {% block page_header %}
 <div class="container header-container">
     <div class="row">

@@ -4,7 +4,7 @@
 
 Normalized PostgreSQL database for e-commerce operations supporting user management, product catalog, shopping cart, order processing, and audit trails.
 
-## 📊 Entity Relationship Diagram
+## Entity Relationship Diagram
 
 ```mermaid
 erDiagram
@@ -139,7 +139,7 @@ erDiagram
 - **`created_at`**: `DateTimeField(auto_now_add=True, null=True, blank=True)` - Auto-set on creation, nullable for fixtures
 - **`updated_at`**: `DateTimeField(auto_now=True, null=True, blank=True)` - Auto-updated on save, nullable for fixtures
 
-## 📋 Core Models
+## Core Models
 
 ### User Management
 - **User**: Django built-in (username, email, password, is_staff)
@@ -160,7 +160,7 @@ erDiagram
 - **OrderLineItem**: Products in order (auto-updates order total via signals)
 - **OrderStatusHistory**: Audit trail for status changes
 
-## 🔒 Business Logic
+## Business Logic
 
 ### Product Size Management
 **Rule**: Cannot disable `has_sizes` if sizes are assigned
@@ -188,7 +188,7 @@ if not self.has_sizes and self.sizes.exists():
 - Model and form level enforcement
 - No decimal ratings
 
-## 🔍 Key Relationships
+## Key Relationships
 
 | Relationship | Type | Notes |
 |--------------|------|-------|
@@ -215,7 +215,7 @@ if not self.has_sizes and self.sizes.exists():
 - Order total: ≥ 0
 - Line item quantity: ≥ 1
 
-## 📈 Performance
+## Performance
 
 ### Indexes
 - Auto: Primary keys, foreign keys, unique fields
@@ -228,7 +228,7 @@ products = Product.objects.select_related('category').prefetch_related('sizes')
 orders = Order.objects.select_related('user_profile').prefetch_related('lineitems__product')
 ```
 
-## 🔒 Security
+## Security
 
 - **Password Hashing**: Django PBKDF2
 - **SQL Injection**: ORM parameterized queries
@@ -237,7 +237,7 @@ orders = Order.objects.select_related('user_profile').prefetch_related('lineitem
 - **Access Control**: Users access only their own orders/reviews
 - **Audit Trails**: Timestamps and status history
 
-## 🧪 Testing
+## Testing
 
 ```python
 # Model validation
@@ -258,7 +258,7 @@ def test_order_preserves_on_profile_delete(self):
     self.assertIsNone(order.user_profile)
 ```
 
-## 📊 Migrations
+## Migrations
 
 - **Incremental**: Small, focused changes
 - **Reversible**: All migrations can be rolled back

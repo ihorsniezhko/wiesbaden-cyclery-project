@@ -3,6 +3,11 @@
 
 {% block title %}Sign In - Wiesbaden Cyclery{% endblock %}
 
+{% block extra_meta %}
+<!-- Login page should not be indexed by search engines -->
+<meta name="robots" content="noindex, follow">
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
