@@ -5,7 +5,7 @@
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-4.6.2-purple.svg)](https://getbootstrap.com/)
 [![Stripe](https://img.shields.io/badge/Stripe-Payment-blue.svg)](https://stripe.com/)
 [![AWS S3](https://img.shields.io/badge/AWS-S3-orange.svg)](https://aws.amazon.com/s3/)
-[![Tests](https://img.shields.io/badge/Tests-66%20Passing-brightgreen.svg)](#testing)
+[![Tests](https://img.shields.io/badge/Tests-27%20Passing-yellow.svg)](#testing)
 
 A production-ready Django e-commerce platform for bicycle retail with secure payments, user management, and professional deployment architecture.
 
@@ -112,7 +112,7 @@ Visit `http://127.0.0.1:8000` to access the application.
 
 ## Product Catalog
 
-56 products across 6 categories: Road Bikes, Mountain Bikes, Electric Bikes, Accessories, Components, Sale Items. Professional Unsplash photography for all products.
+50 products across 6 categories: Road Bikes, Mountain Bikes, Electric Bikes, Accessories, Components, Sale Items. Professional Unsplash photography for all products.
 
 ### Product Management
 
@@ -172,8 +172,6 @@ This project was developed using **Agile practices** with iterative development 
 All product images sourced from **[Unsplash](https://unsplash.com/)** under the Unsplash License (free for commercial use).
 
 **Photographers**: Sies Kranen, Tasha Kostyuk, Dick Honing, Michał Robak, Mukkpetebike, Kaffeebart, MESTO Sprayers, Daiki Sato, Suraj Tomer, Egor Komarov, Sidral Mundet, Wayne Bishop, Yomex Owo, yasara hansani, Kelly Common, Meg Jenson.
-
-Complete credits: `media/UNSPLASH_ATTRIBUTIONS.md`
 
 ## Advanced Features
 
@@ -260,8 +258,6 @@ Special thanks to:
 - **Student Care Team** - For their continuous support and assistance
 - **Code Institute Community** - For providing a collaborative learning environment
 - **Boutique Ado Project** - The [Boutique Ado](https://github.com/Code-Institute-Solutions/boutique_ado_v1_sourcecode.git) educational project by Anna Greaves, Kasia Bogucka, and Chris Thomason was instrumental in developing various e-commerce elements
-
-The project demonstrates professional e-commerce development practices and serves as a portfolio piece for educational purposes.
 
 ---
 

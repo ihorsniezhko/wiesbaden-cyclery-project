@@ -119,7 +119,7 @@ erDiagram
     Order ||--o{ OrderStatusHistory : "tracks"
 ```
 
-## 🏗️ Design Principles
+## Design Principles
 
 ### Normalization
 - 3rd Normal Form (3NF) compliance
@@ -199,7 +199,7 @@ if not self.has_sizes and self.sizes.exists():
 | Order → OrderLineItem | 1:M | Auto-updates order total |
 | User → Review | 1:M | One review per product |
 
-## 💾 Constraints
+## Constraints
 
 ### Unique
 - User: username, email

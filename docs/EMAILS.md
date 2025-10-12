@@ -1,9 +1,11 @@
 # Email System
 
 ## Overview
-Gmail SMTP integration for order confirmations and status updates.
+The Wiesbaden Cyclery platform uses two email systems:
+1. **Gmail SMTP** - Transactional emails (order confirmations, status updates)
+2. **Mailchimp** - Marketing emails (newsletter, cycling tips, special offers)
 
-## Configuration
+## Gmail SMTP Configuration
 
 ```env
 EMAIL_HOST_USER=your-email@gmail.com
@@ -102,7 +104,27 @@ Pending → Processing → Shipped → Delivered
 - Status-specific messaging
 - Automatic stock restoration on cancellation
 
+## Mailchimp Newsletter
+
+Footer signup form on all pages for cycling tips and special offers.
+
+**Features:**
+- GDPR-compliant with required consent checkbox
+- Double opt-in confirmation via email
+- One-click unsubscribe in all emails
+- Mobile-friendly stacked layout
+
+**Location:** `templates/base.html` (footer)
+
+**Testing:**
+1. Scroll to footer on any page
+2. Enter email and check consent box
+3. Click "Subscribe"
+4. Confirm via Mailchimp email
+
 ## Troubleshooting
+
+### Gmail SMTP Issues
 
 | Issue | Solution |
 |-------|----------|
@@ -110,3 +132,10 @@ Pending → Processing → Shipped → Delivered
 | Emails to spam | Verify sender domain |
 | Template errors | Check template syntax |
 | SMTP errors | Verify Gmail 2FA enabled |
+
+### Mailchimp
+
+| Issue | Solution |
+|-------|----------|
+| No confirmation email | Check spam folder |
+| Form not submitting | Verify consent checkbox checked |

@@ -67,7 +67,7 @@ Core functionality working correctly:
 
 ## Manual Testing
 
-**Status**: All 9 test categories completed and passed  
+**Status**: All 11 test categories completed and passed  
 **Test Date**: October 2025  
 **Environment**: Production (https://wiesbaden-cyclery-project-818faeff3e83.herokuapp.com)
 
@@ -118,20 +118,69 @@ Core functionality working correctly:
 - [x] View orders
 - [x] Update order status
 
-### 8. Staff Management
-- [x] Access /products/management/
-- [x] Add new product
-- [x] Edit product
-- [x] Upload image
-- [x] Delete product
+### 8. Product Management Interfaces
 
-### 9. Error Handling
+**User-Facing Interface** (https://wiesbaden-cyclery-project-818faeff3e83.herokuapp.com/products/management/)
+- [x] Access staff product management interface
+- [x] Add new product with all fields
+- [x] Edit existing product
+- [x] Upload product image
+- [x] Delete product
+- [x] Verify form validation works
+
+**Django Admin Interface** (https://wiesbaden-cyclery-project-818faeff3e83.herokuapp.com/admin/products/product/)
+- [x] Access Django admin panel
+- [x] View product list with filters
+- [x] Edit product via admin
+- [x] Bulk actions work correctly
+- [x] Verify both interfaces show same data
+
+**Interface Consistency:**
+- [x] Changes in staff interface reflect in admin
+- [x] Changes in admin reflect in staff interface
+- [x] Both interfaces enforce same validation rules
+
+### 9. Stock Control Testing
+
+**Automatic Stock Status:**
+- [x] Create product with stock quantity > 0
+- [x] Verify product shows as "In Stock"
+- [x] Reduce stock quantity to 0
+- [x] Verify product automatically marked as "Out of Stock"
+- [x] Verify "Add to Cart" button disabled when out of stock
+- [x] Increase stock quantity above 0
+- [x] Verify product automatically marked as "In Stock" again
+
+**Stock Validation:**
+- [x] Cannot set negative stock quantities
+- [x] Stock decrements correctly when order placed
+- [x] Stock restores correctly when order cancelled
+
+### 10. Product Size Management
+
+**Size Constraint Testing:**
+- [x] Create product with "Has Sizes" enabled
+- [x] Assign sizes (S, M, L, XL) to product
+- [x] Attempt to disable "Has Sizes" option
+- [x] Verify system prevents disabling with validation error
+- [x] Verify error message: "Cannot disable sizes - remove all assigned sizes first"
+- [x] Remove all assigned sizes from product
+- [x] Verify "Has Sizes" can now be disabled
+- [x] Verify data integrity maintained
+
+**Size Assignment:**
+- [x] Enable "Has Sizes" for product
+- [x] Select multiple sizes
+- [x] Save product successfully
+- [x] Verify sizes display correctly on product page
+
+### 11. Error Handling
 - [x] Test declined card: `4000 0000 0000 0002`
 - [x] Test form validation
 - [x] Test 404 page
 - [x] Test 500 page
 
-**All manual tests completed successfully**
+**All manual tests completed successfully** - 11 test categories passed
 
 ## Test Cards (Stripe)
 
@@ -173,7 +222,7 @@ python manage.py test --verbosity=2
 
 **All features work correctly in production**:
 - Live site: https://wiesbaden-cyclery-project-818faeff3e83.herokuapp.com
-- All 56 products display properly
+- All 50 products display properly
 - Payments process successfully
 - Orders created and tracked
 - Emails sent correctly

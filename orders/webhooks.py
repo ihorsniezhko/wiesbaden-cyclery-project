@@ -11,7 +11,6 @@ from django.core.cache import cache
 from .models import Order, OrderStatusHistory
 from .stripe_utils import handle_payment_intent_webhook
 from .utils import send_order_confirmation_email, send_order_notification_email
-from .webhook_monitor import record_webhook_event
 
 logger = logging.getLogger(__name__)
 
